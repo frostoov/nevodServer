@@ -6,6 +6,10 @@ include_directories("${CMAKE_SOURCE_DIR}/include/")
 set(rpcserver_files_source
     rpcserver.hpp
     rpcserver.cpp
+    easrpc.hpp
+    easrpc.cpp
+    uranrpc.hpp
+    uranrpc.cpp
 )
 
 add_library(rpcserver ${rpcserver_files_source})
