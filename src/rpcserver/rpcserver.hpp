@@ -3,14 +3,12 @@
 
 #include <cstdint>
 #include <memory>
-#include <include/xsonrpc/server.h>
-#include <include/xsonrpc/dispatcher.h>
-#include <include/xsonrpc/jsonformathandler.h>
 
+#include "server.hpp"
 #include "easrpc.hpp"
 #include "uranrpc.hpp"
 
-class RpcServer	: public xsonrpc::Server {
+class RpcServer	: public  xsonrpc::Server	{
 public:
 	using EasRpcPtr		= std::unique_ptr<EasRpc>;
 	using UranRpcPtr	= std::unique_ptr<UranRpc>;

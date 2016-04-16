@@ -10,7 +10,31 @@ set(rpcserver_files_source
     easrpc.cpp
     uranrpc.hpp
     uranrpc.cpp
+    dispatcher.hpp
+    dispatcher.cpp
+    json.hpp
+    jsonreader.hpp
+    jsonreader.cpp
+    jsonwriter.hpp
+    jsonwriter.cpp
+    server.hpp
+    server.cpp
+    tcpconnection.cpp
+    tcpconnection.hpp
+    fault.hpp
+    request.hpp
+    request.cpp
+    response.hpp
+    response.cpp
+    value.hpp
+    value.cpp
+    util.hpp
+    util.cpp
+    reader.hpp
+    writer.hpp
+    formathandler.hpp
+    jsonformathandler.hpp
+    jsonformathandler.cpp
 )
 
 add_library(rpcserver ${rpcserver_files_source})
-target_link_libraries(rpcserver xsonrpc)

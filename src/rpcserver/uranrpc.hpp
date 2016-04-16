@@ -1,7 +1,7 @@
 #ifndef URANRPC_H
 #define URANRPC_H
 
-#include <include/xsonrpc/dispatcher.h>
+#include "dispatcher.hpp"
 
 class UranRpc	{
 public:

@@ -7,9 +7,13 @@ add_subdirectory(rpcserver)
 add_subdirectory(keeper)
 add_subdirectory(observer)
 
-include_directories("${CMAKE_SOURCE_DIR}/include/")
-
 set(src_files_source main.cpp)
+
+set(Boost_USE_STATIC_LIBS ON)
+find_package(Boost COMPONENTS system)
+
+include_directories(${Boost_INCLUDE_DIR})
 
 add_executable(${PROJECT_NAME} ${src_files_source})
 target_link_libraries(${PROJECT_NAME} rpcserver)
+target_link_libraries(${PROJECT_NAME} boost_system)
