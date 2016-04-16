@@ -1,18 +1,18 @@
 #ifndef URANRPC_H
 #define URANRPC_H
 
-#include "dispatcher.hpp"
+#include "rpcserver/dispatcher.hpp"
 
 class UranRpc	{
 public:
-	explicit UranRpc(xsonrpc::Dispatcher& dispatcher);
+	explicit UranRpc(Dispatcher& dispatcher);
 	~UranRpc();
 
 protected:
 	void	initializeDispatcher();
 
 private:
-	xsonrpc::Dispatcher&	dispatcher_;
+	Dispatcher&	dispatcher_;
 };
 
 #endif//URANRPC_H

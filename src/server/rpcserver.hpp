@@ -4,11 +4,11 @@
 #include <cstdint>
 #include <memory>
 
-#include "server.hpp"
+#include "rpcserver/server.hpp"
 #include "easrpc.hpp"
 #include "uranrpc.hpp"
 
-class RpcServer	: public  xsonrpc::Server	{
+class RpcServer	: public  Server	{
 public:
 	using EasRpcPtr		= std::unique_ptr<EasRpc>;
 	using UranRpcPtr	= std::unique_ptr<UranRpc>;
@@ -22,7 +22,7 @@ protected:
 	void	initializeDispatcherOfEasRpc();
 
 private:
-	xsonrpc::Dispatcher	dispatcher_;
+	Dispatcher	dispatcher_;
 
 	EasRpcPtr		easRpc_;
 	UranRpcPtr		uranRpc_;

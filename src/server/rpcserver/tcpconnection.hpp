@@ -10,19 +10,17 @@
 #include <boost/bind.hpp>
 #include <memory>
 
-namespace xsonrpc	{
-
 class TcpConnection : public std::enable_shared_from_this<TcpConnection>
 {
 public:
 	using TcpConnectionPtr	= std::shared_ptr<TcpConnection>;
-	using	FormatHandlerPtr	= std::shared_ptr<FormatHandler>;
+	using FormatHandlerPtr	= std::shared_ptr<JsonFormatHandler>;
 	using DispatcherPtr			= std::shared_ptr<Dispatcher>;
 
-	TcpConnection(boost::asio::io_service& service, Dispatcher& dispatcher, std::vector<FormatHandler*>&	formatHandlersIn);
+	TcpConnection(boost::asio::io_service& service, Dispatcher& dispatcher, std::vector<JsonFormatHandler*>&	formatHandlersIn);
 	~TcpConnection();
 
-	static TcpConnectionPtr create(boost::asio::io_service&	service, Dispatcher& dispatcher, std::vector<FormatHandler *> &formatHandlers);
+	static TcpConnectionPtr create(boost::asio::io_service&	service, Dispatcher& dispatcher, std::vector<JsonFormatHandler *> &formatHandlers);
 	boost::asio::ip::tcp::socket&	getSocket();
 	void	start();
 
@@ -32,16 +30,14 @@ protected:
 
 private:
 	Dispatcher& myDispatcher;
-	std::vector<FormatHandler*> myFormatHandlers;
-	std::shared_ptr<FormatHandler>	formatHandler;
-	std::unique_ptr<Writer>	writer;
+	std::vector<JsonFormatHandler*> myFormatHandlers;
+	std::shared_ptr<JsonFormatHandler>	formatHandler;
+	std::unique_ptr<JsonWriter>	writer;
 
 	boost::asio::ip::tcp::socket	socket;
 	std::string message;
 	std::vector<char>	buf;
 	boost::asio::streambuf	response_;
 };
-
-}	// namespace xsonrpc
 
 #endif	//TCPCONNECTION_H

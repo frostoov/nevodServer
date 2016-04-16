@@ -1,7 +1,6 @@
 #ifndef JSON_H
 #define JSON_H
 
-namespace xsonrpc {
 namespace json {
 
 const char JSONRPC_NAME[] = "jsonrpc";
@@ -18,6 +17,5 @@ const char ERROR_CODE_NAME[] = "code";
 const char ERROR_MESSAGE_NAME[] = "message";
 
 } // namespace json
-} // namespace xsonrpc
 
 #endif

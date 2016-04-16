@@ -3,7 +3,7 @@ project(nevodserver)
 
 add_subdirectory(eas)
 add_subdirectory(uran)
-add_subdirectory(rpcserver)
+add_subdirectory(server)
 add_subdirectory(keeper)
 add_subdirectory(observer)
 
@@ -15,5 +15,5 @@ find_package(Boost COMPONENTS system)
 include_directories(${Boost_INCLUDE_DIR})
 
 add_executable(${PROJECT_NAME} ${src_files_source})
-target_link_libraries(${PROJECT_NAME} rpcserver)
+target_link_libraries(${PROJECT_NAME} server)
 target_link_libraries(${PROJECT_NAME} boost_system)

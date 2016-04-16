@@ -1,9 +1,9 @@
 #include "rpcserver.hpp"
 
 RpcServer::RpcServer(uint16_t	port)
-	:	xsonrpc::Server(port)	{
+	:	Server(port)	{
 
-	xsonrpc::JsonFormatHandler	formatHandler;
+	JsonFormatHandler	formatHandler;
 	this->RegisterFormatHandler(formatHandler);
 
 	easRpc_		= std::make_unique<EasRpc>(this->GetIoService());

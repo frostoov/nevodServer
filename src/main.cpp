@@ -1,5 +1,4 @@
-#include "rpcserver/rpcserver.hpp"
-
+#include "server/rpcserver.hpp"
 
 int main(int argc, char *argv[])	{
 	RpcServer	server(2222);

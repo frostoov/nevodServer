@@ -1,6 +1,6 @@
 #include "uranrpc.hpp"
 
-UranRpc::UranRpc(xsonrpc::Dispatcher &dispatcher)
+UranRpc::UranRpc(Dispatcher &dispatcher)
 	:	dispatcher_(dispatcher)	{
 
 }

@@ -1,15 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(nevodserver)
 
-include_directories("${CMAKE_SOURCE_DIR}/include/")
-
 set(rpcserver_files_source
-    rpcserver.hpp
-    rpcserver.cpp
-    easrpc.hpp
-    easrpc.cpp
-    uranrpc.hpp
-    uranrpc.cpp
     dispatcher.hpp
     dispatcher.cpp
     json.hpp
@@ -28,11 +20,6 @@ set(rpcserver_files_source
     response.cpp
     value.hpp
     value.cpp
-    util.hpp
-    util.cpp
-    reader.hpp
-    writer.hpp
-    formathandler.hpp
     jsonformathandler.hpp
     jsonformathandler.cpp
 )
