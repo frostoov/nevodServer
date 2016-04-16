@@ -1,6 +1,7 @@
 #include "easstation.hpp"
 
-EasStation::EasStation()	{
+EasStation::EasStation(IoServicePtr service)
+	:	service_(service)	{
 
 }
 

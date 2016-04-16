@@ -4,6 +4,16 @@ project(nevodserver)
 set(eas_files_source
     easstation.hpp
     easstation.cpp
+    registers.hpp
+    registers.cpp
+    client.hpp
+    client.cpp
+    queueofmessages.hpp
+    queueofmessages.cpp
+    host.hpp
+    host.cpp
+    master.hpp
+    master.cpp
 )
 
 add_library(eas ${eas_files_source})
