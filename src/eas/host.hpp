@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <memory>
 #include <array>
+#include <boost/asio.hpp>
 
 #include "master.hpp"
 #include "registers.hpp"
@@ -12,10 +13,11 @@
 
 class Host : public Subject, public Observer, public std::enable_shared_from_this<Host>	{
 public:
-	using MasterPtr = std::shared_ptr<Master>;
-	using QueuePtr	= std::shared_ptr<QueueOfMessages>;
+	using MasterPtr		= std::shared_ptr<Master>;
+	using QueuePtr		= std::shared_ptr<QueueOfMessages>;
+	using IoServicePtr	= std::shared_ptr<boost::asio::io_service>;
 
-	Host(const std::string&	ip);
+	Host(const std::string&	ip, const IoServicePtr&	service);
 	~Host();
 
 	void		update(const Subject* subject);

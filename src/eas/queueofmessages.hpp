@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <list>
+#include <boost/asio.hpp>
 
 #include "../observer/observer.hpp"
 #include "client.hpp"
@@ -12,8 +13,9 @@
 
 class QueueOfMessages : public Observer, public Subject, public std::enable_shared_from_this<QueueOfMessages>	{
 public:
-	using	ClientPtr = std::shared_ptr<Client>;
-	using	ObserverPtr = std::shared_ptr<Observer>;
+	using	ClientPtr		= std::shared_ptr<Client>;
+	using	ObserverPtr		= std::shared_ptr<Observer>;
+	using	IoServicePtr	= std::shared_ptr<boost::asio::io_service>;
 
 	enum class Message	{
 		connected,
@@ -25,7 +27,7 @@ public:
 		null
 	};
 
-    QueueOfMessages(const std::string& ip);
+	QueueOfMessages(const std::string& ip, const IoServicePtr& service);
 	~QueueOfMessages();
 
 	void	update(const Subject*	subject);

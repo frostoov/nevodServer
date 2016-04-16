@@ -1,7 +1,7 @@
 #include "queueofmessages.hpp"
 #include <iostream>
 
-QueueOfMessages::QueueOfMessages(const std::string& ip)	{
+QueueOfMessages::QueueOfMessages(const std::string& ip, const IoServicePtr &service)	{
 //	clientReg_	= std::make_shared<Client>(ip, (uint16_t)3000);
 //	clientData_	= std::make_shared<Client>(ip, (uint16_t)3007);
 

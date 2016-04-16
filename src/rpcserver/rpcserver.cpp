@@ -6,9 +6,8 @@ RpcServer::RpcServer(uint16_t	port)
 	xsonrpc::JsonFormatHandler	formatHandler;
 	this->RegisterFormatHandler(formatHandler);
 
-	easRpc_		= std::make_unique<EasRpc>();
+	easRpc_		= std::make_unique<EasRpc>(this->GetIoService());
 	uranRpc_	= std::make_unique<UranRpc>(dispatcher_);
-	easStation_	= std::make_unique<EasStation>(this->GetIoService());
 
 	initializeDispatcherOfEasRpc();
 }

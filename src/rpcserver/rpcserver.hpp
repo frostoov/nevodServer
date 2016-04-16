@@ -9,13 +9,11 @@
 
 #include "easrpc.hpp"
 #include "uranrpc.hpp"
-#include "../eas/easstation.hpp"
 
 class RpcServer	: public xsonrpc::Server {
 public:
 	using EasRpcPtr		= std::unique_ptr<EasRpc>;
 	using UranRpcPtr	= std::unique_ptr<UranRpc>;
-	using EasStationPtr	= std::unique_ptr<EasStation>;
 
 	explicit RpcServer(uint16_t	port);
 	~RpcServer();
@@ -30,7 +28,6 @@ private:
 
 	EasRpcPtr		easRpc_;
 	UranRpcPtr		uranRpc_;
-	EasStationPtr	easStation_;
 };
 
 #endif//RPCSERVER_H

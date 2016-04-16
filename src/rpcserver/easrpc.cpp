@@ -2,15 +2,15 @@
 
 #include <iostream>	//TODO
 
-EasRpc::EasRpc()	{
-
+EasRpc::EasRpc(const IoServicePtr& service)	{
+	easStation_	= std::make_unique<EasStation>(service);
 }
 
 EasRpc::~EasRpc()	{
 
 }
 
-bool EasRpc::eas_writeBanOfTimestamps(int32_t idHost, bool id)	{
+bool EasRpc::eas_writeBanOfTimestamps(int32_t idHost, bool isBan)	{
 
 }
 

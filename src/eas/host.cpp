@@ -2,8 +2,8 @@
 #include <iostream>
 #include <fstream>
 
-Host::Host(const std::string& ip)	{
-	clientQueue_ = std::make_shared<QueueOfMessages>(ip);
+Host::Host(const std::string& ip, const IoServicePtr&	service)	{
+	clientQueue_ = std::make_shared<QueueOfMessages>(ip, service);
 
 	clientQueue_->attach(this);
 	offset_ = 0x400000;
