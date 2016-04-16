@@ -5,6 +5,7 @@ add_subdirectory(eas)
 add_subdirectory(uran)
 add_subdirectory(rpcserver)
 add_subdirectory(keeper)
+add_subdirectory(observer)
 
 include_directories("${CMAKE_SOURCE_DIR}/include/")
 

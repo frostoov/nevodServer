@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <memory>
 
-#include "queueofmessages.h"
+#include "queueofmessages.hpp"
 
 class Adc : public Observer, public std::enable_shared_from_this<Adc>	{
 public:

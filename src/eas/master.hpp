@@ -7,9 +7,9 @@
 #include <array>
 #include <map>
 
-#include "queueofmessages.h"
-#include "adc.h"
-#include "registers.h"
+#include "queueofmessages.hpp"
+#include "adc.hpp"
+#include "registers.hpp"
 
 class Master : public Subject, public Observer, public std::enable_shared_from_this<Master>	{
 public:

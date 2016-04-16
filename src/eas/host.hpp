@@ -6,9 +6,9 @@
 #include <memory>
 #include <array>
 
-#include "master.h"
-#include "registers.h"
-#include "queueofmessages.h"
+#include "master.hpp"
+#include "registers.hpp"
+#include "queueofmessages.hpp"
 
 class Host : public Subject, public Observer, public std::enable_shared_from_this<Host>	{
 public:

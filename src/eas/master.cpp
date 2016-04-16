@@ -1,4 +1,4 @@
-#include "master.h"
+#include "master.hpp"
 #include <iostream>
 
 Master::Master(uint32_t	offset, QueuePtr clientQueue)

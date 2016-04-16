@@ -6,9 +6,9 @@
 #include <string>
 #include <list>
 
-#include "../observer/observer.h"
-#include "client.h"
-#include "registers.h"
+#include "../observer/observer.hpp"
+#include "client.hpp"
+#include "registers.hpp"
 
 class QueueOfMessages : public Observer, public Subject, public std::enable_shared_from_this<QueueOfMessages>	{
 public:
@@ -38,11 +38,11 @@ public:
 
 	const Record&					getRecord()		const;
 	Message							getMessage()	const;
-	const vector<unsigned char>&	getData()		const;
+	const std::vector<uint8_t>&	getData()			const;
 
 protected:
 	void	writeRegister(const Record&	record);
-	int		fillValuesInCommandsHaveBeenDone(const vector<unsigned char>&	data, int commandNumber);
+	int		fillValuesInCommandsHaveBeenDone(const std::vector<uint8_t>&	data, int commandNumber);
 
 private:
 	ClientPtr									clientReg_;
@@ -51,7 +51,7 @@ private:
 	std::vector<std::pair<Record, ObserverPtr>>	commandsHaveBeenDone_;
 	Record										answerRecord_;
 	Message										message_;
-	vector<unsigned char>						data_;
+	std::vector<uint8_t>						data_;
 //	string			ip_;
 };
 

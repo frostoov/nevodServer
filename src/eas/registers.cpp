@@ -1,4 +1,4 @@
-#include "registers.h"
+#include "registers.hpp"
 
 HostRegisters::HostRegisters()	{
 	write.ban_of_timestamps.address		= 0;

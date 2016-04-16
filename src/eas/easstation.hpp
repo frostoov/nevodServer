@@ -8,8 +8,11 @@ class EasStation	{
 public:
 	using IoServicePtr	= std::shared_ptr<boost::asio::io_service>;
 
-	explicit EasStation(IoServicePtr	service);
-	~EasStation();
+	explicit EasStation(const IoServicePtr&	service)	{
+
+	}
+
+	~EasStation()	{}
 
 protected:
 
