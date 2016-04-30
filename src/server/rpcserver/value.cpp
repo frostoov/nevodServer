@@ -8,29 +8,25 @@
 #include <string>
 
 Value::Value(Array value)
-	: myType(Type::ARRAY)
-{
+	: myType(Type::ARRAY)	{
 	as.myArray = new Array(std::move(value));
 }
 
 Value::Value(const DateTime& value)
-	: myType(Type::DATE_TIME)
-{
+	: myType(Type::DATE_TIME)	{
 	as.myDateTime = new DateTime(value);
 	as.myDateTime->tm_isdst = -1;
 }
 
 Value::Value(int32_t value)
-	: myType(Type::INTEGER_32)
-{
+	: myType(Type::INTEGER_32)	{
 	as.myInteger32 = value;
 	as.myInteger64 = value;
 	as.myDouble = value;
 }
 
 Value::Value(int64_t value)
-	: myType(Type::INTEGER_64)
-{
+	: myType(Type::INTEGER_64)	{
 	as.myInteger32 = value;
 	as.myInteger64 = value;
 	as.myDouble = value;
@@ -42,26 +38,22 @@ Value::Value(int64_t value)
 }
 
 Value::Value(String value, bool binary)
-	: myType(binary ? Type::BINARY : Type::STRING)
-{
+	: myType(binary ? Type::BINARY : Type::STRING)	{
 	as.myString = new String(std::move(value));
 }
 
 Value::Value(Struct value)
-	: myType(Type::STRUCT)
-{
+	: myType(Type::STRUCT)	{
 	as.myStruct = new Struct(std::move(value));
 }
 
-Value::~Value()
-{
+Value::~Value()	{
 	Reset();
 }
 
 Value::Value(const Value& other)
 	: myType(other.myType),
-	  as(other.as)
-{
+	  as(other.as)	{
 	switch (myType) {
 	case Type::BOOLEAN:
 	case Type::DOUBLE:
@@ -88,13 +80,11 @@ Value::Value(const Value& other)
 
 Value::Value(Value&& other) noexcept
 	: myType(other.myType),
-	  as(other.as)
-{
+	  as(other.as)	{
 	other.myType = Type::NIL;
 }
 
-Value& Value::operator=(Value&& other) noexcept
-{
+Value& Value::operator=(Value&& other) noexcept	{
 	if (this != &other) {
 		Reset();
 
@@ -106,40 +96,35 @@ Value& Value::operator=(Value&& other) noexcept
 	return *this;
 }
 
-const Value::Array& Value::AsArray() const
-{
+const Value::Array& Value::AsArray() const	{
 	if (IsArray()) {
 		return *as.myArray;
 	}
 	throw InvalidParametersFault();
 }
 
-const bool& Value::AsBoolean() const
-{
+const bool& Value::AsBoolean() const	{
 	if (IsBoolean()) {
 		return as.myBoolean;
 	}
 	throw InvalidParametersFault();
 }
 
-const Value::DateTime& Value::AsDateTime() const
-{
+const Value::DateTime& Value::AsDateTime() const	{
 	if (IsDateTime()) {
 		return *as.myDateTime;
 	}
 	throw InvalidParametersFault();
 }
 
-const double& Value::AsDouble() const
-{
+const double& Value::AsDouble() const	{
 	if (IsDouble() || IsInteger32() || IsInteger64()) {
 		return as.myDouble;
 	}
 	throw InvalidParametersFault();
 }
 
-const int32_t& Value::AsInteger32() const
-{
+const int32_t& Value::AsInteger32() const	{
 	if (IsInteger32()) {
 		return as.myInteger32;
 	}
@@ -150,32 +135,28 @@ const int32_t& Value::AsInteger32() const
 	throw InvalidParametersFault();
 }
 
-const int64_t& Value::AsInteger64() const
-{
+const int64_t& Value::AsInteger64() const	{
 	if (IsInteger32() || IsInteger64()) {
 		return as.myInteger64;
 	}
 	throw InvalidParametersFault();
 }
 
-const Value::String& Value::AsString() const
-{
+const Value::String& Value::AsString() const	{
 	if (IsString() || IsBinary()) {
 		return *as.myString;
 	}
 	throw InvalidParametersFault();
 }
 
-const Value::Struct& Value::AsStruct() const
-{
+const Value::Struct& Value::AsStruct() const	{
 	if (IsStruct()) {
 		return *as.myStruct;
 	}
 	throw InvalidParametersFault();
 }
 
-void Value::Write(JsonWriter& writer) const
-{
+void Value::Write(JsonWriter& writer) const	{
 	switch (myType) {
 	case Type::ARRAY:
 		writer.StartArray();
@@ -220,8 +201,7 @@ void Value::Write(JsonWriter& writer) const
 	}
 }
 
-void Value::Reset()
-{
+void Value::Reset()	{
 	switch (myType) {
 	case Type::ARRAY:
 		delete as.myArray;
@@ -248,8 +228,7 @@ void Value::Reset()
 	myType = Type::NIL;
 }
 
-std::ostream& operator<<(std::ostream& os, const Value& value)
-{
+std::ostream& operator<<(std::ostream& os, const Value& value)	{
 	switch (value.GetType()) {
 	case Value::Type::ARRAY: {
 		os << '[';

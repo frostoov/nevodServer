@@ -1,17 +1,16 @@
 #ifndef TCPCONNECTION_H
 #define TCPCONNECTION_H
 
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <memory>
+
 #include "jsonformathandler.hpp"
 #include "dispatcher.hpp"
 #include "jsonwriter.hpp"
 #include "jsonreader.hpp"
 
-#include <boost/asio.hpp>
-#include <boost/bind.hpp>
-#include <memory>
-
-class TcpConnection : public std::enable_shared_from_this<TcpConnection>
-{
+class TcpConnection : public std::enable_shared_from_this<TcpConnection>	{
 public:
 	using TcpConnectionPtr	= std::shared_ptr<TcpConnection>;
 	using FormatHandlerPtr	= std::shared_ptr<JsonFormatHandler>;

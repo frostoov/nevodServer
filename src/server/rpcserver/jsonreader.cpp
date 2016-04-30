@@ -8,8 +8,7 @@
 
 using namespace json;
 
-JsonReader::JsonReader(std::string data)
-{
+JsonReader::JsonReader(std::string data)	{
 	myDocument.Parse(data.c_str());
 	if (myDocument.HasParseError()) {
 		throw ParseErrorFault(
@@ -17,13 +16,11 @@ JsonReader::JsonReader(std::string data)
 	}
 }
 
-JsonReader::~JsonReader()
-{
+JsonReader::~JsonReader()	{
 
 }
 
-Request JsonReader::GetRequest()
-{
+Request JsonReader::GetRequest()	{
 	if (!myDocument.IsObject()) {
 		throw InvalidRequestFault();
 	}
@@ -58,8 +55,7 @@ Request JsonReader::GetRequest()
 				   GetId(id->value));
 }
 
-Response JsonReader::GetResponse()
-{
+Response JsonReader::GetResponse()	{
 	if (!myDocument.IsObject()) {
 		throw InvalidRequestFault();
 	}
@@ -104,13 +100,11 @@ Response JsonReader::GetResponse()
 	}
 }
 
-Value JsonReader::GetValue()
-{
+Value JsonReader::GetValue()	{
 	return GetValue(myDocument);
 }
 
-void JsonReader::ValidateJsonrpcVersion() const
-{
+void JsonReader::ValidateJsonrpcVersion() const	{
 	auto jsonrpc = myDocument.FindMember(JSONRPC_NAME);
 	if (jsonrpc == myDocument.MemberEnd()
 			|| !jsonrpc->value.IsString()
@@ -119,8 +113,7 @@ void JsonReader::ValidateJsonrpcVersion() const
 	}
 }
 
-Value JsonReader::GetValue(const rapidjson::Value& value) const
-{
+Value JsonReader::GetValue(const rapidjson::Value& value) const	{
 	switch (value.GetType()) {
 	case rapidjson::kNullType:
 		return Value();
@@ -166,8 +159,7 @@ Value JsonReader::GetValue(const rapidjson::Value& value) const
 	throw InternalErrorFault();
 }
 
-Value JsonReader::GetId(const rapidjson::Value& id) const
-{
+Value JsonReader::GetId(const rapidjson::Value& id) const	{
 	if (id.IsString()) {
 		return id.GetString();
 	}

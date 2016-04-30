@@ -6,8 +6,7 @@
 
 #include "jsonreader.hpp"
 
-class JsonFormatHandler
-{
+class JsonFormatHandler	{
 public:
 	explicit JsonFormatHandler(std::string requestPath = "/RPC2");
 	~JsonFormatHandler();

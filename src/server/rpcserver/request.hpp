@@ -7,8 +7,7 @@
 #include "value.hpp"
 #include "jsonwriter.hpp"
 
-class Request
-{
+class Request	{
 public:
 	typedef std::deque<Value> Parameters;
 

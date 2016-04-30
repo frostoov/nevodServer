@@ -4,8 +4,7 @@
 #include "value.hpp"
 #include "jsonwriter.hpp"
 
-class Response
-{
+class Response	{
 public:
 	Response(Value value, Value id);
 	Response(int32_t faultCode, std::string faultString, Value id);

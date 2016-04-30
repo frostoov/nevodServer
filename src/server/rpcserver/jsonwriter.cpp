@@ -6,37 +6,30 @@
 using namespace json;
 
 JsonWriter::JsonWriter()
-	: myWriter(myStringBuffer)
-{
+	: myWriter(myStringBuffer)	{
 }
 
-JsonWriter::~JsonWriter()
-{
+JsonWriter::~JsonWriter()	{
 
 }
 
-const char* JsonWriter::GetData()
-{
+const char* JsonWriter::GetData()	{
 	return myStringBuffer.GetString();
 }
 
-size_t JsonWriter::GetSize()
-{
+size_t JsonWriter::GetSize()	{
 	return myStringBuffer.GetSize();
 }
 
-void JsonWriter::StartDocument()
-{
+void JsonWriter::StartDocument()	{
 	// Empty
 }
 
-void JsonWriter::EndDocument()
-{
+void JsonWriter::EndDocument()	{
 	// Empty
 }
 
-void JsonWriter::StartRequest(const std::string& methodName, const Value& id)
-{
+void JsonWriter::StartRequest(const std::string& methodName, const Value& id)	{
 	myWriter.StartObject();
 
 	myWriter.Key(JSONRPC_NAME, sizeof(JSONRPC_NAME) - 1);
@@ -51,24 +44,20 @@ void JsonWriter::StartRequest(const std::string& methodName, const Value& id)
 	myWriter.StartArray();
 }
 
-void JsonWriter::EndRequest()
-{
+void JsonWriter::EndRequest()	{
 	myWriter.EndArray();
 	myWriter.EndObject();
 }
 
-void JsonWriter::StartParameter()
-{
+void JsonWriter::StartParameter()	{
 	// Empty
 }
 
-void JsonWriter::EndParameter()
-{
+void JsonWriter::EndParameter()	{
 	// Empty
 }
 
-void JsonWriter::StartResponse(const Value& id)
-{
+void JsonWriter::StartResponse(const Value& id)	{
 	myWriter.StartObject();
 
 	myWriter.Key(JSONRPC_NAME, sizeof(JSONRPC_NAME) - 1);
@@ -79,13 +68,11 @@ void JsonWriter::StartResponse(const Value& id)
 	myWriter.Key(RESULT_NAME, sizeof(RESULT_NAME) - 1);
 }
 
-void JsonWriter::EndResponse()
-{
+void JsonWriter::EndResponse()	{
 	myWriter.EndObject();
 }
 
-void JsonWriter::StartFaultResponse(const Value& id)
-{
+void JsonWriter::StartFaultResponse(const Value& id)	{
 	myWriter.StartObject();
 
 	myWriter.Key(JSONRPC_NAME, sizeof(JSONRPC_NAME) - 1);
@@ -94,13 +81,11 @@ void JsonWriter::StartFaultResponse(const Value& id)
 	WriteId(id);
 }
 
-void JsonWriter::EndFaultResponse()
-{
+void JsonWriter::EndFaultResponse()	{
 	myWriter.EndObject();
 }
 
-void JsonWriter::WriteFault(int32_t code, const std::string& string)
-{
+void JsonWriter::WriteFault(int32_t code, const std::string& string)	{
 	myWriter.Key(ERROR_NAME, sizeof(ERROR_NAME) - 1);
 	myWriter.StartObject();
 
@@ -113,78 +98,63 @@ void JsonWriter::WriteFault(int32_t code, const std::string& string)
 	myWriter.EndObject();
 }
 
-void JsonWriter::StartArray()
-{
+void JsonWriter::StartArray()	{
 	myWriter.StartArray();
 }
 
-void JsonWriter::EndArray()
-{
+void JsonWriter::EndArray()	{
 	myWriter.EndArray();
 }
 
-void JsonWriter::StartStruct()
-{
+void JsonWriter::StartStruct()	{
 	myWriter.StartObject();
 }
 
-void JsonWriter::EndStruct()
-{
+void JsonWriter::EndStruct()	{
 	myWriter.EndObject();
 }
 
-void JsonWriter::StartStructElement(const std::string& name)
-{
+void JsonWriter::StartStructElement(const std::string& name)	{
 	myWriter.Key(name.data(), name.size(), true);
 }
 
-void JsonWriter::EndStructElement()
-{
+void JsonWriter::EndStructElement()	{
 	// Empty
 }
 
-void JsonWriter::WriteBinary(const char* data, size_t size)
-{
+void JsonWriter::WriteBinary(const char* data, size_t size)	{
 	myWriter.String(data, size, true);
 }
 
-void JsonWriter::WriteNull()
-{
+void JsonWriter::WriteNull()	{
 	myWriter.Null();
 }
 
-void JsonWriter::Write(bool value)
-{
+void JsonWriter::Write(bool value)	{
 	myWriter.Bool(value);
 }
 
-void JsonWriter::Write(double value)
-{
+void JsonWriter::Write(double value)	{
 	myWriter.Double(value);
 }
 
-void JsonWriter::Write(int32_t value)
-{
+void JsonWriter::Write(int32_t value)	{
 	myWriter.Int(value);
 }
 
-void JsonWriter::Write(int64_t value)
-{
+void JsonWriter::Write(int64_t value)	{
 	myWriter.Int64(value);
 }
 
-void JsonWriter::Write(const std::string& value)
-{
+void JsonWriter::Write(const std::string& value)	{
 	myWriter.String(value.data(), value.size(), true);
 }
 
-void JsonWriter::Write(const tm& value)
-{
+void JsonWriter::Write(const tm& value)	{
 //	Write(util::FormatIso8601DateTime(value));
 }
 
-void JsonWriter::WriteId(const Value& id)
-{
+void JsonWriter::WriteId(const Value& id)	{
 	if (id.IsString() || id.IsInteger32() || id.IsInteger64() || id.IsNil()) {
 		myWriter.Key(ID_NAME, sizeof(ID_NAME) - 1);
 		if (id.IsString()) {

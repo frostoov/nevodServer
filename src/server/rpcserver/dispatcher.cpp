@@ -2,15 +2,13 @@
 
 #include <stdexcept>
 
-MethodWrapper& MethodWrapper::SetHelpText(std::string help)
-{
+MethodWrapper& MethodWrapper::SetHelpText(std::string help)	{
 	myHelpText = std::move(help);
 	return *this;
 }
 
 std::vector<std::string> Dispatcher::GetMethodNames(
-		bool includeHidden) const
-{
+		bool includeHidden) const	{
 	std::vector<std::string> names;
 	names.reserve(myMethods.size());
 
@@ -23,14 +21,12 @@ std::vector<std::string> Dispatcher::GetMethodNames(
 	return names;
 }
 
-MethodWrapper& Dispatcher::GetMethod(const std::string& name)
-{
+MethodWrapper& Dispatcher::GetMethod(const std::string& name)	{
 	return myMethods.at(name);
 }
 
 MethodWrapper& Dispatcher::AddMethod(
-		std::string name, MethodWrapper::Method method)
-{
+		std::string name, MethodWrapper::Method method)	{
 	auto result = myMethods.emplace(
 				std::piecewise_construct,
 				std::forward_as_tuple(std::move(name)),
@@ -41,15 +37,14 @@ MethodWrapper& Dispatcher::AddMethod(
 	return result.first->second;
 }
 
-void Dispatcher::RemoveMethod(const std::string& name)
-{
+void Dispatcher::RemoveMethod(const std::string& name)	{
 	myMethods.erase(name);
 }
 
 Response Dispatcher::Invoke(const std::string& name,
 							const Request::Parameters& parameters,
-							const Value& id) const
-{
+							const Value& id) const	{
+
 	try {
 		auto method = myMethods.find(name);
 		if (method == myMethods.end()) {

@@ -6,11 +6,9 @@
 #include <exception>
 #include <string>
 
-class Fault : public std::exception
-{
+class Fault : public std::exception	{
 public:
-	enum ReservedCodes : int32_t
-	{
+	enum ReservedCodes : int32_t	{
 		RESERVED_CODE_MIN = -32768,
 		RESERVED_CODE_MAX = -32000,
 		SERVER_ERROR_CODE_MIN = -32099,
@@ -36,8 +34,7 @@ public:
 	int32_t GetCode() const { return myFaultCode; }
 	const std::string& GetString() const { return myFaultString; }
 
-	const char* what() const noexcept override
-	{
+	const char* what() const noexcept override	{
 		return myFaultString.c_str();
 	}
 
@@ -53,8 +50,7 @@ private:
 	friend class PreDefinedFault;
 };
 
-class PreDefinedFault : public Fault
-{
+class PreDefinedFault : public Fault	{
 protected:
 	PreDefinedFault(int32_t faultCode, std::string faultString)
 		: Fault(faultCode, std::move(faultString)) {}
@@ -62,47 +58,40 @@ protected:
 	friend class Response;
 };
 
-class ParseErrorFault : public PreDefinedFault
-{
+class ParseErrorFault : public PreDefinedFault	{
 public:
 	ParseErrorFault(std::string string = "Parse error")
 		: PreDefinedFault(PARSE_ERROR, std::move(string)) {}
 };
 
-class InvalidRequestFault : public PreDefinedFault
-{
+class InvalidRequestFault : public PreDefinedFault	{
 public:
 	InvalidRequestFault(std::string string = "Invalid request")
 		: PreDefinedFault(INVALID_REQUEST, std::move(string)) {}
 };
 
-class MethodNotFoundFault : public PreDefinedFault
-{
+class MethodNotFoundFault : public PreDefinedFault	{
 public:
 	MethodNotFoundFault(std::string string = "Method not found")
 		: PreDefinedFault(METHOD_NOT_FOUND, std::move(string)) {}
 };
 
-class InvalidParametersFault : public PreDefinedFault
-{
+class InvalidParametersFault : public PreDefinedFault	{
 public:
 	InvalidParametersFault(std::string string = "Invalid parameters")
 		: PreDefinedFault(INVALID_PARAMETERS, std::move(string)) {}
 };
 
-class InternalErrorFault : public PreDefinedFault
-{
+class InternalErrorFault : public PreDefinedFault	{
 public:
 	InternalErrorFault(std::string string = "Internal error")
 		: PreDefinedFault(INTERNAL_ERROR, std::move(string)) {}
 };
 
-class ServerErrorFault : public PreDefinedFault
-{
+class ServerErrorFault : public PreDefinedFault	{
 public:
 	ServerErrorFault(int32_t code, std::string string)
-		: PreDefinedFault(code, std::move(string))
-	{
+		: PreDefinedFault(code, std::move(string))	{
 		assert(code >= SERVER_ERROR_CODE_MIN && code <= SERVER_ERROR_CODE_MAX);
 	}
 };

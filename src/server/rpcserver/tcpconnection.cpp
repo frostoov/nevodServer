@@ -3,8 +3,8 @@
 #include <iostream>	//TODO
 
 TcpConnection::TcpConnection(boost::asio::io_service &service, Dispatcher &dispatcher, std::vector<JsonFormatHandler *> &formatHandlersIn)
-	:	socket(service), myDispatcher(dispatcher), myFormatHandlers(formatHandlersIn)
-{
+	:	socket(service), myDispatcher(dispatcher), myFormatHandlers(formatHandlersIn)	{
+
 	formatHandler = std::make_shared<JsonFormatHandler>();
 	buf.resize(2048);
 
@@ -12,23 +12,19 @@ TcpConnection::TcpConnection(boost::asio::io_service &service, Dispatcher &dispa
 		std::cout << str << std::endl;
 }
 
-TcpConnection::~TcpConnection()
-{
+TcpConnection::~TcpConnection()	{
 
 }
 
-TcpConnection::TcpConnectionPtr	TcpConnection::create(boost::asio::io_service &service, Dispatcher &dispatcher, std::vector<JsonFormatHandler *> &formatHandlers)
-{
+TcpConnection::TcpConnectionPtr	TcpConnection::create(boost::asio::io_service &service, Dispatcher &dispatcher, std::vector<JsonFormatHandler *> &formatHandlers)	{
 	return std::make_shared<TcpConnection>(service, dispatcher, formatHandlers);
 }
 
-boost::asio::ip::tcp::socket& TcpConnection::getSocket()
-{
+boost::asio::ip::tcp::socket& TcpConnection::getSocket()	{
 	return socket;
 }
 
-void	TcpConnection::start()
-{
+void	TcpConnection::start()	{
 	std::cout << "I am in start!!" << std::endl;
 
 	//	async_write(socket, boost::asio::buffer(message),
@@ -48,8 +44,7 @@ void	TcpConnection::start()
 
 }
 
-void	TcpConnection::handleWrite(const boost::system::error_code &error, size_t)
-{
+void	TcpConnection::handleWrite(const boost::system::error_code &error, size_t)	{
 	std::cout << "I have wrriten that!!" << std::endl;
 	//	boost::asio::async_read_until(socket, response_, ";",
 	//									boost::bind(&TcpConnection::handleRead, shared_from_this(),
@@ -57,8 +52,7 @@ void	TcpConnection::handleWrite(const boost::system::error_code &error, size_t)
 	//													));
 }
 
-void	TcpConnection::handleRead(const boost::system::error_code &error)
-{
+void	TcpConnection::handleRead(const boost::system::error_code &error)	{
 	std::cout << error.message() << std::endl;
 	//	if (error != 0)	{
 	//		return;

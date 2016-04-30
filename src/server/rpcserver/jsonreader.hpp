@@ -4,12 +4,13 @@
 #include <rapidjson/document.h>
 #include <string>
 
+#include <json.hpp>
+
 #include "request.hpp"
 #include "response.hpp"
 #include "value.hpp"
 
-class JsonReader
-{
+class JsonReader {
 public:
 	JsonReader(std::string data);
 	~JsonReader();

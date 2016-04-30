@@ -7,20 +7,17 @@ Response::Response(Value value, Value id)
 	: myResult(std::move(value)),
 	  myIsFault(false),
 	  myFaultCode(0),
-	  myId(std::move(id))
-{
+	  myId(std::move(id))	{
 }
 
 Response::Response(int32_t faultCode, std::string faultString, Value id)
 	: myIsFault(true),
 	  myFaultCode(faultCode),
 	  myFaultString(std::move(faultString)),
-	  myId(std::move(id))
-{
+	  myId(std::move(id))	{
 }
 
-void Response::Write(JsonWriter& writer) const
-{
+void Response::Write(JsonWriter& writer) const	{
 	writer.StartDocument();
 	if (myIsFault) {
 		writer.StartFaultResponse(myId);
@@ -35,8 +32,7 @@ void Response::Write(JsonWriter& writer) const
 	writer.EndDocument();
 }
 
-void Response::ThrowIfFault() const
-{
+void Response::ThrowIfFault() const	{
 	if (!IsFault()) {
 		return;
 	}

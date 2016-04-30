@@ -9,16 +9,14 @@
 
 #include "jsonwriter.hpp"
 
-class Value
-{
+class Value	{
 public:
 	typedef std::vector<Value> Array;
 	typedef tm DateTime;
 	typedef std::string String;
 	typedef std::map<std::string, Value> Struct;
 
-	enum class Type
-	{
+	enum class Type	{
 		ARRAY,
 		BINARY,
 		BOOLEAN,
@@ -44,8 +42,7 @@ public:
 
 	template<typename T>
 	Value(std::vector<T> value)
-		: Value(Array{})
-	{
+		: Value(Array{})	{
 		as.myArray->reserve(value.size());
 		for (auto& v : value) {
 			as.myArray->emplace_back(std::move(v));
@@ -54,8 +51,7 @@ public:
 
 	template<typename T>
 	Value(const std::map<std::string, T>& value)
-		: Value(Struct{})
-	{
+		: Value(Struct{})	{
 		for (auto& v : value) {
 			as.myStruct->emplace(v.first, v.second);
 		}
@@ -63,8 +59,7 @@ public:
 
 	template<typename T>
 	Value(const std::unordered_map<std::string, T>& value)
-		: Value(Struct{})
-	{
+		: Value(Struct{})	{
 		for (auto& v : value) {
 			as.myStruct->emplace(v.first, v.second);
 		}
@@ -112,15 +107,13 @@ private:
 	void Reset();
 
 	Type myType;
-	union
-	{
+	union	{
 		Array* myArray;
 		bool myBoolean;
 		DateTime* myDateTime;
 		String* myString;
 		Struct* myStruct;
-		struct
-		{
+		struct	{
 			double myDouble;
 			int32_t myInteger32;
 			int64_t myInteger64;
@@ -129,66 +122,55 @@ private:
 };
 
 template<> inline
-const Value::Array& Value::AsType<typename Value::Array>() const
-{
+const Value::Array& Value::AsType<typename Value::Array>() const	{
 	return AsArray();
 }
 
 template<> inline
-const bool& Value::AsType<bool>() const
-{
+const bool& Value::AsType<bool>() const	{
 	return AsBoolean();
 }
 
 template<> inline
-const Value::DateTime& Value::AsType<typename Value::DateTime>() const
-{
+const Value::DateTime& Value::AsType<typename Value::DateTime>() const	{
 	return AsDateTime();
 }
 
 template<> inline
-const double& Value::AsType<double>() const
-{
+const double& Value::AsType<double>() const	{
 	return AsDouble();
 }
 
 template<> inline
-const int32_t& Value::AsType<int32_t>() const
-{
+const int32_t& Value::AsType<int32_t>() const	{
 	return AsInteger32();
 }
 
 template<> inline
-const int64_t& Value::AsType<int64_t>() const
-{
+const int64_t& Value::AsType<int64_t>() const	{
 	return AsInteger64();
 }
 
 template<> inline
-const Value::String& Value::AsType<typename Value::String>() const
-{
+const Value::String& Value::AsType<typename Value::String>() const	{
 	return AsString();
 }
 
 template<> inline
-const Value::Struct& Value::AsType<typename Value::Struct>() const
-{
+const Value::Struct& Value::AsType<typename Value::Struct>() const	{
 	return AsStruct();
 }
 
 template<> inline
-const Value& Value::AsType<Value>() const
-{
+const Value& Value::AsType<Value>() const	{
 	return *this;
 }
 
-inline const Value& Value::operator[](Array::size_type i) const
-{
+inline const Value& Value::operator[](Array::size_type i) const	{
 	return AsArray().at(i);
 };
 
-inline const Value& Value::operator[](const Struct::key_type& key) const
-{
+inline const Value& Value::operator[](const Struct::key_type& key) const	{
 	return AsStruct().at(key);
 }
 

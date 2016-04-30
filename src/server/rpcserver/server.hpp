@@ -1,14 +1,13 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "dispatcher.hpp"
-#include "tcpconnection.hpp"
-
 #include <string>
 #include <boost/asio.hpp>
 
-class Server
-{
+#include "dispatcher.hpp"
+#include "tcpconnection.hpp"
+
+class Server	{
 public:
 	using ioServicePtr = std::shared_ptr<boost::asio::io_service>;
 

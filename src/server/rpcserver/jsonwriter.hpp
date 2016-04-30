@@ -6,10 +6,11 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
 
+#include <json.hpp>
+
 class Value;
 
-class JsonWriter
-{
+class JsonWriter	{
 public:
 	JsonWriter();
 	~JsonWriter();
