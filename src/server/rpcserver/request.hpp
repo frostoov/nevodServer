@@ -4,7 +4,6 @@
 #include <deque>
 #include <string>
 
-#include "value.hpp"
 #include "jsonwriter.hpp"
 
 class Request	{

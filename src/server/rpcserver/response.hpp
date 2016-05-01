@@ -1,7 +1,6 @@
 #ifndef RESPONSE_H
 #define RESPONSE_H
 
-#include "value.hpp"
 #include "jsonwriter.hpp"
 
 class Response	{

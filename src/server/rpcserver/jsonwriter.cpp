@@ -3,7 +3,7 @@
 #include "json.hpp"
 #include "value.hpp"
 
-using namespace jsonconstats;
+using namespace jsonconstants;
 
 JsonWriter::JsonWriter()	{
 

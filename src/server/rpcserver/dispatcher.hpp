@@ -8,7 +8,6 @@
 #include "fault.hpp"
 #include "request.hpp"
 #include "response.hpp"
-#include "value.hpp"
 
 class MethodWrapper	{
 public:

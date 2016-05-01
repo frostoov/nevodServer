@@ -4,9 +4,8 @@
 #include "json.hpp"
 #include "request.hpp"
 #include "response.hpp"
-#include "value.hpp"
 
-using namespace jsonconstats;
+using namespace jsonconstants;
 
 JsonReader::JsonReader(const std::string& data)	{
 	document_ = json::parse(data);
