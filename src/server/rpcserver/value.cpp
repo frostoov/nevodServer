@@ -159,44 +159,44 @@ const Value::Struct& Value::AsStruct() const	{
 void Value::Write(JsonWriter& writer) const	{
 	switch (myType) {
 	case Type::ARRAY:
-		writer.StartArray();
+		writer.startArray();
 		for (auto& element : *as.myArray) {
 			element.Write(writer);
 		}
-		writer.EndArray();
+		writer.endArray();
 		break;
 	case Type::BINARY:
-		writer.WriteBinary(as.myString->data(), as.myString->size());
+		writer.writeBinary(as.myString->data(), as.myString->size());
 		break;
 	case Type::BOOLEAN:
-		writer.Write(as.myBoolean);
+		writer.write(as.myBoolean);
 		break;
 	case Type::DATE_TIME:
-		writer.Write(*as.myDateTime);
+		writer.write(*as.myDateTime);
 		break;
 	case Type::DOUBLE:
-		writer.Write(as.myDouble);
+		writer.write(as.myDouble);
 		break;
 	case Type::INTEGER_32:
-		writer.Write(as.myInteger32);
+		writer.write(as.myInteger32);
 		break;
 	case Type::INTEGER_64:
-		writer.Write(as.myInteger64);
+		writer.write(as.myInteger64);
 		break;
 	case Type::NIL:
-		writer.WriteNull();
+		writer.writeNull();
 		break;
 	case Type::STRING:
-		writer.Write(*as.myString);
+		writer.write(*as.myString);
 		break;
 	case Type::STRUCT:
-		writer.StartStruct();
+		writer.startStruct();
 		for (auto& element : *as.myStruct) {
-			writer.StartStructElement(element.first);
+			writer.startStructElement(element.first);
 			element.second.Write(writer);
-			writer.EndStructElement();
+			writer.endStructElement();
 		}
-		writer.EndStruct();
+		writer.endStruct();
 		break;
 	}
 }

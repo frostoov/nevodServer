@@ -14,13 +14,13 @@ void Request::Write(JsonWriter &writer) const	{
 
 void Request::Write(const std::string& methodName, const Parameters& params,
 					const Value& id, JsonWriter& writer)	{
-	writer.StartDocument();
-	writer.StartRequest(methodName, id);
+	writer.startDocument();
+	writer.startRequest(methodName, id);
 	for (auto& param : params) {
-		writer.StartParameter();
+		writer.startParameter();
 		param.Write(writer);
-		writer.EndParameter();
+		writer.endParameter();
 	}
-	writer.EndRequest();
-	writer.EndDocument();
+	writer.endRequest();
+	writer.endDocument();
 }

@@ -18,18 +18,18 @@ Response::Response(int32_t faultCode, std::string faultString, Value id)
 }
 
 void Response::Write(JsonWriter& writer) const	{
-	writer.StartDocument();
+	writer.startDocument();
 	if (myIsFault) {
-		writer.StartFaultResponse(myId);
-		writer.WriteFault(myFaultCode, myFaultString);
-		writer.EndFaultResponse();
+		writer.startFaultResponse(myId);
+		writer.writeFault(myFaultCode, myFaultString);
+		writer.endFaultResponse();
 	}
 	else {
-		writer.StartResponse(myId);
+		writer.startResponse(myId);
 		myResult.Write(writer);
-		writer.EndResponse();
+		writer.endResponse();
 	}
-	writer.EndDocument();
+	writer.endDocument();
 }
 
 void Response::ThrowIfFault() const	{

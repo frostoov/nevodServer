@@ -1,7 +1,6 @@
 #ifndef XSONRPC_JSONREADER_H
 #define XSONRPC_JSONREADER_H
 
-#include <rapidjson/document.h>
 #include <string>
 
 #include <json.hpp>
@@ -12,20 +11,20 @@
 
 class JsonReader {
 public:
-	JsonReader(std::string data);
+	using json = nlohmann::json;
+
+	JsonReader(const std::string& data);
 	~JsonReader();
 
-	Request GetRequest();
-	Response GetResponse();
-	Value GetValue();
+	Request getRequest();
+	Response getResponse();
+	Value getValue();
 
 private:
-	void ValidateJsonrpcVersion() const;
-	Value GetValue(const rapidjson::Value& value) const;
-	Value GetId(const rapidjson::Value& id) const;
+	void validateJsonrpcVersion() const;
 
-	std::string myData;
-	rapidjson::Document myDocument;
+	std::string data_;
+	json		document_;
 };
 
 #endif

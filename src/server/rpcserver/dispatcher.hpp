@@ -5,8 +5,6 @@
 #include <utility>
 #include <vector>
 
-#include <json.hpp>
-
 #include "fault.hpp"
 #include "request.hpp"
 #include "response.hpp"

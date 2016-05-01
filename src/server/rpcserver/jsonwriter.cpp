@@ -3,171 +3,145 @@
 #include "json.hpp"
 #include "value.hpp"
 
-using namespace json;
+using namespace jsonconstats;
 
-JsonWriter::JsonWriter()
-	: myWriter(myStringBuffer)	{
+JsonWriter::JsonWriter()	{
+
 }
 
 JsonWriter::~JsonWriter()	{
 
 }
 
-const char* JsonWriter::GetData()	{
-	return myStringBuffer.GetString();
+const char* JsonWriter::getData()	{
+	return document.dump().c_str();
 }
 
-size_t JsonWriter::GetSize()	{
-	return myStringBuffer.GetSize();
+size_t JsonWriter::getSize()	{
+	return document.size();
 }
 
-void JsonWriter::StartDocument()	{
+void JsonWriter::startDocument()	{
 	// Empty
 }
 
-void JsonWriter::EndDocument()	{
+void JsonWriter::endDocument()	{
 	// Empty
 }
 
-void JsonWriter::StartRequest(const std::string& methodName, const Value& id)	{
-	myWriter.StartObject();
+void JsonWriter::startRequest(const std::string& methodName, const Value& id)	{
+	document[JSONRPC_NAME]	= JSONRPC_VERSION_2_0;
+	document[METHOD_NAME]	= methodName;
 
-	myWriter.Key(JSONRPC_NAME, sizeof(JSONRPC_NAME) - 1);
-	myWriter.String(JSONRPC_VERSION_2_0, sizeof(JSONRPC_VERSION_2_0) - 1);
-
-	myWriter.Key(METHOD_NAME, sizeof(METHOD_NAME) - 1);
-	myWriter.String(methodName.data(), methodName.size(), true);
-
-	WriteId(id);
-
-	myWriter.Key(PARAMS_NAME, sizeof(PARAMS_NAME) - 1);
-	myWriter.StartArray();
+	writeId(id);
+	//TODO
 }
 
-void JsonWriter::EndRequest()	{
-	myWriter.EndArray();
-	myWriter.EndObject();
+void JsonWriter::endRequest()	{
 }
 
-void JsonWriter::StartParameter()	{
+void JsonWriter::startParameter()	{
 	// Empty
 }
 
-void JsonWriter::EndParameter()	{
+void JsonWriter::endParameter()	{
 	// Empty
 }
 
-void JsonWriter::StartResponse(const Value& id)	{
-	myWriter.StartObject();
-
-	myWriter.Key(JSONRPC_NAME, sizeof(JSONRPC_NAME) - 1);
-	myWriter.String(JSONRPC_VERSION_2_0, sizeof(JSONRPC_VERSION_2_0) - 1);
-
-	WriteId(id);
-
-	myWriter.Key(RESULT_NAME, sizeof(RESULT_NAME) - 1);
+void JsonWriter::startResponse(const Value& id)	{
+	document[JSONRPC_NAME] = JSONRPC_VERSION_2_0;
+	writeId(id);
 }
 
-void JsonWriter::EndResponse()	{
-	myWriter.EndObject();
+void JsonWriter::endResponse()	{
 }
 
-void JsonWriter::StartFaultResponse(const Value& id)	{
-	myWriter.StartObject();
+void JsonWriter::startFaultResponse(const Value& id)	{
+	document[JSONRPC_NAME] = JSONRPC_VERSION_2_0;
 
-	myWriter.Key(JSONRPC_NAME, sizeof(JSONRPC_NAME) - 1);
-	myWriter.String(JSONRPC_VERSION_2_0, sizeof(JSONRPC_VERSION_2_0) - 1);
-
-	WriteId(id);
+	writeId(id);
 }
 
-void JsonWriter::EndFaultResponse()	{
-	myWriter.EndObject();
+void JsonWriter::endFaultResponse()	{
 }
 
-void JsonWriter::WriteFault(int32_t code, const std::string& string)	{
-	myWriter.Key(ERROR_NAME, sizeof(ERROR_NAME) - 1);
-	myWriter.StartObject();
-
-	myWriter.Key(ERROR_CODE_NAME, sizeof(ERROR_CODE_NAME) - 1);
-	myWriter.Int(code);
-
-	myWriter.Key(ERROR_MESSAGE_NAME, sizeof(ERROR_MESSAGE_NAME) - 1);
-	myWriter.String(string.data(), string.size(), true);
-
-	myWriter.EndObject();
+void JsonWriter::writeFault(int32_t code, const std::string& string)	{
+	document[ERROR_NAME] = {
+		{ERROR_CODE_NAME, code},
+		{ERROR_MESSAGE_NAME, string}
+	};
 }
 
-void JsonWriter::StartArray()	{
-	myWriter.StartArray();
+void JsonWriter::startArray()	{
+//	writer_.StartArray();
 }
 
-void JsonWriter::EndArray()	{
-	myWriter.EndArray();
+void JsonWriter::endArray()	{
+//	writer_.EndArray();
 }
 
-void JsonWriter::StartStruct()	{
-	myWriter.StartObject();
+void JsonWriter::startStruct()	{
+//	writer_.StartObject();
 }
 
-void JsonWriter::EndStruct()	{
-	myWriter.EndObject();
+void JsonWriter::endStruct()	{
+//	writer_.EndObject();
 }
 
-void JsonWriter::StartStructElement(const std::string& name)	{
-	myWriter.Key(name.data(), name.size(), true);
+void JsonWriter::startStructElement(const std::string& name)	{
+//	writer_.Key(name.data(), name.size(), true);
 }
 
-void JsonWriter::EndStructElement()	{
+void JsonWriter::endStructElement()	{
 	// Empty
 }
 
-void JsonWriter::WriteBinary(const char* data, size_t size)	{
-	myWriter.String(data, size, true);
+void JsonWriter::writeBinary(const char* data, size_t size)	{
+//	writer_.String(data, size, true);
 }
 
-void JsonWriter::WriteNull()	{
-	myWriter.Null();
+void JsonWriter::writeNull()	{
+//	writer_.Null();
 }
 
-void JsonWriter::Write(bool value)	{
-	myWriter.Bool(value);
+void JsonWriter::write(bool value)	{
+//	writer_.Bool(value);
 }
 
-void JsonWriter::Write(double value)	{
-	myWriter.Double(value);
+void JsonWriter::write(double value)	{
+//	writer_.Double(value);
 }
 
-void JsonWriter::Write(int32_t value)	{
-	myWriter.Int(value);
+void JsonWriter::write(int32_t value)	{
+//	writer_.Int(value);
 }
 
-void JsonWriter::Write(int64_t value)	{
-	myWriter.Int64(value);
+void JsonWriter::write(int64_t value)	{
+//	writer_.Int64(value);
 }
 
-void JsonWriter::Write(const std::string& value)	{
-	myWriter.String(value.data(), value.size(), true);
+void JsonWriter::write(const std::string& value)	{
+//	writer_.String(value.data(), value.size(), true);
 }
 
-void JsonWriter::Write(const tm& value)	{
+void JsonWriter::write(const tm& value)	{
 //	Write(util::FormatIso8601DateTime(value));
 }
 
-void JsonWriter::WriteId(const Value& id)	{
-	if (id.IsString() || id.IsInteger32() || id.IsInteger64() || id.IsNil()) {
-		myWriter.Key(ID_NAME, sizeof(ID_NAME) - 1);
-		if (id.IsString()) {
-			myWriter.String(id.AsString().data(), id.AsString().size(), true);
-		}
-		else if (id.IsInteger32()) {
-			myWriter.Int(id.AsInteger32());
-		}
-		else if (id.IsInteger64()) {
-			myWriter.Int64(id.AsInteger64());
-		}
-		else {
-			myWriter.Null();
-		}
-	}
+void JsonWriter::writeId(const Value& id)	{
+//	if (id.IsString() || id.IsInteger32() || id.IsInteger64() || id.IsNil()) {
+//		writer_.Key(ID_NAME, sizeof(ID_NAME) - 1);
+//		if (id.IsString()) {
+//			writer_.String(id.AsString().data(), id.AsString().size(), true);
+//		}
+//		else if (id.IsInteger32()) {
+//			writer_.Int(id.AsInteger32());
+//		}
+//		else if (id.IsInteger64()) {
+//			writer_.Int64(id.AsInteger64());
+//		}
+//		else {
+//			writer_.Null();
+//		}
+//	}
 }

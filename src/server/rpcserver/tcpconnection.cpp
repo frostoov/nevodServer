@@ -70,7 +70,7 @@ void	TcpConnection::handleRead(const boost::system::error_code &error)	{
 
 	try {
 		auto reader = std::unique_ptr<JsonReader>(new JsonReader(std::move(msg)));
-		Request	request = reader->GetRequest();
+		Request	request = reader->getRequest();
 		reader.reset();
 
 		auto response = myDispatcher.Invoke(
@@ -80,9 +80,9 @@ void	TcpConnection::handleRead(const boost::system::error_code &error)	{
 		Response(ex.GetCode(), ex.GetString(), Value()).Write(*writer.get());
 	}
 
-	std::cout << std::string(writer->GetData()) << std::endl;
+	std::cout << std::string(writer->getData()) << std::endl;
 
-	boost::asio::async_write(socket, boost::asio::buffer(std::string(writer->GetData())),
+	boost::asio::async_write(socket, boost::asio::buffer(std::string(writer->getData())),
 							 boost::bind(&TcpConnection::handleWrite, shared_from_this(),
 										 boost::asio::placeholders::error,
 										 boost::asio::placeholders::bytes_transferred));

@@ -3,8 +3,6 @@
 
 #include <iosfwd>
 #include <string>
-#include <rapidjson/writer.h>
-#include <rapidjson/stringbuffer.h>
 
 #include <json.hpp>
 
@@ -12,42 +10,43 @@ class Value;
 
 class JsonWriter	{
 public:
+	using json = nlohmann::json;
+
 	JsonWriter();
 	~JsonWriter();
 
-	const char* GetData();
-	size_t GetSize();
-	void StartDocument();
-	void EndDocument();
-	void StartRequest(const std::string& methodName, const Value& id);
-	void EndRequest();
-	void StartParameter();
-	void EndParameter();
-	void StartResponse(const Value& id);
-	void EndResponse();
-	void StartFaultResponse(const Value& id);
-	void EndFaultResponse();
-	void WriteFault(int32_t code, const std::string& string);
-	void StartArray();
-	void EndArray();
-	void StartStruct();
-	void EndStruct();
-	void StartStructElement(const std::string& name);
-	void EndStructElement();
-	void WriteBinary(const char* data, size_t size);
-	void WriteNull();
-	void Write(bool value);
-	void Write(double value);
-	void Write(int32_t value);
-	void Write(int64_t value);
-	void Write(const std::string& value);
-	void Write(const tm& value);
+	const char* getData();
+	size_t getSize();
+	void startDocument();
+	void endDocument();
+	void startRequest(const std::string& methodName, const Value& id);
+	void endRequest();
+	void startParameter();
+	void endParameter();
+	void startResponse(const Value& id);
+	void endResponse();
+	void startFaultResponse(const Value& id);
+	void endFaultResponse();
+	void writeFault(int32_t code, const std::string& string);
+	void startArray();
+	void endArray();
+	void startStruct();
+	void endStruct();
+	void startStructElement(const std::string& name);
+	void endStructElement();
+	void writeBinary(const char* data, size_t size);
+	void writeNull();
+	void write(bool value);
+	void write(double value);
+	void write(int32_t value);
+	void write(int64_t value);
+	void write(const std::string& value);
+	void write(const tm& value);
 
 private:
-	void WriteId(const Value& id);
+	void writeId(const Value& id);
 
-	rapidjson::StringBuffer myStringBuffer;
-	rapidjson::Writer<rapidjson::StringBuffer> myWriter;
+	json	document;
 };
 
 #endif

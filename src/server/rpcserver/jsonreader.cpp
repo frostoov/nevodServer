@@ -6,172 +6,94 @@
 #include "response.hpp"
 #include "value.hpp"
 
-using namespace json;
+using namespace jsonconstats;
 
-JsonReader::JsonReader(std::string data)	{
-	myDocument.Parse(data.c_str());
-	if (myDocument.HasParseError()) {
-		throw ParseErrorFault(
-					"Parse error: " + std::to_string(myDocument.GetParseError()));
-	}
+JsonReader::JsonReader(const std::string& data)	{
+	document_ = json::parse(data);
+	//TODO
 }
 
 JsonReader::~JsonReader()	{
 
 }
 
-Request JsonReader::GetRequest()	{
-	if (!myDocument.IsObject()) {
+Request JsonReader::getRequest()	{
+	if (!document_.is_object())
 		throw InvalidRequestFault();
-	}
 
-	ValidateJsonrpcVersion();
+	validateJsonrpcVersion();
 
-	auto method = myDocument.FindMember(METHOD_NAME);
-	if (method == myDocument.MemberEnd() || !method->value.IsString()) {
+	if (document_.find(METHOD_NAME) == document_.end())
 		throw InvalidRequestFault();
-	}
+
+	auto methodName = document_[METHOD_NAME];
 
 	Request::Parameters parameters;
-	auto params = myDocument.FindMember(PARAMS_NAME);
-	if (params != myDocument.MemberEnd()) {
-		if (!params->value.IsArray()) {
-			throw InvalidRequestFault();
-		}
+	if (document_.find(PARAMS_NAME) == document_.end())
+		throw InvalidRequestFault();
+	auto params_name = document_[PARAMS_NAME];
 
-		for (auto param = params->value.Begin(); param != params->value.End();
-			 ++param) {
-			parameters.emplace_back(GetValue(*param));
-		}
-	}
+	if (!params_name.is_array())
+		throw InvalidRequestFault();
+	for (auto& param : params_name)
+		parameters.emplace_back(param.dump());
 
-	auto id = myDocument.FindMember(ID_NAME);
-	if (id == myDocument.MemberEnd()) {
-		// Notification
-		return Request(method->value.GetString(), std::move(parameters), false);
-	}
+	if (document_.find(ID_NAME) == document_.end())
+		return Request(methodName.dump(), parameters, false);
 
-	return Request(method->value.GetString(), std::move(parameters),
-				   GetId(id->value));
+	return Request(methodName.dump(), parameters, document_[ID_NAME]);
 }
 
-Response JsonReader::GetResponse()	{
-	if (!myDocument.IsObject()) {
+Response JsonReader::getResponse()	{
+	if (!document_.is_object())
 		throw InvalidRequestFault();
-	}
 
-	ValidateJsonrpcVersion();
+	validateJsonrpcVersion();
 
-	auto id = myDocument.FindMember(ID_NAME);
-	if (id == myDocument.MemberEnd()) {
+	if (document_.find(ID_NAME) == document_.end())
 		throw InvalidRequestFault();
+
+	auto result = document_.find(RESULT_NAME);
+	auto error	= document_.find(ERROR_NAME);
+	auto errorObj = document_[ERROR_NAME];
+
+	if (result != document_.end()) {
+		if (error != document_.end())
+			throw InvalidRequestFault();
+
+		return Response(document_[RESULT_NAME], document_[ID_NAME]);
 	}
+	else if (error != document_.end()) {
+		if (result != document_.end()) {
+			throw InvalidRequestFault();
+		}
+		if (!errorObj.is_object()) {
+			throw InvalidRequestFault();
+		}
+		auto code = errorObj.find(ERROR_CODE_NAME);
+		if (code == errorObj.end() || !errorObj[ERROR_CODE_NAME].is_number()) {
+			throw InvalidRequestFault();
+		}
+		if (errorObj.find(ERROR_MESSAGE_NAME) == errorObj.end())
+			throw InvalidRequestFault();
+		if (!errorObj[ERROR_MESSAGE_NAME].is_string())
+			throw InvalidRequestFault();
 
-	auto result = myDocument.FindMember(RESULT_NAME);
-	auto error = myDocument.FindMember(ERROR_NAME);
-
-	if (result != myDocument.MemberEnd()) {
-		if (error != myDocument.MemberEnd()) {
-			throw InvalidRequestFault();
-		}
-		return Response(GetValue(result->value), GetId(id->value));
-	}
-	else if (error != myDocument.MemberEnd()) {
-		if (result != myDocument.MemberEnd()) {
-			throw InvalidRequestFault();
-		}
-		if (!error->value.IsObject()) {
-			throw InvalidRequestFault();
-		}
-		auto code = error->value.FindMember(ERROR_CODE_NAME);
-		if (code == error->value.MemberEnd() || !code->value.IsInt()) {
-			throw InvalidRequestFault();
-		}
-		auto message = error->value.FindMember(ERROR_MESSAGE_NAME);
-		if (message == error->value.MemberEnd() || !message->value.IsString()) {
-			throw InvalidRequestFault();
-		}
-
-		return Response(code->value.GetInt(), message->value.GetString(),
-						GetId(id->value));
+		return Response(errorObj[ERROR_CODE_NAME], errorObj[ERROR_MESSAGE_NAME].dump(), document_[ID_NAME]);
 	}
 	else {
 		throw InvalidRequestFault();
 	}
 }
 
-Value JsonReader::GetValue()	{
-	return GetValue(myDocument);
-}
+//Value JsonReader::getValue()	{
+//	return getValue(myDocument);
+//}
 
-void JsonReader::ValidateJsonrpcVersion() const	{
-	auto jsonrpc = myDocument.FindMember(JSONRPC_NAME);
-	if (jsonrpc == myDocument.MemberEnd()
-			|| !jsonrpc->value.IsString()
-			|| strcmp(jsonrpc->value.GetString(), JSONRPC_VERSION_2_0) != 0) {
+void JsonReader::validateJsonrpcVersion() const	{
+	if (document_.find(JSONRPC_NAME) == document_.end())
 		throw InvalidRequestFault();
-	}
-}
-
-Value JsonReader::GetValue(const rapidjson::Value& value) const	{
-	switch (value.GetType()) {
-	case rapidjson::kNullType:
-		return Value();
-	case rapidjson::kFalseType:
-	case rapidjson::kTrueType:
-		return Value(value.GetBool());
-	case rapidjson::kObjectType: {
-		Value::Struct data;
-		for (auto it = value.MemberBegin(); it != value.MemberEnd(); ++it) {
-			std::string name(it->name.GetString(), it->name.GetStringLength());
-			data.emplace(name, GetValue(it->value));
-		}
-		return Value(std::move(data));
-	}
-	case rapidjson::kArrayType: {
-		Value::Array array;
-		array.reserve(value.Size());
-		for (auto it = value.Begin(); it != value.End(); ++it) {
-			array.emplace_back(GetValue(*it));
-		}
-		return Value(std::move(array));
-	}
-	case rapidjson::kNumberType:
-		if (value.IsDouble()) {
-			return Value(value.GetDouble());
-		}
-		else if (value.IsInt()) {
-			return Value(value.GetInt());
-		}
-		else if (value.IsUint()) {
-			return Value(static_cast<int64_t>(value.GetUint()));
-		}
-		else if (value.IsInt64()) {
-			return Value(value.GetInt64());
-		}
-		else {
-			assert(value.IsUint64());
-			return Value(static_cast<double>(value.GetUint64()));
-		}
-		break;
-	}
-
-	throw InternalErrorFault();
-}
-
-Value JsonReader::GetId(const rapidjson::Value& id) const	{
-	if (id.IsString()) {
-		return id.GetString();
-	}
-	else if (id.IsInt()) {
-		return id.GetInt();
-	}
-	else if (id.IsInt64()) {
-		return id.GetInt64();
-	}
-	else if (id.IsNull()) {
-		return {};
-	}
-
-	throw InvalidRequestFault();
+	auto jsonrpc = document_[JSONRPC_NAME];
+	if (!jsonrpc.is_string() || jsonrpc != JSONRPC_VERSION_2_0)
+		throw InvalidRequestFault();
 }
