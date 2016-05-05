@@ -2,18 +2,18 @@
 
 #include "dispatcher.hpp"
 
-MethodWrapper& MethodWrapper::SetHelpText(std::string help)	{
+MethodWrapper& MethodWrapper::setHelpText(std::string help)	{
 	helpText_ = std::move(help);
 	return *this;
 }
 
-std::vector<std::string> Dispatcher::GetMethodNames(
+std::vector<std::string> Dispatcher::getMethodNames(
 		bool includeHidden) const	{
 	std::vector<std::string> names;
 	names.reserve(methods_.size());
 
 	for (auto& method : methods_) {
-		if (includeHidden || !method.second.IsHidden()) {
+		if (includeHidden || !method.second.isHidden()) {
 			names.emplace_back(method.first);
 		}
 	}
@@ -21,11 +21,11 @@ std::vector<std::string> Dispatcher::GetMethodNames(
 	return names;
 }
 
-MethodWrapper& Dispatcher::GetMethod(const std::string& name)	{
+MethodWrapper& Dispatcher::getMethod(const std::string& name)	{
 	return methods_.at(name);
 }
 
-MethodWrapper& Dispatcher::AddMethod(
+MethodWrapper& Dispatcher::addMethod(
 		std::string name, MethodWrapper::Method method)	{
 	auto result = methods_.emplace(
 				std::piecewise_construct,

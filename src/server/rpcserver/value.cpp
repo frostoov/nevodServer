@@ -1,52 +1,31 @@
-// This file is part of xsonrpc, an XML/JSON RPC library.
-// Copyright (C) 2015 Erik Johansson <erik@ejohansson.se>
-//
-// This library is free software; you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by the
-// Free Software Foundation; either version 2.1 of the License, or (at your
-// option) any later version.
-//
-// This library is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-// for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with this library; if not, write to the Free Software Foundation,
-// Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+#include <limits>
+#include <ostream>
+#include <string>
 
 #include "value.hpp"
 #include "fault.hpp"
 #include "jsonwriter.hpp"
 
-#include <limits>
-#include <ostream>
-#include <string>
-
 Value::Value(Array value)
-  : type_(Type::ARRAY)
-{
+  : type_(Type::ARRAY)	{
   as_.array = new Array(std::move(value));
 }
 
 Value::Value(const DateTime& value)
-  : type_(Type::DATE_TIME)
-{
+  : type_(Type::DATE_TIME)	{
   as_.dateTime = new DateTime(value);
   as_.dateTime->tm_isdst = -1;
 }
 
 Value::Value(int32_t value)
-  : type_(Type::INTEGER_32)
-{
+  : type_(Type::INTEGER_32)	{
   as_.integer32 = value;
   as_.integer64 = value;
   as_.number = value;
 }
 
 Value::Value(int64_t value)
-  : type_(Type::INTEGER_64)
-{
+  : type_(Type::INTEGER_64)	{
   as_.integer32 = value;
   as_.integer64 = value;
   as_.number = value;
@@ -58,26 +37,22 @@ Value::Value(int64_t value)
 }
 
 Value::Value(String value, bool binary)
-  : type_(binary ? Type::BINARY : Type::STRING)
-{
+  : type_(binary ? Type::BINARY : Type::STRING)	{
   as_.string = new String(std::move(value));
 }
 
 Value::Value(Struct value)
-  : type_(Type::STRUCT)
-{
+  : type_(Type::STRUCT)	{
   as_.someStruct = new Struct(std::move(value));
 }
 
-Value::~Value()
-{
+Value::~Value()	{
   reset();
 }
 
 Value::Value(const Value& other)
   : type_(other.type_),
-	as_(other.as_)
-{
+	as_(other.as_)	{
   switch (type_) {
     case Type::BOOLEAN:
     case Type::DOUBLE:
@@ -104,13 +79,11 @@ Value::Value(const Value& other)
 
 Value::Value(Value&& other) noexcept
   : type_(other.type_),
-	as_(other.as_)
-{
+	as_(other.as_)	{
   other.type_ = Type::NIL;
 }
 
-Value& Value::operator=(Value&& other) noexcept
-{
+Value& Value::operator=(Value&& other) noexcept	{
   if (this != &other) {
 	reset();
 
@@ -122,40 +95,35 @@ Value& Value::operator=(Value&& other) noexcept
   return *this;
 }
 
-const Value::Array& Value::asArray() const
-{
+const Value::Array& Value::asArray() const	{
   if (isArray()) {
 	return *as_.array;
   }
   throw InvalidParametersFault();
 }
 
-const bool& Value::asBoolean() const
-{
+const bool& Value::asBoolean() const	{
   if (isBoolean()) {
 	return as_.boolean;
   }
   throw InvalidParametersFault();
 }
 
-const Value::DateTime& Value::asDateTime() const
-{
+const Value::DateTime& Value::asDateTime() const	{
   if (isDateTime()) {
 	return *as_.dateTime;
   }
   throw InvalidParametersFault();
 }
 
-const double& Value::asDouble() const
-{
+const double& Value::asDouble() const	{
   if (isDouble() || isInteger32() || isInteger64()) {
 	return as_.number;
   }
   throw InvalidParametersFault();
 }
 
-const int32_t& Value::asInteger32() const
-{
+const int32_t& Value::asInteger32() const	{
   if (isInteger32()) {
 	return as_.integer32;
   }
@@ -166,32 +134,28 @@ const int32_t& Value::asInteger32() const
   throw InvalidParametersFault();
 }
 
-const int64_t& Value::asInteger64() const
-{
+const int64_t& Value::asInteger64() const	{
   if (isInteger32() || isInteger64()) {
 	return as_.integer64;
   }
   throw InvalidParametersFault();
 }
 
-const Value::String& Value::asString() const
-{
+const Value::String& Value::asString() const	{
   if (isString() || isBinary()) {
 	return *as_.string;
   }
   throw InvalidParametersFault();
 }
 
-const Value::Struct& Value::asStruct() const
-{
+const Value::Struct& Value::asStruct() const	{
   if (isStruct()) {
 	return *as_.someStruct;
   }
   throw InvalidParametersFault();
 }
 
-void Value::write(JsonWriter& writer) const
-{
+void Value::write(JsonWriter& writer) const	{
   switch (type_) {
     case Type::ARRAY:
 	  writer.startArray();
@@ -236,8 +200,7 @@ void Value::write(JsonWriter& writer) const
   }
 }
 
-void Value::reset()
-{
+void Value::reset()	{
   switch (type_) {
     case Type::ARRAY:
 	  delete as_.array;
@@ -264,8 +227,7 @@ void Value::reset()
   type_ = Type::NIL;
 }
 
-std::ostream& operator<<(std::ostream& os, const Value& value)
-{
+std::ostream& operator<<(std::ostream& os, const Value& value)	{
   switch (value.getType()) {
     case Value::Type::ARRAY: {
       os << '[';
@@ -279,15 +241,9 @@ std::ostream& operator<<(std::ostream& os, const Value& value)
       os << ']';
       break;
     }
-//    case Value::Type::BINARY:
-//	  os << util::Base64Encode(value.asBinary());
-//      break;
     case Value::Type::BOOLEAN:
 	  os << value.asBoolean();
       break;
-//    case Value::Type::DATE_TIME:
-//	  os << util::FormatIso8601DateTime(value.asDateTime());
-//      break;
     case Value::Type::DOUBLE:
 	  os << value.asDouble();
       break;

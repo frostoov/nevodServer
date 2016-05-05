@@ -1,6 +1,5 @@
 #include "server.hpp"
 
-#include "jsonformathandler.hpp"
 #include "jsonwriter.hpp"
 
 #include <vector>
@@ -8,8 +7,8 @@
 #include <iostream>	//TODO
 
 Server::Server(unsigned short port)
-	:	service(std::make_shared<boost::asio::io_service>()),
-	  acceptor(*(service.get()), boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))	{
+	:	service_(std::make_shared<boost::asio::io_service>()),
+	  acceptor_(*(service_.get()), boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))	{
 
 }
 
@@ -17,28 +16,16 @@ Server::~Server()	{
 
 }
 
-void Server::RegisterFormatHandler(JsonFormatHandler &formatHandler)	{
-	myFormatHandlers.push_back(&formatHandler);
-}
-
-void Server::Run()	{
+void Server::run()	{
 	startAccept();
-	service->run();
-}
-
-int Server::GetFileDescriptor()	{
-
-}
-
-void Server::OnReadableFileDescriptor()	{
-
+	service_->run();
 }
 
 void Server::startAccept()	{
 	TcpConnection::TcpConnectionPtr newConnection =
-			TcpConnection::create(acceptor.get_io_service(), myDispatcher, myFormatHandlers);
+			TcpConnection::create(acceptor_.get_io_service(), dispatcher_);
 
-	acceptor.async_accept(newConnection->getSocket(),
+	acceptor_.async_accept(newConnection->getSocket(),
 						  boost::bind(&Server::handleAccept,
 									  this, newConnection,
 									  boost::asio::placeholders::error));

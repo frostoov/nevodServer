@@ -2,13 +2,13 @@
 
 #include <iostream>	//TODO
 
-TcpConnection::TcpConnection(boost::asio::io_service &service, Dispatcher &dispatcher, std::vector<JsonFormatHandler *> &formatHandlersIn)
-	:	socket(service), myDispatcher(dispatcher), myFormatHandlers(formatHandlersIn)	{
+TcpConnection::TcpConnection(boost::asio::io_service &service, Dispatcher &dispatcher)
+	:	socket(service), dispatcher_(dispatcher)	{
 
-	formatHandler = std::make_shared<JsonFormatHandler>();
+//	formatHandler = std::make_shared<JsonFormatHandler>();
 	buf.resize(2048);
 
-	for (auto str : myDispatcher.GetMethodNames())
+	for (auto str : dispatcher_.getMethodNames())
 		std::cout << str << std::endl;
 }
 
@@ -16,8 +16,8 @@ TcpConnection::~TcpConnection()	{
 
 }
 
-TcpConnection::TcpConnectionPtr	TcpConnection::create(boost::asio::io_service &service, Dispatcher &dispatcher, std::vector<JsonFormatHandler *> &formatHandlers)	{
-	return std::make_shared<TcpConnection>(service, dispatcher, formatHandlers);
+TcpConnection::TcpConnectionPtr	TcpConnection::create(boost::asio::io_service &service, Dispatcher &dispatcher)	{
+	return std::make_shared<TcpConnection>(service, dispatcher);
 }
 
 boost::asio::ip::tcp::socket& TcpConnection::getSocket()	{
@@ -69,18 +69,18 @@ void	TcpConnection::handleRead(const boost::system::error_code &error)	{
 	writer = std::unique_ptr<JsonWriter>(new JsonWriter());
 
 	try {
-		auto reader = std::unique_ptr<JsonReader>(new JsonReader(std::move(msg)));
+		auto reader = std::unique_ptr<JsonReader>(new JsonReader(msg));
 		Request	request = reader->getRequest();
 		reader.reset();
 
-		auto response = myDispatcher.Invoke(
-					request.GetMethodName(), request.GetParameters(), request.getId());
-		response.Write(*writer.get());
+		auto response = dispatcher_.Invoke(
+					request.getMethodName(), request.getParameters(), request.getId());
+		response.write(*writer.get());
 	} catch (const Fault& ex)	{
-		Response(ex.GetCode(), ex.GetString(), Value()).Write(*writer.get());
+		Response(ex.GetCode(), ex.GetString(), Value()).write(*writer.get());
 	}
 
-	std::cout << std::string(writer->getData()) << std::endl;
+	std::cout << writer->getData() << std::endl;
 
 	boost::asio::async_write(socket, boost::asio::buffer(std::string(writer->getData())),
 							 boost::bind(&TcpConnection::handleWrite, shared_from_this(),

@@ -18,8 +18,8 @@ set(rpcserver_files_source
     request.cpp
     response.hpp
     response.cpp
-    jsonformathandler.hpp
-    jsonformathandler.cpp
+#    jsonformathandler.hpp
+#    jsonformathandler.cpp
     value.hpp
     value.cpp
 )

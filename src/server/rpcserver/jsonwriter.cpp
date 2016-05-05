@@ -13,8 +13,16 @@ JsonWriter::~JsonWriter()	{
 
 }
 
-const char* JsonWriter::getData()	{
-	return document.dump().c_str();
+void JsonWriter::setJson(const JsonWriter::Json &json)	{
+	document = json;
+}
+
+//const char* JsonWriter::getData()	{
+//	return document.dump().c_str();
+//}
+
+std::string JsonWriter::getData() const {
+	return document.dump();
 }
 
 size_t JsonWriter::getSize()	{
@@ -63,6 +71,7 @@ void JsonWriter::startFaultResponse(const Value& id)	{
 }
 
 void JsonWriter::endFaultResponse()	{
+
 }
 
 void JsonWriter::writeFault(int32_t code, const std::string& string)	{

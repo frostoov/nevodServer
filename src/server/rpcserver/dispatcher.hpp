@@ -19,14 +19,14 @@ public:
 	MethodWrapper(const MethodWrapper&) = delete;
 	MethodWrapper& operator=(const MethodWrapper&) = delete;
 
-	bool IsHidden() const { return isHidden_; }
-	void SetHidden(bool hidden = true) { isHidden_ = hidden; }
+	bool isHidden() const { return isHidden_; }
+	void setHidden(bool hidden = true) { isHidden_ = hidden; }
 
-	MethodWrapper& SetHelpText(std::string help);
-	const std::string& GetHelpText() const { return helpText_; }
+	MethodWrapper& setHelpText(std::string help);
+	const std::string& getHelpText() const { return helpText_; }
 
 	template<typename... ParameterTypes>
-	MethodWrapper& AddSignature(Value::Type returnType,
+	MethodWrapper& addSignature(Value::Type returnType,
 								ParameterTypes... parameterTypes)	{
 		signatures_.emplace_back(
 					std::initializer_list<Value::Type>{returnType, parameterTypes...});
@@ -80,10 +80,10 @@ struct StdFunction<MethodType, true>	{
 
 class Dispatcher	{
 public:
-	std::vector<std::string> GetMethodNames(bool includeHidden = false) const;
-	MethodWrapper& GetMethod(const std::string& name);
+	std::vector<std::string> getMethodNames(bool includeHidden = false) const;
+	MethodWrapper& getMethod(const std::string& name);
 
-	MethodWrapper& AddMethod(
+	MethodWrapper& addMethod(
 			std::string name, MethodWrapper::Method method);
 
 	template<typename MethodType>
@@ -91,43 +91,43 @@ public:
 	!std::is_convertible<MethodType, MethodWrapper::Method>::value
 	&& !std::is_member_pointer<MethodType>::value,
 	MethodWrapper>::type&
-	AddMethod(std::string name, MethodType method)	{
+	addMethod(std::string name, MethodType method)	{
 		static_assert(!std::is_bind_expression<MethodType>::value,
 					  "Use AddMethod with 3 arguments to add member method");
 		typename StdFunction<MethodType, std::is_class<MethodType>::value>::Type
 				function(std::move(method));
-		return AddMethodInternal(std::move(name), std::move(function));
+		return addMethodInternal(std::move(name), std::move(function));
 	}
 
 	template<typename T>
-	MethodWrapper& AddMethod(std::string name,
+	MethodWrapper& addMethod(std::string name,
 							 Value(T::*method)(const Request::Parameters&),
 							 T& instance)	{
-		return AddMethod(std::move(name),
+		return addMethod(std::move(name),
 						 std::bind(method, &instance, std::placeholders::_1));
 	}
 
 	template<typename T>
-	MethodWrapper& AddMethod(std::string name,
+	MethodWrapper& addMethod(std::string name,
 							 Value(T::*method)(const Request::Parameters&) const,
 							 T& instance)	{
-		return AddMethod(std::move(name),
+		return addMethod(std::move(name),
 						 std::bind(method, &instance, std::placeholders::_1));
 	}
 
 	template<typename ReturnType, typename T, typename... ParameterTypes>
-	MethodWrapper& AddMethod(std::string name,
+	MethodWrapper& addMethod(std::string name,
 							 ReturnType(T::*method)(ParameterTypes...),
 							 T& instance)	{
 		std::function<ReturnType(ParameterTypes...)> function =
 				[&instance,method] (ParameterTypes&&... params) -> ReturnType	{
 			return (instance.*method)(std::forward<ParameterTypes>(params)...);
 		};
-		return AddMethodInternal(std::move(name), std::move(function));
+		return addMethodInternal(std::move(name), std::move(function));
 	}
 
 	template<typename ReturnType, typename T, typename... ParameterTypes>
-	MethodWrapper& AddMethod(std::string name,
+	MethodWrapper& addMethod(std::string name,
 							 ReturnType(T::*method)(ParameterTypes...) const,
 							 T& instance)	{
 		std::function<ReturnType(ParameterTypes...)> function =
@@ -135,7 +135,7 @@ public:
 		{
 			return (instance.*method)(std::forward<ParameterTypes>(params)...);
 		};
-		return AddMethodInternal(std::move(name), std::move(function));
+		return addMethodInternal(std::move(name), std::move(function));
 	}
 
 	void RemoveMethod(const std::string& name);
@@ -146,15 +146,15 @@ public:
 
 private:
 	template<typename ReturnType, typename... ParameterTypes>
-	MethodWrapper& AddMethodInternal(
+	MethodWrapper& addMethodInternal(
 			std::string name,
 			std::function<ReturnType(ParameterTypes...)> method)	{
-		return AddMethodInternal(std::move(name), std::move(method),
+		return addMethodInternal(std::move(name), std::move(method),
 								 std::index_sequence_for<ParameterTypes...>{});
 	}
 
 	template<typename... ParameterTypes>
-	MethodWrapper& AddMethodInternal(
+	MethodWrapper& addMethodInternal(
 			std::string name,
 			std::function<void(ParameterTypes...)> method)	{
 		std::function<Value(ParameterTypes...)> returnMethod =
@@ -162,14 +162,14 @@ private:
 			method(std::forward<ParameterTypes>(params)...);
 			return Value();
 		};
-		return AddMethodInternal(
+		return addMethodInternal(
 					std::move(name), std::move(returnMethod),
 					std::index_sequence_for<ParameterTypes...>{});
 	}
 
 	template<typename ReturnType, typename... ParameterTypes,
 			 std::size_t... index>
-	MethodWrapper& AddMethodInternal(
+	MethodWrapper& addMethodInternal(
 			std::string name,
 			std::function<ReturnType(ParameterTypes...)> method,
 			std::index_sequence<index...>)	{
@@ -182,7 +182,7 @@ private:
 						params[index]
 						.asType<typename std::decay<ParameterTypes>::type>()...);
 		};
-		return AddMethod(std::move(name), std::move(realMethod));
+		return addMethod(std::move(name), std::move(realMethod));
 	}
 
 	std::map<std::string, MethodWrapper> methods_;

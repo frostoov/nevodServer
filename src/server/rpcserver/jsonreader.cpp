@@ -8,12 +8,27 @@
 using namespace jsonconstants;
 
 JsonReader::JsonReader(const std::string& data)	{
-	document_ = json::parse(data);
+	document_ = Json::parse(data);
 	//TODO
 }
 
 JsonReader::~JsonReader()	{
 
+}
+
+Value JsonReader::fromJsonToValue(const JsonReader::Json &json)	{
+	if (json.is_null())
+		return Value(nullptr);
+	if (json.is_number_integer())
+		return Value(json.get<int32_t>());
+	if (json.is_number_unsigned())
+		return Value(json.get<int64_t>());		//TODO
+	if (json.is_number_float())
+		return Value(json.get<double>());
+	if (json.is_string())
+		return Value(json.get<std::string>());
+	if (json.is_boolean())
+		return Value(json.get<bool>());
 }
 
 Request JsonReader::getRequest()	{
@@ -35,12 +50,14 @@ Request JsonReader::getRequest()	{
 	if (!params_name.is_array())
 		throw InvalidRequestFault();
 	for (auto& param : params_name)
-		parameters.emplace_back(param.dump());
+		parameters.emplace_back(fromJsonToValue(param));
 
 	if (document_.find(ID_NAME) == document_.end())
 		return Request(methodName.dump(), parameters, false);
 
-	return Request(methodName.dump(), parameters, document_[ID_NAME]);
+	int id = document_[ID_NAME].get<int>();
+
+	return Request(methodName.get<std::string>(), parameters, id);
 }
 
 Response JsonReader::getResponse()	{
@@ -84,10 +101,6 @@ Response JsonReader::getResponse()	{
 		throw InvalidRequestFault();
 	}
 }
-
-//Value JsonReader::getValue()	{
-//	return getValue(myDocument);
-//}
 
 void JsonReader::validateJsonrpcVersion() const	{
 	if (document_.find(JSONRPC_NAME) == document_.end())

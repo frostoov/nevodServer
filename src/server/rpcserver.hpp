@@ -16,7 +16,7 @@ public:
 	explicit RpcServer(uint16_t	port);
 	~RpcServer();
 
-	void	run();
+	void	start();
 
 protected:
 	void	initializeDispatcherOfEasRpc();

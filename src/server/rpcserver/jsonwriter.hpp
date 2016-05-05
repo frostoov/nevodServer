@@ -10,12 +10,15 @@
 
 class JsonWriter	{
 public:
-	using json = nlohmann::json;
+	using Json = nlohmann::json;
 
 	JsonWriter();
 	~JsonWriter();
 
-	const char* getData();
+	void setJson(const Json& json);
+
+//	const char* getData();
+	std::string getData()	const;
 	size_t getSize();
 	void startDocument();
 	void endDocument();
@@ -46,7 +49,7 @@ public:
 private:
 	void writeId(const Value& id);
 
-	json	document;
+	Json	document;
 };
 
 #endif

@@ -1,26 +1,32 @@
 #ifndef RESPONSE_H
 #define RESPONSE_H
 
+#include <json.hpp>
 #include "jsonwriter.hpp"
 
 class Response	{
 public:
+	using Json = nlohmann::json;
+
 	Response(Value value, Value id);
 	Response(int32_t faultCode, std::string faultString, Value id);
 
-	void Write(JsonWriter &writer) const;
+	void write(JsonWriter &writer) const;
 
-	Value& GetResult() { return myResult; }
-	bool IsFault() const { return myIsFault; }
-	void ThrowIfFault() const;
-	const Value& GetId() const { return myId; }
+	Value& getResult() { return result_; }
+	bool isFault() const { return isFault_; }
+	void throwIfFault() const;
+	const Value& getId() const { return id_; }
+
+protected:
+	Json fromValueToJson(const Value& value) const;
 
 private:
-	Value myResult;
-	bool myIsFault;
-	int32_t myFaultCode;
-	std::string myFaultString;
-	Value myId;
+	Value result_;
+	bool isFault_;
+	int32_t faultCode_;
+	std::string faultString_;
+	Value id_;
 };
 
 #endif

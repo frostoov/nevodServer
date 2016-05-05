@@ -19,14 +19,10 @@ public:
 	Server(Server&&) = delete;
 	Server& operator=(Server&&) = delete;
 
-	void RegisterFormatHandler(JsonFormatHandler& formatHandler);
+	void run();
 
-	void Run();
-	int GetFileDescriptor();
-	void OnReadableFileDescriptor();
-
-	Dispatcher& GetDispatcher() { return myDispatcher; }
-	ioServicePtr& GetIoService()   {return service;}
+	Dispatcher& getDispatcher() { return dispatcher_; }
+	ioServicePtr& getIoService()   {return service_;}
 
 protected:
 	void  startAccept();
@@ -34,11 +30,10 @@ protected:
 	void  handleRequest(const boost::system::error_code& error, size_t);
 
 private:  
-	Dispatcher myDispatcher;
-	std::vector<JsonFormatHandler*> myFormatHandlers;
+	Dispatcher dispatcher_;
 
-	ioServicePtr service;
-	boost::asio::ip::tcp::acceptor acceptor;
+	ioServicePtr service_;
+	boost::asio::ip::tcp::acceptor acceptor_;
 };
 
 #endif
