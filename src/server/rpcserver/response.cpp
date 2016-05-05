@@ -26,7 +26,7 @@ void Response::Write(JsonWriter& writer) const	{
 	}
 	else {
 		writer.startResponse(myId);
-		myResult.Write(writer);
+		myResult.write(writer);
 		writer.endResponse();
 	}
 	writer.endDocument();

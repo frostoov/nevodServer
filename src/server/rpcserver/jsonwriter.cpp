@@ -1,6 +1,6 @@
 #include "jsonwriter.hpp"
 
-#include "json.hpp"
+#include "jsonconstants.hpp"
 #include "value.hpp"
 
 using namespace jsonconstants;

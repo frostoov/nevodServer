@@ -1,7 +1,7 @@
 #include "jsonreader.hpp"
 
 #include "fault.hpp"
-#include "json.hpp"
+#include "jsonconstants.hpp"
 #include "request.hpp"
 #include "response.hpp"
 

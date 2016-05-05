@@ -8,42 +8,43 @@
 #include "fault.hpp"
 #include "request.hpp"
 #include "response.hpp"
+#include "value.hpp"
 
 class MethodWrapper	{
 public:
-	typedef std::function<Value(const Request::Parameters&)> Method;
+	using Method = std::function<Value(const Request::Parameters&)>;
 
-	explicit MethodWrapper(Method method) : myMethod(method) {}
+	explicit MethodWrapper(Method method) : method_(method) {}
 
 	MethodWrapper(const MethodWrapper&) = delete;
 	MethodWrapper& operator=(const MethodWrapper&) = delete;
 
-	bool IsHidden() const { return myIsHidden; }
-	void SetHidden(bool hidden = true) { myIsHidden = hidden; }
+	bool IsHidden() const { return isHidden_; }
+	void SetHidden(bool hidden = true) { isHidden_ = hidden; }
 
 	MethodWrapper& SetHelpText(std::string help);
-	const std::string& GetHelpText() const { return myHelpText; }
+	const std::string& GetHelpText() const { return helpText_; }
 
 	template<typename... ParameterTypes>
 	MethodWrapper& AddSignature(Value::Type returnType,
 								ParameterTypes... parameterTypes)	{
-		mySignatures.emplace_back(
+		signatures_.emplace_back(
 					std::initializer_list<Value::Type>{returnType, parameterTypes...});
 		return *this;
 	}
 
 	const std::vector<std::vector<Value::Type>>&
-	GetSignatures() const { return mySignatures; }
+	getSignatures() const { return signatures_; }
 
 	Value operator()(const Request::Parameters& params) const	{
-		return myMethod(params);
+		return method_(params);
 	}
 
 private:
-	Method myMethod;
-	bool myIsHidden = false;
-	std::string myHelpText;
-	std::vector<std::vector<Value::Type>> mySignatures;
+	Method method_;
+	bool isHidden_ = false;
+	std::string helpText_;
+	std::vector<std::vector<Value::Type>> signatures_;
 };
 
 template<typename> struct ToStdFunction;
@@ -179,12 +180,12 @@ private:
 			}
 			return method(
 						params[index]
-						.AsType<typename std::decay<ParameterTypes>::type>()...);
+						.asType<typename std::decay<ParameterTypes>::type>()...);
 		};
 		return AddMethod(std::move(name), std::move(realMethod));
 	}
 
-	std::map<std::string, MethodWrapper> myMethods;
+	std::map<std::string, MethodWrapper> methods_;
 };
 
 #endif

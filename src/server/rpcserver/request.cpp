@@ -18,7 +18,7 @@ void Request::Write(const std::string& methodName, const Parameters& params,
 	writer.startRequest(methodName, id);
 	for (auto& param : params) {
 		writer.startParameter();
-		param.Write(writer);
+		param.write(writer);
 		writer.endParameter();
 	}
 	writer.endRequest();

@@ -1,18 +1,18 @@
-#include "dispatcher.hpp"
-
 #include <stdexcept>
 
+#include "dispatcher.hpp"
+
 MethodWrapper& MethodWrapper::SetHelpText(std::string help)	{
-	myHelpText = std::move(help);
+	helpText_ = std::move(help);
 	return *this;
 }
 
 std::vector<std::string> Dispatcher::GetMethodNames(
 		bool includeHidden) const	{
 	std::vector<std::string> names;
-	names.reserve(myMethods.size());
+	names.reserve(methods_.size());
 
-	for (auto& method : myMethods) {
+	for (auto& method : methods_) {
 		if (includeHidden || !method.second.IsHidden()) {
 			names.emplace_back(method.first);
 		}
@@ -22,12 +22,12 @@ std::vector<std::string> Dispatcher::GetMethodNames(
 }
 
 MethodWrapper& Dispatcher::GetMethod(const std::string& name)	{
-	return myMethods.at(name);
+	return methods_.at(name);
 }
 
 MethodWrapper& Dispatcher::AddMethod(
 		std::string name, MethodWrapper::Method method)	{
-	auto result = myMethods.emplace(
+	auto result = methods_.emplace(
 				std::piecewise_construct,
 				std::forward_as_tuple(std::move(name)),
 				std::forward_as_tuple(std::move(method)));
@@ -38,7 +38,7 @@ MethodWrapper& Dispatcher::AddMethod(
 }
 
 void Dispatcher::RemoveMethod(const std::string& name)	{
-	myMethods.erase(name);
+	methods_.erase(name);
 }
 
 Response Dispatcher::Invoke(const std::string& name,
@@ -46,8 +46,8 @@ Response Dispatcher::Invoke(const std::string& name,
 							const Value& id) const	{
 
 	try {
-		auto method = myMethods.find(name);
-		if (method == myMethods.end()) {
+		auto method = methods_.find(name);
+		if (method == methods_.end()) {
 			throw MethodNotFoundFault("Method not found: " + name);
 		}
 		return {method->second(parameters), Value(id)};

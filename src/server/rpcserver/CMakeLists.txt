@@ -4,7 +4,7 @@ project(nevodserver)
 set(rpcserver_files_source
     dispatcher.hpp
     dispatcher.cpp
-    json.hpp
+    jsonconstants.hpp
     jsonreader.hpp
     jsonreader.cpp
     jsonwriter.hpp
@@ -20,6 +20,8 @@ set(rpcserver_files_source
     response.cpp
     jsonformathandler.hpp
     jsonformathandler.cpp
+    value.hpp
+    value.cpp
 )
 
 add_library(rpcserver ${rpcserver_files_source})

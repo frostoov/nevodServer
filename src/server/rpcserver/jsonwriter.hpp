@@ -6,6 +6,8 @@
 
 #include <json.hpp>
 
+#include "value.hpp"
+
 class JsonWriter	{
 public:
 	using json = nlohmann::json;
