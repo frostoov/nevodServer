@@ -2,15 +2,15 @@
 #include <iostream>
 
 QueueOfMessages::QueueOfMessages(const std::string& ip, const IoServicePtr &service)	{
-//	clientReg_	= std::make_shared<Client>(ip, (uint16_t)3000);
-//	clientData_	= std::make_shared<Client>(ip, (uint16_t)3007);
+	clientReg_	= std::make_shared<Client>(ip, 2222, service);
+//	clientData_	= std::make_shared<Client>(ip);
 
 	clientReg_->attach(this);
-	clientData_->attach(this);
+//	clientData_->attach(this);
 }
 
 QueueOfMessages::~QueueOfMessages()	{
-//	clientReg_->detach(this);
+	clientReg_->detach(this);
 //	clientData_->detach(this);
 }
 
@@ -78,12 +78,13 @@ void	QueueOfMessages::update(const Subject* subject)	{
 }
 
 void	QueueOfMessages::connectToHost()	{
+	clientReg_->start();
 //	clientReg_->connectToHost();
 //	clientData_->connectToHost();
 }
 
 void	QueueOfMessages::disconnectFromHost()	{
-//	clientReg_->disconnectFromHost();
+	clientReg_->disconnectFromHost();
 //	clientData_->disconnectFromHost();
 }
 

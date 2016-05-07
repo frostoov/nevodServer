@@ -1,13 +1,13 @@
 #include "easstation.hpp"
 
-//EasStation::EasStation(const IoServicePtr &service)
-//	:	service_(service)	{
+EasStation::EasStation(const IoServicePtr &service)
+	:	service_(service)	{
 
-//}
+}
 
-//EasStation::~EasStation()	{
+EasStation::~EasStation()	{
 
-//}
+}
 
 EasStation::HostPtr EasStation::addHost(uint32_t numberHost, const std::string &ip)	{
 	HostPtr	host = std::make_shared<Host>(ip, service_);

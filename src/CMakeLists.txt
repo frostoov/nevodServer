@@ -6,6 +6,7 @@ add_subdirectory(uran)
 add_subdirectory(server)
 add_subdirectory(keeper)
 add_subdirectory(observer)
+add_subdirectory(configparsers)
 
 set(src_files_source main.cpp)
 
@@ -16,4 +17,6 @@ include_directories(${Boost_INCLUDE_DIR})
 
 add_executable(${PROJECT_NAME} ${src_files_source})
 target_link_libraries(${PROJECT_NAME} server)
+target_link_libraries(${PROJECT_NAME} eas)
+target_link_libraries(${PROJECT_NAME} observer)
 target_link_libraries(${PROJECT_NAME} boost_system)

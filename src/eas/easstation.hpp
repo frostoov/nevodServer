@@ -1,5 +1,5 @@
-#ifndef EASSTATION_H
-#define EASSTATION_H
+#ifndef EASSTATION_HPP
+#define EASSTATION_HPP
 
 #include <memory>
 #include <boost/asio.hpp>
@@ -9,13 +9,11 @@
 class EasStation	{
 public:
 	using IoServicePtr	= std::shared_ptr<boost::asio::io_service>;
-	using HostPtr = std::shared_ptr<Host>;
+	using HostPtr		= std::shared_ptr<Host>;
 
-	explicit EasStation(const IoServicePtr&	service)	{
+	EasStation(const IoServicePtr&	service);
+	~EasStation();
 
-	}
-
-	~EasStation()	{}
 
 	HostPtr	addHost(uint32_t	numberHost, const std::string&	ip);
 	void	deleteHost(uint32_t	numberHost);
@@ -28,7 +26,6 @@ public:
 	bool	writeStartTaskMaster(int idMaster);
 	bool	writeRegisterOfReadData(int idHost);
 
-
 protected:
 
 private:
@@ -36,4 +33,4 @@ private:
 	std::map<uint32_t, HostPtr>	hosts_;
 };
 
-#endif//EASSTATION_H
+#endif//EASSTATION_HPP

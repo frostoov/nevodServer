@@ -1,10 +1,8 @@
-#include "server.hpp"
-
-#include "jsonwriter.hpp"
-
 #include <vector>
-
 #include <iostream>	//TODO
+
+#include "server.hpp"
+#include "jsonwriter.hpp"
 
 Server::Server(unsigned short port)
 	:	service_(std::make_shared<boost::asio::io_service>()),

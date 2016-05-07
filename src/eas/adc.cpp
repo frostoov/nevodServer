@@ -1,4 +1,4 @@
-#include "adc.h"
+#include "adc.hpp"
 #include <iostream>
 
 Adc::Adc(uint32_t	offset, QueuePtr clientQueue)
@@ -9,7 +9,7 @@ Adc::Adc(uint32_t	offset, QueuePtr clientQueue)
 }
 
 Adc::~Adc()	{
-//	clientQueue_->detach(this);
+	clientQueue_->detach(this);
 }
 
 void	Adc::update(const Subject *subject)	{

@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 project(nevodserver)
 
 set(eas_files_source
-    easstation.hpp
-    easstation.cpp
     registers.hpp
     registers.cpp
     client.hpp
@@ -14,6 +12,10 @@ set(eas_files_source
     host.cpp
     master.hpp
     master.cpp
+    easstation.hpp
+    easstation.cpp
+    adc.hpp
+    adc.cpp
 )
 
 add_library(eas ${eas_files_source})
