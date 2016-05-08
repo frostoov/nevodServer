@@ -2,7 +2,7 @@
 #include <iostream>
 
 QueueOfMessages::QueueOfMessages(const std::string& ip, const IoServicePtr &service)	{
-	clientReg_	= std::make_shared<Client>(ip, 2222, service);
+	clientReg_	= std::make_shared<Client>(ip, 2223, service);
 //	clientData_	= std::make_shared<Client>(ip);
 
 	clientReg_->attach(this);
