@@ -11,8 +11,7 @@ EasRpc::~EasRpc()	{
 }
 
 bool EasRpc::eas_writeBanOfTimestamps(int32_t idHost, bool isBan)	{
-	std::cout << "I have been invoked\t" << isBan << std::endl;
-	return false;
+	return easStation_->writeBanOfTimestamps(idHost, isBan);
 }
 
 bool EasRpc::eas_writeRegisterOfMasks(int idHost)	{

@@ -11,7 +11,8 @@
 #include "client.hpp"
 #include "registers.hpp"
 
-class QueueOfMessages : public Observer, public Subject, public std::enable_shared_from_this<QueueOfMessages>	{
+class QueueOfMessages : public Observer, public Subject,
+		public std::enable_shared_from_this<QueueOfMessages>	{
 public:
 	using	ClientPtr		= std::shared_ptr<Client>;
 	using	ObserverPtr		= std::shared_ptr<Observer>;
@@ -27,7 +28,8 @@ public:
 		null
 	};
 
-	QueueOfMessages(const std::string& ip, const IoServicePtr& service);
+	QueueOfMessages(const std::string& ip, uint16_t registerPort,
+					uint16_t dataPort, const IoServicePtr& service);
 	~QueueOfMessages();
 
 	void	update(const Subject*	subject);
@@ -35,16 +37,21 @@ public:
 	void	connectToHost();
 	void	disconnectFromHost();
 	void	addCommandToStack(const Record&	record, ObserverPtr	sender);
-	void	runStack();
+	void	runQueue();
 	void	clearData();
 
 	const Record&					getRecord()		const;
 	Message							getMessage()	const;
 	const std::vector<uint8_t>&	getData()			const;
 
+	void	write(int32_t number, bool isBan)	{
+		clientReg_->write(number, isBan);
+	}
+
 protected:
 	void	writeRegister(const Record&	record);
-	int		fillValuesInCommandsHaveBeenDone(const std::vector<uint8_t>&	data, int commandNumber);
+	int		fillValuesInCommandsHaveBeenDone(const std::vector<uint8_t>& data,
+											 int commandNumber);
 
 private:
 	ClientPtr									clientReg_;

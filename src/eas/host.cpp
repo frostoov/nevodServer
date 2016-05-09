@@ -2,16 +2,16 @@
 #include <iostream>
 #include <fstream>
 
-Host::Host(const std::string& ip, const IoServicePtr&	service)	{
-	clientQueue_ = std::make_shared<QueueOfMessages>(ip, service);
+Host::Host(const std::string& ip, uint16_t registerPort, uint16_t dataPort, const IoServicePtr&	service)	{
+	clientQueue_ = std::make_shared<QueueOfMessages>(ip, registerPort, dataPort, service);
 
 	clientQueue_->attach(this);
 	offset_ = 0x400000;
 }
 
 Host::~Host()	{
+	clientQueue_->detach(this);
 	clientQueue_.reset();
-//	clientQueue_->detach(this);
 }
 
 void	Host::update(const Subject *subject)	{
@@ -79,7 +79,7 @@ void	Host::readState()	{
 }
 
 void	Host::runQueue()	{
-	clientQueue_->runStack();
+	clientQueue_->runQueue();
 }
 
 void Host::writeBanOfTimestamps(bool ban)	{
@@ -216,7 +216,7 @@ void	Host::writeRegister(uint32_t	address, uint32_t	data, Record::Type	type)	{
 	record.value = data;
 	record.type = type;
 	clientQueue_->addCommandToStack(record, shared_from_this());
-	clientQueue_->runStack();
+	clientQueue_->runQueue();
 }
 
 void	Host::readRegister(uint32_t	address)	{
@@ -224,7 +224,7 @@ void	Host::readRegister(uint32_t	address)	{
 	record.address = address;
 	record.type	= Record::Type::Read;
 	clientQueue_->addCommandToStack(record, shared_from_this());
-	clientQueue_->runStack();
+	clientQueue_->runQueue();
 }
 
 void	Host::initializeTable(uint32_t numberMaster, const std::vector<uint32_t> &numbersOfChannels)	{

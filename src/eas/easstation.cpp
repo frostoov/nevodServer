@@ -2,15 +2,20 @@
 
 EasStation::EasStation(const IoServicePtr &service)
 	:	service_(service)	{
-
+	auto host = addHost(0, "127.0.0.1", 2223, 2224);
+	host->connectToHost();
 }
 
 EasStation::~EasStation()	{
 
 }
 
-EasStation::HostPtr EasStation::addHost(uint32_t numberHost, const std::string &ip)	{
-	HostPtr	host = std::make_shared<Host>(ip, service_);
+EasStation::HostPtr EasStation::addHost(uint32_t numberHost,
+										const std::string &ip,
+										uint16_t registerPort,
+										uint16_t dataPort)	{
+
+	HostPtr	host = std::make_shared<Host>(ip, registerPort, dataPort, service_);
 	hosts_.insert(std::pair<uint32_t, HostPtr>(numberHost, host));
 	return	host;
 }
@@ -20,7 +25,10 @@ void EasStation::deleteHost(uint32_t numberHost)	{
 }
 
 bool EasStation::writeBanOfTimestamps(int32_t idHost, bool isBan)	{
-	hosts_[idHost]->writeBanOfTimestamps(isBan);						//TODO they have to return bool values
+//	hosts_[0]->write(idHost, isBan);
+	hosts_[0]->writeBanOfTimestamps(isBan);
+	hosts_[0]->runQueue();
+	return true;
 }
 
 bool EasStation::writeRegisterOfMasks(int idHost)	{

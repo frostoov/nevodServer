@@ -17,7 +17,8 @@ public:
 	using QueuePtr		= std::shared_ptr<QueueOfMessages>;
 	using IoServicePtr	= std::shared_ptr<boost::asio::io_service>;
 
-	Host(const std::string&	ip, const IoServicePtr&	service);
+	Host(const std::string&	ip, uint16_t registerPort,
+		 uint16_t dataPort, const IoServicePtr&	service);
 	~Host();
 
 	void		update(const Subject* subject);
@@ -33,25 +34,30 @@ public:
 //	void		writeRegisterOfMasks();
 	void		writeTestRegister(uint16_t	data);
 	void		writeCoarseReset(const std::array<bool, 4>&	resetLink);
-	void		writeResolutionOfLinks(const std::array<bool, 4>&	resolutionLink);
+	void		writeResolutionOfLinks(const std::array<bool, 4>& resolutionLink);
 	void		writeExchangeRegister(uint16_t	data);
 	void		writeControlDma(int oneOnTwoReset);
-	void		writeClusterNumberLink(uint32_t	numberLink, uint16_t	numberCluster);
+	void		writeClusterNumberLink(uint32_t	numberLink, uint16_t numberCluster);
 	void		writeStartTaskLink(uint32_t	numberLink, uint32_t	numberBank);
 	void		writeRegisterOfReadData(const std::array<bool, 4>&	readLink);
 	void		writeResolutionAndForbidOfData(bool resolution);
 	void		writeClearDataBuffer(bool clear);
 
-	void		initializeTable(uint32_t	numberMaster,	const std::vector<uint32_t>&	numbersOfChannels);
-	void		initializeTable(uint32_t	numberMaster);
+	void		initializeTable(uint32_t numberMaster,
+								const std::vector<uint32_t>& numbersOfChannels);
+	void		initializeTable(uint32_t numberMaster);
 	void		writeSleep(uint32_t milliseconds);
+
+	void		write(int32_t number, bool isBan)	{
+		clientQueue_->write(number, isBan);
+	}
 
 	QueuePtr		getQueue();
 	Record			getResult()	const;
 	HostRegisters	getRegisters()	const;
 
-	void		writeRegister(uint32_t	address, uint32_t	data, Record::Type	type);
-	void		readRegister(uint32_t	address);
+	void		writeRegister(uint32_t address, uint32_t data, Record::Type type);
+	void		readRegister(uint32_t address);
 
 protected:
 	Record		getRecordWithOffset(Record	record);

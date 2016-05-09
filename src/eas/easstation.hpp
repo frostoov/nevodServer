@@ -15,7 +15,10 @@ public:
 	~EasStation();
 
 
-	HostPtr	addHost(uint32_t	numberHost, const std::string&	ip);
+	HostPtr	addHost(uint32_t	numberHost,
+					const std::string&	ip,
+					uint16_t registerPort,
+					uint16_t dataPort);
 	void	deleteHost(uint32_t	numberHost);
 
 	bool	writeBanOfTimestamps(int32_t	idHost, bool isBan);
