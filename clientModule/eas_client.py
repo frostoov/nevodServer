@@ -1,4 +1,5 @@
 import asyncio
+import json
 
 
 class EasClient:
@@ -10,12 +11,13 @@ class EasClient:
         self.id = 0
 
     def set_callback_functions(self, control_callback, data_callback):
-        self.control_client.set_callback(control_callback)
+        self.control_callback = control_callback
+        self.control_client.set_callback(self.callback_for_control_client)
         self.data_client.set_callback(data_callback)
 
     def connect_client_to_server(self, ip, control_port, data_port):
         self.control_client.connect_to(ip, control_port)
-        # self.data_client.connect_to(ip, data_port)
+        self.data_client.connect_to(ip, data_port)
 
     def connect_server_to_host(self, host_number,
                                host_ip=None):
@@ -104,6 +106,31 @@ class EasClient:
             self.control_client.send_to(command)
         self.id = 0
 
+    def callback_for_control_client(self, msg):
+        try:
+            answer_json = json.loads(msg)
+            answer_queue = []
+            id_list = [item["id"] for item in self.queue]
+            if isinstance(answer_json, list):
+                for command in answer_json:
+                    if command["id"] in id_list:
+                        answer_queue.append(
+                         (self.queue[id_list.index(command["id"])]["method"],
+                          command["result"])
+                        )
+                        del self.queue[id_list.index(command["id"])]
+            else:
+                if answer_json["id"] in id_list:
+                    answer_queue.append(
+                     (self.queue[id_list.index(answer_json["id"])]["method"],
+                      answer_json["result"])
+                    )
+                    del self.queue[id_list.index(answer_json["id"])]
+
+            self.control_callback(answer_queue)
+        except():
+            print("Invalid Json")
+
     def __get_rpc_json(self, name_of_method, list_of_arguments):
         rpc_json = {
             "jsonrpc": "2.0",
@@ -129,11 +156,6 @@ class _Client:
     def disconnect_from(self):
         self.reader.close()
         self.writer.close()
-
-    def start_read(self):
-        future = asyncio.Future()
-        asyncio.ensure_future(self.__receive_from(future))
-        future.add_done_callback(self.__receive_from_callback)
 
     def set_callback(self, callback):
         self.callback = callback
