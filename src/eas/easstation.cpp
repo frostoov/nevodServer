@@ -2,7 +2,7 @@
 
 EasStation::EasStation(const IoServicePtr& service) : service_(service) {
     auto host = addHost(0, "127.0.0.1", 2223, 2224);
-    host->connectToHost();
+//    host->connectToHost();
 }
 
 EasStation::~EasStation() {}

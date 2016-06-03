@@ -23,3 +23,4 @@ set(rpcserver_files_source
 )
 
 add_library(rpcserver ${rpcserver_files_source})
+target_include_directories(rpcserver PUBLIC ${CMAKE_SOURCE_DIR}/include)
