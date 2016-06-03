@@ -6,25 +6,28 @@
 class Subject;
 class Observer;
 
-class Observer	{
+class Observer {
 public:
-	virtual ~Observer();
-	virtual void update(const Subject*	subject) = 0;
+    virtual ~Observer();
+    virtual void update(const Subject* subject) = 0;
+
 protected:
-	Observer();
+    Observer();
 };
 
-class Subject	{
+class Subject {
 public:
-	virtual ~Subject();
-	virtual void attach(Observer*	obs);
-	virtual void detach(Observer *obs);
-	virtual void notify();
-	virtual void notify(Observer*	obs);
+    virtual ~Subject();
+    virtual void attach(Observer* obs);
+    virtual void detach(Observer* obs);
+    virtual void notify();
+    virtual void notify(Observer* obs);
+
 protected:
-	Subject();
+    Subject();
+
 private:
-	std::list<Observer*>	observers_;
+    std::list<Observer*> observers_;
 };
 
-#endif // OBSERVER_H
+#endif  // OBSERVER_H

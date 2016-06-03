@@ -8,24 +8,24 @@
 #include "easrpc.hpp"
 #include "uranrpc.hpp"
 
-class RpcServer	: public  Server	{
+class RpcServer : public Server {
 public:
-	using EasRpcPtr		= std::unique_ptr<EasRpc>;
-	using UranRpcPtr	= std::unique_ptr<UranRpc>;
+    using EasRpcPtr = std::unique_ptr<EasRpc>;
+    using UranRpcPtr = std::unique_ptr<UranRpc>;
 
-	explicit RpcServer(uint16_t	port);
-	~RpcServer();
+    explicit RpcServer(uint16_t port);
+    ~RpcServer();
 
-	void	start();
+    void start();
 
 protected:
-	void	initializeDispatcherOfEasRpc();
+    void initializeDispatcherOfEasRpc();
 
 private:
-	Dispatcher	dispatcher_;
+    Dispatcher dispatcher_;
 
-	EasRpcPtr		easRpc_;
-	UranRpcPtr		uranRpc_;
+    EasRpcPtr easRpc_;
+    UranRpcPtr uranRpc_;
 };
 
-#endif//RPCSERVER_H
+#endif  // RPCSERVER_H

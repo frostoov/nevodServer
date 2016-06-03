@@ -1,10 +1,5 @@
 #include "uranrpc.hpp"
 
-UranRpc::UranRpc(Dispatcher &dispatcher)
-	:	dispatcher_(dispatcher)	{
+UranRpc::UranRpc(Dispatcher& dispatcher) : dispatcher_(dispatcher) {}
 
-}
-
-UranRpc::~UranRpc()	{
-
-}
+UranRpc::~UranRpc() {}

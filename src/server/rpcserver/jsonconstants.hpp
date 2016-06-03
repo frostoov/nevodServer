@@ -17,6 +17,6 @@ static const std::string ERROR_NAME = "error";
 static const std::string ERROR_CODE_NAME = "code";
 static const std::string ERROR_MESSAGE_NAME = "message";
 
-} // namespace json
+}  // namespace json
 
 #endif

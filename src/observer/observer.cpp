@@ -1,26 +1,26 @@
 #include "observer.hpp"
 
-Observer::Observer(){}
+Observer::Observer() {}
 
-Subject::Subject(){}
+Subject::Subject() {}
 
-Observer::~Observer(){}
+Observer::~Observer() {}
 
-Subject::~Subject(){}
+Subject::~Subject() {}
 
-void Subject::attach(Observer*	obs)	{
-	observers_.push_back(obs);
+void Subject::attach(Observer* obs) {
+    observers_.push_back(obs);
 }
 
-void Subject::detach(Observer *obs)	{
-	observers_.remove(obs);
+void Subject::detach(Observer* obs) {
+    observers_.remove(obs);
 }
 
-void Subject::notify()	{
-	for(auto &obs : observers_)
-		obs->update(this);
+void Subject::notify() {
+    for (auto& obs : observers_)
+        obs->update(this);
 }
 
-void Subject::notify(Observer*	obs)	{
-	obs->update(this);
+void Subject::notify(Observer* obs) {
+    obs->update(this);
 }

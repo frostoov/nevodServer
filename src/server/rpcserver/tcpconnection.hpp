@@ -9,30 +9,31 @@
 #include "jsonwriter.hpp"
 #include "jsonreader.hpp"
 
-class TcpConnection : public std::enable_shared_from_this<TcpConnection>	{
+class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
 public:
-	using TcpConnectionPtr	= std::shared_ptr<TcpConnection>;
-	using DispatcherPtr			= std::shared_ptr<Dispatcher>;
+    using TcpConnectionPtr = std::shared_ptr<TcpConnection>;
+    using DispatcherPtr = std::shared_ptr<Dispatcher>;
 
-	TcpConnection(boost::asio::io_service& service, Dispatcher& dispatcher);
-	~TcpConnection();
+    TcpConnection(boost::asio::io_service& service, Dispatcher& dispatcher);
+    ~TcpConnection();
 
-	static TcpConnectionPtr create(boost::asio::io_service&	service, Dispatcher& dispatcher);
-	boost::asio::ip::tcp::socket&	getSocket();
-	void	start();
+    static TcpConnectionPtr create(boost::asio::io_service& service,
+                                   Dispatcher& dispatcher);
+    boost::asio::ip::tcp::socket& getSocket();
+    void start();
 
 protected:
-	void	handleWrite(const boost::system::error_code& error, size_t);
-	void	handleRead(const boost::system::error_code& error);
+    void handleWrite(const boost::system::error_code& error, size_t);
+    void handleRead(const boost::system::error_code& error);
 
 private:
-	Dispatcher& dispatcher_;
-	std::unique_ptr<JsonWriter>	writer;
+    Dispatcher& dispatcher_;
+    std::unique_ptr<JsonWriter> writer;
 
-	boost::asio::ip::tcp::socket	socket;
-	std::string message;
-	std::vector<char>	buf;
-	boost::asio::streambuf	response_;
+    boost::asio::ip::tcp::socket socket;
+    std::string message;
+    std::vector<char> buf;
+    boost::asio::streambuf response_;
 };
 
-#endif	//TCPCONNECTION_H
+#endif  // TCPCONNECTION_H

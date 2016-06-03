@@ -3,16 +3,16 @@
 
 #include "rpcserver/dispatcher.hpp"
 
-class UranRpc	{
+class UranRpc {
 public:
-	explicit UranRpc(Dispatcher& dispatcher);
-	~UranRpc();
+    explicit UranRpc(Dispatcher& dispatcher);
+    ~UranRpc();
 
 protected:
-	void	initializeDispatcher();
+    void initializeDispatcher();
 
 private:
-	Dispatcher&	dispatcher_;
+    Dispatcher& dispatcher_;
 };
 
-#endif//URANRPC_H
+#endif  // URANRPC_H

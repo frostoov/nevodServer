@@ -11,20 +11,20 @@
 
 class JsonReader {
 public:
-	using Json = nlohmann::json;
+    using Json = nlohmann::json;
 
-	JsonReader(const std::string& data);
-	~JsonReader();
+    JsonReader(const std::string& data);
+    ~JsonReader();
 
-	Request getRequest();
-	Response getResponse();
+    Request getRequest();
+    Response getResponse();
 
 private:
-	void	validateJsonrpcVersion() const;
-	Value	fromJsonToValue(const Json& json);
+    void validateJsonrpcVersion() const;
+    Value fromJsonToValue(const Json& json);
 
-	std::string data_;
-	Json		document_;
+    std::string data_;
+    Json document_;
 };
 
 #endif
