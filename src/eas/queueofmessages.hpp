@@ -1,5 +1,5 @@
-#ifndef STACKOFMESSAGES_H
-#define STACKOFMESSAGES_H
+#ifndef QUEUEOFMESSAGES_HPP
+#define QUEUEOFMESSAGES_HPP
 
 #include <queue>
 #include <memory>
@@ -29,10 +29,8 @@ public:
         null
     };
 
-    QueueOfMessages(const std::string& ip,
-                    uint16_t registerPort,
-                    uint16_t dataPort,
-                    const IoServicePtr& service);
+	QueueOfMessages(const std::shared_ptr<Client>& clientReg,
+					const std::shared_ptr<Client>& clientData);
     ~QueueOfMessages();
 
     void update(const Subject* subject);
@@ -65,4 +63,15 @@ private:
     //	string			ip_;
 };
 
-#endif  // STACKOFMESSAGES_H
+class QueueOfMessagesFactory {
+public:
+	using QueueOfMessagesPtr = std::shared_ptr<QueueOfMessages>;
+
+	static QueueOfMessagesPtr create(
+		const std::shared_ptr<Client>& clientReg,
+		const std::shared_ptr<Client>& clientData) {
+		return std::make_shared<QueueOfMessages>(clientReg, clientData);
+	}
+};
+
+#endif  // QUEUEOFMESSAGES_HPP

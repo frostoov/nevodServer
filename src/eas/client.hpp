@@ -20,7 +20,7 @@ public:
                     const IoServicePtr& service);
     ~Client();
 
-    bool connectToHost();
+	bool connectToHost();
     bool disconnectFromHost();
     void readRegister(uint32_t address);
     void writeRegister3000(uint32_t address, uint32_t data);
@@ -52,6 +52,18 @@ private:
     bool stopped_;
     std::vector<uint8_t> data_;
     Message message_;
+};
+
+class ClientFactory {
+public:
+	using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
+	using ClientPtr = std::shared_ptr<Client>;
+
+	static ClientPtr create(const std::string& ip,
+				  uint16_t port,
+				  const IoServicePtr& service) {
+		return std::make_shared<Client>(ip, port, service);
+	}
 };
 
 #endif  // CLIENT_HPP

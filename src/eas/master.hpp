@@ -43,7 +43,6 @@ public:
                    uint16_t seconds,
                    uint16_t ms);
 
-protected:
 private:
     QueuePtr clientQueue_;
     std::vector<AdcPtr> adcs_;

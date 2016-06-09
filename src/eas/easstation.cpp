@@ -1,8 +1,8 @@
 #include "easstation.hpp"
 
 EasStation::EasStation(const IoServicePtr& service) : service_(service) {
-    auto host = addHost(0, "127.0.0.1", 2223, 2224);
-//    host->connectToHost();
+	//    auto host = addHost(0, "127.0.0.1", 2223, 2224);
+	//    host->connectToHost();
 }
 
 EasStation::~EasStation() {}
@@ -11,7 +11,10 @@ EasStation::HostPtr EasStation::addHost(uint32_t numberHost,
                                         const std::string& ip,
                                         uint16_t registerPort,
                                         uint16_t dataPort) {
-    HostPtr host = std::make_shared<Host>(ip, registerPort, dataPort, service_);
+	auto clientReg = ClientFactory::create(ip, registerPort, service_);
+	auto clientData = ClientFactory::create(ip, dataPort, service_);
+	auto clientQueue = QueueOfMessagesFactory::create(clientReg, clientData);
+	HostPtr host = std::make_shared<Host>(clientQueue);
     hosts_.insert(std::pair<uint32_t, HostPtr>(numberHost, host));
     return host;
 }

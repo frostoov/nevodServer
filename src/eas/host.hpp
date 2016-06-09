@@ -19,10 +19,7 @@ public:
     using QueuePtr = std::shared_ptr<QueueOfMessages>;
     using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
 
-    Host(const std::string& ip,
-         uint16_t registerPort,
-         uint16_t dataPort,
-         const IoServicePtr& service);
+	Host(const std::shared_ptr<QueueOfMessages>& clientQueue);
     ~Host();
 
     void update(const Subject* subject);
@@ -35,7 +32,6 @@ public:
     void runQueue();
 
     void writeBanOfTimestamps(bool ban);
-    //	void		writeRegisterOfMasks();
     void writeTestRegister(uint16_t data);
     void writeCoarseReset(const std::array<bool, 4>& resetLink);
     void writeResolutionOfLinks(const std::array<bool, 4>& resolutionLink);

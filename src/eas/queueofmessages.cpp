@@ -1,12 +1,10 @@
 #include "queueofmessages.hpp"
 #include <iostream>
 
-QueueOfMessages::QueueOfMessages(const std::string& ip,
-                                 uint16_t registerPort,
-                                 uint16_t dataPort,
-                                 const IoServicePtr& service) {
-    clientReg_ = std::make_shared<Client>(ip, registerPort, service);
-    clientData_ = std::make_shared<Client>(ip, dataPort, service);
+QueueOfMessages::QueueOfMessages(const std::shared_ptr<Client>& clientReg,
+								 const std::shared_ptr<Client>& clientData) {
+	clientReg_ = clientReg;
+	clientData_ = clientData;
 
     clientReg_->attach(this);
     clientData_->attach(this);
