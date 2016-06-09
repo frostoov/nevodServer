@@ -11,7 +11,7 @@ public:
 	using TcpConnectionTestPtr = std::shared_ptr<TcpConnectionTest>;
 
 	RpcServerTest(uint16_t port) : RpcServer(port) {
-		connection = std::make_shared<TcpConnectionTest>(
+		connection_ = std::make_shared<TcpConnectionTest>(
 			*(getIoService().get()), getDispatcher());
 
 		auto& dispatcher = getDispatcher();
@@ -33,10 +33,10 @@ public:
 		return first + second;
 	}
 
-	TcpConnectionTestPtr getTcpConnectionTest() { return connection; }
+	TcpConnectionTestPtr getTcpConnectionTest() { return connection_; }
 
 private:
-	TcpConnectionTestPtr connection;
+	TcpConnectionTestPtr connection_;
 };
 
 #endif  // RPCSERVERTEST_HPP

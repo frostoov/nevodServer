@@ -1,5 +1,5 @@
-#ifndef CLIENT_H
-#define CLIENT_H
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
 
 #include <thread>
 #include <memory>
@@ -54,4 +54,4 @@ private:
     Message message_;
 };
 
-#endif  // CLIENT_H
+#endif  // CLIENT_HPP

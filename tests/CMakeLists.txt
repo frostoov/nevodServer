@@ -9,10 +9,10 @@ set(catch_files
 )
 
 set(test_files
-    hostclient.cpp
     rpcserver.cpp
     configparsers.cpp
-    hostclient.cpp
+    keeper.cpp
+    eas.cpp
 )
 
 add_library(catch INTERFACE)
