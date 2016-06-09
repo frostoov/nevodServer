@@ -12,7 +12,7 @@ public:
     using ioServicePtr = std::shared_ptr<boost::asio::io_service>;
 
     Server(unsigned short port);
-    ~Server();
+	~Server();
 
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
@@ -21,8 +21,8 @@ public:
 
     void run();
 
-    Dispatcher& getDispatcher() { return dispatcher_; }
-    ioServicePtr& getIoService() { return service_; }
+	Dispatcher& getDispatcher() { return dispatcher_; }
+	ioServicePtr& getIoService() { return service_; }
 
 protected:
     void startAccept();

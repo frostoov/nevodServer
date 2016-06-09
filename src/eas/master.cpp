@@ -46,7 +46,7 @@ void Master::readState() {
     for (auto record : registers_.readRecords) {
         Record recordWithOffset(*record);
         recordWithOffset.address += offset_;
-        clientQueue_->addCommandToStack(recordWithOffset, shared_from_this());
+        clientQueue_->addCommandToQueue(recordWithOffset, shared_from_this());
     }
 }
 
@@ -54,7 +54,7 @@ void Master::writeResetRegister() {
     Record recordWithValue(registers_.write.reset_register);
     recordWithValue.address += offset_;
     recordWithValue.value = 3;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Master::writeResolutionOfTimer(bool resolution) {
@@ -62,7 +62,7 @@ void Master::writeResolutionOfTimer(bool resolution) {
         Record recordWithValue(registers_.write.resolution_of_timer);
         recordWithValue.address += offset_;
         recordWithValue.value = 1;
-        clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+        clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
     }
 }
 
@@ -70,7 +70,7 @@ void Master::writeTestRegister(uint16_t data) {
     Record recordWithValue(registers_.write.test_register);
     recordWithValue.address += offset_;
     recordWithValue.value = data;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Master::writeCoincidence(uint32_t coincidence) {
@@ -93,28 +93,28 @@ void Master::writeCoincidence(uint32_t coincidence) {
             recordWithValue.value = 15;
             break;
     }
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Master::writeResetCounter() {
     Record recordWithValue(registers_.write.reset_counter);
     recordWithValue.address += offset_;
     recordWithValue.value = 1;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Master::writeTemporaryWindow(uint16_t window) {
     Record recordWithValue(registers_.write.temporary_window);
     recordWithValue.address += offset_;
     recordWithValue.value = window;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Master::writeChErrorCount(uint16_t data) {
     Record recordWithValue(registers_.write.ch_error_count);
     recordWithValue.address += offset_;
     recordWithValue.value = data;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Master::writeControlTrigger(int i) {
@@ -126,7 +126,7 @@ void Master::writeControlTrigger(int i) {
         recordWithValue.value = 1;
     if (i == 2)
         recordWithValue.value = 3;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Master::writeProgramTrigger(bool trigger) {
@@ -134,7 +134,7 @@ void Master::writeProgramTrigger(bool trigger) {
         Record recordWithValue(registers_.write.program_trigger);
         recordWithValue.address += offset_;
         recordWithValue.value = 1;
-        clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+        clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
     }
 }
 
@@ -142,7 +142,7 @@ void Master::writeResetVme() {
     Record recordWithValue(registers_.write.reset_vme);
     recordWithValue.address += offset_;
     recordWithValue.value = 1;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Master::writeMaskOfActiveChannels(
@@ -153,7 +153,7 @@ void Master::writeMaskOfActiveChannels(
     for (int i = 0; i < activeChannels.size(); i++)
         if (activeChannels[i] == true)
             recordWithValue.value += (1 << i);
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Master::writeTime(uint16_t hours,
@@ -170,6 +170,6 @@ void Master::writeTime(uint16_t hours,
         record.value = 0x34;
     }
     for (auto record : recordsWithValues) {
-        clientQueue_->addCommandToStack(record, shared_from_this());
+        clientQueue_->addCommandToQueue(record, shared_from_this());
     }
 }

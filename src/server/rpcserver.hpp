@@ -13,7 +13,7 @@ public:
     using EasRpcPtr = std::unique_ptr<EasRpc>;
     using UranRpcPtr = std::unique_ptr<UranRpc>;
 
-    explicit RpcServer(uint16_t port);
+	RpcServer(uint16_t port);
     ~RpcServer();
 
     void start();

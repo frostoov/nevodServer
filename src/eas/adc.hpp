@@ -1,5 +1,5 @@
-#ifndef ADC_H
-#define ADC_H
+#ifndef ADC_HPP
+#define ADC_HPP
 
 #include <cstdint>
 #include <memory>
@@ -22,11 +22,10 @@ public:
     void writeResetChannel(uint32_t channel);
     void writeSmoothing(uint16_t smoothing);
 
-protected:
 private:
     QueuePtr clientQueue_;
     AdcRegisters registers_;
     uint32_t offset_;
 };
 
-#endif  // DETECTOR_H
+#endif//ADC_HPP

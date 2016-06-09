@@ -33,7 +33,7 @@ void Adc::readState() {
     for (auto record : registers_.readRecords) {
         Record recordWithOffset(*record);
         recordWithOffset.address += offset_;
-        clientQueue_->addCommandToStack(recordWithOffset, shared_from_this());
+        clientQueue_->addCommandToQueue(recordWithOffset, shared_from_this());
     }
 }
 
@@ -41,7 +41,7 @@ void Adc::writeControlRegister() {
     Record recordWithOffset(registers_.write.control_register);
     recordWithOffset.address += offset_;
     recordWithOffset.value = 0;
-    clientQueue_->addCommandToStack(recordWithOffset, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithOffset, shared_from_this());
 }
 
 void Adc::writeThreshold(uint32_t channel, uint16_t threshold) {
@@ -54,7 +54,7 @@ void Adc::writeThreshold(uint32_t channel, uint16_t threshold) {
 
     recordWithValue.address += offset_;
     recordWithValue.value = threshold;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Adc::writeDelay(uint32_t channel, uint16_t delay) {
@@ -67,7 +67,7 @@ void Adc::writeDelay(uint32_t channel, uint16_t delay) {
 
     recordWithValue.address += offset_;
     recordWithValue.value = delay;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Adc::writeResetChannel(uint32_t channel) {
@@ -80,12 +80,12 @@ void Adc::writeResetChannel(uint32_t channel) {
 
     recordWithValue.address += offset_;
     recordWithValue.value = 1;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void Adc::writeSmoothing(uint16_t smoothing) {
     Record recordWithValue(registers_.write.smoothing);
     recordWithValue.address += offset_;
     recordWithValue.value = smoothing;
-    clientQueue_->addCommandToStack(recordWithValue, shared_from_this());
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }

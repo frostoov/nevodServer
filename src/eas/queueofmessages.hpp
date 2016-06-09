@@ -39,7 +39,7 @@ public:
 
     void connectToHost();
     void disconnectFromHost();
-    void addCommandToStack(const Record& record, ObserverPtr sender);
+	void addCommandToQueue(const Record& record, ObserverPtr sender);
     void runQueue();
     void clearData();
 

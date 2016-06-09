@@ -69,25 +69,29 @@ void TcpConnection::handleRead(const boost::system::error_code& error) {
     msg.erase(msg.end() - 1);
     std::cout << msg << std::endl;
 
-    writer = std::unique_ptr<JsonWriter>(new JsonWriter());
-
-    try {
-        auto reader = std::unique_ptr<JsonReader>(new JsonReader(msg));
-        Request request = reader->getRequest();
-        reader.reset();
-
-        auto response = dispatcher_.Invoke(
-            request.getMethodName(), request.getParameters(), request.getId());
-        response.write(*writer.get());
-    } catch (const Fault& ex) {
-        Response(ex.GetCode(), ex.GetString(), Value()).write(*writer.get());
-    }
-
-    std::cout << writer->getData() << std::endl;
-
     boost::asio::async_write(
-        socket, boost::asio::buffer(std::string(writer->getData())),
+		socket, boost::asio::buffer(answerToRequest(msg)),
         boost::bind(&TcpConnection::handleWrite, shared_from_this(),
                     boost::asio::placeholders::error,
-                    boost::asio::placeholders::bytes_transferred));
+					boost::asio::placeholders::bytes_transferred));
+}
+
+std::string TcpConnection::answerToRequest(const std::string& message) {
+	writer = std::unique_ptr<JsonWriter>(new JsonWriter());
+
+	try {
+		auto reader = std::unique_ptr<JsonReader>(new JsonReader(message));
+		Request request = reader->getRequest();
+		reader.reset();
+
+		auto response = dispatcher_.Invoke(
+			request.getMethodName(), request.getParameters(), request.getId());
+		response.write(*writer.get());
+	} catch (const Fault& ex) {
+		Response(ex.GetCode(), ex.GetString(), Value()).write(*writer.get());
+	}
+
+	std::cout << writer->getData() << std::endl;
+
+	return writer->getData();
 }

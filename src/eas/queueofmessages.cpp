@@ -20,11 +20,11 @@ QueueOfMessages::~QueueOfMessages() {
 void QueueOfMessages::update(const Subject* subject) {
     if (subject == clientReg_.get()) {
         if (clientReg_->getMessage() == Client::Message::readyRead) {
-            static int commandNumberBegin = 0;
-            static int commandNumberEnd = 0;
+			static size_t commandNumberBegin = 0;
+			static size_t commandNumberEnd = 0;
             commandNumberEnd = fillValuesInCommandsHaveBeenDone(
                 clientReg_->getData(), commandNumberBegin);
-            for (int i = commandNumberBegin; i < commandNumberEnd; i++) {
+			for (size_t i = commandNumberBegin; i < commandNumberEnd; i++) {
                 if (commandsHaveBeenDone_[i].first.type == Record::Type::Read) {
                     message_ = Message::recordRead;
                     answerRecord_ = commandsHaveBeenDone_[i].first;
@@ -87,7 +87,7 @@ void QueueOfMessages::disconnectFromHost() {
     clientData_->disconnectFromHost();
 }
 
-void QueueOfMessages::addCommandToStack(const Record& record,
+void QueueOfMessages::addCommandToQueue(const Record& record,
                                         ObserverPtr sender) {
     commandsWillBeDone_.push(std::pair<Record, ObserverPtr>(record, sender));
 }
@@ -118,7 +118,7 @@ int QueueOfMessages::fillValuesInCommandsHaveBeenDone(
     //	for (auto& item : commandsHaveBeenDone_)
     //		item.first.value = 13232;
     int command = commandNumber;
-    for (int i = 0; i < (int)data.size(); i++) {
+	for (size_t i = 0; i < data.size(); i++) {
         if (data[i] == 0x0b && data[i + 1] == 0xb9 && data[i + 2] == 0x0b &&
             data[i + 3] == 0xb9) {
             uint16_t value = data[i + 10] << 8;

@@ -28,7 +28,6 @@ public:
     bool writeStartTaskMaster(int idMaster);
     bool writeRegisterOfReadData(int idHost);
 
-protected:
 private:
     IoServicePtr service_;
     std::map<uint32_t, HostPtr> hosts_;
