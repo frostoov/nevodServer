@@ -1,8 +1,8 @@
 #include "queueofmessages.hpp"
 #include <iostream>
 
-QueueOfMessages::QueueOfMessages(const std::shared_ptr<Client>& clientReg,
-								 const std::shared_ptr<Client>& clientData) {
+QueueOfMessages::QueueOfMessages(const std::shared_ptr<HostClient>& clientReg,
+								 const std::shared_ptr<HostClient>& clientData) {
 	clientReg_ = clientReg;
 	clientData_ = clientData;
 
@@ -17,7 +17,7 @@ QueueOfMessages::~QueueOfMessages() {
 
 void QueueOfMessages::update(const Subject* subject) {
     if (subject == clientReg_.get()) {
-        if (clientReg_->getMessage() == Client::Message::readyRead) {
+        if (clientReg_->getMessage() == HostClient::Message::readyRead) {
 			static size_t commandNumberBegin = 0;
 			static size_t commandNumberEnd = 0;
             commandNumberEnd = fillValuesInCommandsHaveBeenDone(
@@ -40,24 +40,24 @@ void QueueOfMessages::update(const Subject* subject) {
             }
         }
 
-        if (clientReg_->getMessage() == Client::Message::connected) {
+        if (clientReg_->getMessage() == HostClient::Message::connected) {
             message_ = Message::connected;
             notify();
         }
 
-        if (clientReg_->getMessage() == Client::Message::disconnected) {
+        if (clientReg_->getMessage() == HostClient::Message::disconnected) {
             message_ = Message::disconnected;
             notify();
         }
 
-        if (clientReg_->getMessage() == Client::Message::error) {
+        if (clientReg_->getMessage() == HostClient::Message::error) {
             message_ = Message::error;
             notify();
         }
     }
 
     if (subject == clientData_.get()) {
-        if (clientData_->getMessage() == Client::Message::readyRead) {
+        if (clientData_->getMessage() == HostClient::Message::readyRead) {
             static int packetCount = 0;
             message_ = Message::dataRead;
             if (packetCount < 200) {

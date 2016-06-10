@@ -16,6 +16,8 @@ set(eas_files_source
     easstation.cpp
     adc.hpp
     adc.cpp
+    hostclient.cpp
+    hostclient.hpp
 )
 
 add_library(eas ${eas_files_source})

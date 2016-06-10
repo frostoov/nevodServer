@@ -8,14 +8,14 @@
 #include <boost/asio.hpp>
 
 #include "../observer/observer.hpp"
-#include "client.hpp"
+#include "hostclient.hpp"
 #include "registers.hpp"
 
 class QueueOfMessages : public Observer,
                         public Subject,
                         public std::enable_shared_from_this<QueueOfMessages> {
 public:
-    using ClientPtr = std::shared_ptr<Client>;
+    using ClientPtr = std::shared_ptr<HostClient>;
     using ObserverPtr = std::shared_ptr<Observer>;
     using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
 
@@ -29,8 +29,8 @@ public:
         null
     };
 
-	QueueOfMessages(const std::shared_ptr<Client>& clientReg,
-					const std::shared_ptr<Client>& clientData);
+	QueueOfMessages(const std::shared_ptr<HostClient>& clientReg,
+					const std::shared_ptr<HostClient>& clientData);
     ~QueueOfMessages();
 
     void update(const Subject* subject);
@@ -68,8 +68,8 @@ public:
 	using QueueOfMessagesPtr = std::shared_ptr<QueueOfMessages>;
 
 	static QueueOfMessagesPtr create(
-		const std::shared_ptr<Client>& clientReg,
-		const std::shared_ptr<Client>& clientData) {
+		const std::shared_ptr<HostClient>& clientReg,
+		const std::shared_ptr<HostClient>& clientData) {
 		return std::make_shared<QueueOfMessages>(clientReg, clientData);
 	}
 };
