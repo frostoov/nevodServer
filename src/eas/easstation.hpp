@@ -5,6 +5,7 @@
 #include <boost/asio.hpp>
 
 #include "host.hpp"
+#include "hostclient.hpp"
 
 class EasStation {
 public:

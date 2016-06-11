@@ -9,10 +9,12 @@ Host::Host(const std::shared_ptr<QueueOfMessages>& clientQueue) {
 	clientQueue_ = clientQueue;
 
     clientQueue_->attach(this);
+	clientQueue_->attachToClients();
     offset_ = 0x400000;
 }
 
 Host::~Host() {
+	clientQueue_->detachFromClients();
     clientQueue_->detach(this);
     clientQueue_.reset();
 }

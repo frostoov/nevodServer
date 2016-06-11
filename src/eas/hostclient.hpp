@@ -11,13 +11,10 @@
 #include "client.hpp"
 
 class HostClient : public Client,
-				   public Subject,
 				   public std::enable_shared_from_this<HostClient> {
 public:
 	using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
 	using HostClientPtr = std::shared_ptr<HostClient>;
-
-	enum class Message { connected, disconnected, readyRead, error, null };
 
 	HostClient(const std::string& ip,
 						uint16_t port,

@@ -20,5 +20,5 @@ Interface& createInterface() {
 TEST_CASE("Queue Of Messages") {
 //	auto clientQueue = QueueOfMessagesFactory::create(
 //		std::make_shared<ClientMock>(), std::make_shared<ClientMock>());
-	Interface& obj =
+	Interface& obj = 
 }

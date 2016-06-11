@@ -1,23 +1,19 @@
 #include "queueofmessages.hpp"
 #include <iostream>
 
-QueueOfMessages::QueueOfMessages(const std::shared_ptr<HostClient>& clientReg,
-								 const std::shared_ptr<HostClient>& clientData) {
+QueueOfMessages::QueueOfMessages(const std::shared_ptr<Client>& clientReg,
+								 const std::shared_ptr<Client>& clientData) {
 	clientReg_ = clientReg;
 	clientData_ = clientData;
-
-    clientReg_->attach(this);
-    clientData_->attach(this);
 }
 
 QueueOfMessages::~QueueOfMessages() {
-    clientReg_->detach(this);
-    clientData_->detach(this);
+
 }
 
 void QueueOfMessages::update(const Subject* subject) {
     if (subject == clientReg_.get()) {
-        if (clientReg_->getMessage() == HostClient::Message::readyRead) {
+		if (clientReg_->getMessage() == Client::Message::readyRead) {
 			static size_t commandNumberBegin = 0;
 			static size_t commandNumberEnd = 0;
             commandNumberEnd = fillValuesInCommandsHaveBeenDone(
@@ -40,24 +36,24 @@ void QueueOfMessages::update(const Subject* subject) {
             }
         }
 
-        if (clientReg_->getMessage() == HostClient::Message::connected) {
+		if (clientReg_->getMessage() == Client::Message::connected) {
             message_ = Message::connected;
             notify();
         }
 
-        if (clientReg_->getMessage() == HostClient::Message::disconnected) {
+		if (clientReg_->getMessage() == Client::Message::disconnected) {
             message_ = Message::disconnected;
             notify();
         }
 
-        if (clientReg_->getMessage() == HostClient::Message::error) {
+		if (clientReg_->getMessage() == Client::Message::error) {
             message_ = Message::error;
             notify();
         }
     }
 
     if (subject == clientData_.get()) {
-        if (clientData_->getMessage() == HostClient::Message::readyRead) {
+		if (clientData_->getMessage() == Client::Message::readyRead) {
             static int packetCount = 0;
             message_ = Message::dataRead;
             if (packetCount < 200) {
@@ -83,6 +79,16 @@ void QueueOfMessages::connectToHost() {
 void QueueOfMessages::disconnectFromHost() {
     clientReg_->disconnectFromHost();
     clientData_->disconnectFromHost();
+}
+
+void QueueOfMessages::attachToClients()	{
+	clientReg_->attach(this);
+	clientData_->attach(this);
+}
+
+void QueueOfMessages::detachFromClients()	{
+	clientReg_->detach(this);
+	clientData_->detach(this);
 }
 
 void QueueOfMessages::addCommandToQueue(const Record& record,
