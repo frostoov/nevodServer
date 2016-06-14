@@ -1,5 +1,5 @@
-#ifndef HOSTCLIENT_HPP
-#define HOSTCLIENT_HPP
+#ifndef REALCLIENT_HPP
+#define REALCLIENT_HPP
 
 #include <thread>
 #include <memory>
@@ -10,16 +10,16 @@
 #include "../observer/observer.hpp"
 #include "client.hpp"
 
-class HostClient : public Client,
-				   public std::enable_shared_from_this<HostClient> {
+class RealClient : public Client,
+				   public std::enable_shared_from_this<RealClient> {
 public:
 	using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
-	using HostClientPtr = std::shared_ptr<HostClient>;
+	using HostClientPtr = std::shared_ptr<RealClient>;
 
-	HostClient(const std::string& ip,
+	RealClient(const std::string& ip,
 						uint16_t port,
 						const IoServicePtr& service);
-	~HostClient();
+	~RealClient();
 
 	bool connectToHost();
 	bool disconnectFromHost();
@@ -55,16 +55,16 @@ private:
 	Message message_;
 };
 
-class HostClientFactory : public ClientFactory {
+class RealClientFactory : public ClientFactory {
 public:
 	using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
-	using ClientPtr = std::shared_ptr<HostClient>;
+	using ClientPtr = std::shared_ptr<RealClient>;
 
 	static ClientPtr create(const std::string& ip,
 							uint16_t port,
 							const IoServicePtr& service) {
-		return std::make_shared<HostClient>(ip, port, service);
+		return std::make_shared<RealClient>(ip, port, service);
 	}
 };
 
-#endif  // HOSTCLIENT_HPP
+#endif  // REALCLIENT_HPP

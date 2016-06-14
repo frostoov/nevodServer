@@ -8,7 +8,7 @@
 
 class Adc : public Observer, public std::enable_shared_from_this<Adc> {
 public:
-    using QueuePtr = std::shared_ptr<QueueOfMessages>;
+	using QueuePtr = std::shared_ptr<QueueOfMessages>;
 
     Adc(uint32_t offset, QueuePtr clientQueue);
     ~Adc();

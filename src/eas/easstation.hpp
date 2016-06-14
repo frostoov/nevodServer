@@ -5,7 +5,8 @@
 #include <boost/asio.hpp>
 
 #include "host.hpp"
-#include "hostclient.hpp"
+#include "realclient.hpp"
+#include "realqueueofmessages.hpp"
 
 class EasStation {
 public:

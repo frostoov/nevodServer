@@ -5,19 +5,20 @@ set(eas_files_source
     registers.hpp
     registers.cpp
     client.hpp
-    client.cpp
     queueofmessages.hpp
-    queueofmessages.cpp
+    realqueueofmessages.hpp
+    realqueueofmessages.cpp
     host.hpp
     host.cpp
     master.hpp
-    master.cpp
+    realmaster.hpp
+    realmaster.cpp
     easstation.hpp
     easstation.cpp
     adc.hpp
     adc.cpp
-    hostclient.cpp
-    hostclient.hpp
+    realclient.cpp
+    realclient.hpp
 )
 
 add_library(eas ${eas_files_source})

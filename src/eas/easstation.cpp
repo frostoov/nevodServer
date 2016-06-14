@@ -11,9 +11,9 @@ EasStation::HostPtr EasStation::addHost(uint32_t numberHost,
                                         const std::string& ip,
                                         uint16_t registerPort,
                                         uint16_t dataPort) {
-	auto clientReg = HostClientFactory::create(ip, registerPort, service_);
-	auto clientData = HostClientFactory::create(ip, dataPort, service_);
-	auto clientQueue = QueueOfMessagesFactory::create(clientReg, clientData);
+	auto clientReg = RealClientFactory::create(ip, registerPort, service_);
+	auto clientData = RealClientFactory::create(ip, dataPort, service_);
+	auto clientQueue = RealQueueOfMessagesFactory::create(clientReg, clientData);
 	HostPtr host = std::make_shared<Host>(clientQueue);
     hosts_.insert(std::pair<uint32_t, HostPtr>(numberHost, host));
     return host;

@@ -1,17 +1,17 @@
-#include "queueofmessages.hpp"
+#include "realqueueofmessages.hpp"
 #include <iostream>
 
-QueueOfMessages::QueueOfMessages(const std::shared_ptr<Client>& clientReg,
+RealQueueOfMessages::RealQueueOfMessages(const std::shared_ptr<Client>& clientReg,
 								 const std::shared_ptr<Client>& clientData) {
 	clientReg_ = clientReg;
 	clientData_ = clientData;
 }
 
-QueueOfMessages::~QueueOfMessages() {
+RealQueueOfMessages::~RealQueueOfMessages() {
 
 }
 
-void QueueOfMessages::update(const Subject* subject) {
+void RealQueueOfMessages::update(const Subject* subject) {
     if (subject == clientReg_.get()) {
 		if (clientReg_->getMessage() == Client::Message::readyRead) {
 			static size_t commandNumberBegin = 0;
@@ -71,32 +71,32 @@ void QueueOfMessages::update(const Subject* subject) {
     }
 }
 
-void QueueOfMessages::connectToHost() {
+void RealQueueOfMessages::connectToHost() {
     clientReg_->connectToHost();
     clientData_->connectToHost();
 }
 
-void QueueOfMessages::disconnectFromHost() {
+void RealQueueOfMessages::disconnectFromHost() {
     clientReg_->disconnectFromHost();
     clientData_->disconnectFromHost();
 }
 
-void QueueOfMessages::attachToClients()	{
+void RealQueueOfMessages::attachToClients()	{
 	clientReg_->attach(this);
 	clientData_->attach(this);
 }
 
-void QueueOfMessages::detachFromClients()	{
+void RealQueueOfMessages::detachFromClients()	{
 	clientReg_->detach(this);
 	clientData_->detach(this);
 }
 
-void QueueOfMessages::addCommandToQueue(const Record& record,
+void RealQueueOfMessages::addCommandToQueue(const Record& record,
                                         ObserverPtr sender) {
     commandsWillBeDone_.push(std::pair<Record, ObserverPtr>(record, sender));
 }
 
-void QueueOfMessages::runQueue() {
+void RealQueueOfMessages::runQueue() {
     while (!commandsWillBeDone_.empty()) {
         writeRegister(commandsWillBeDone_.front().first);
         commandsHaveBeenDone_.push_back(commandsWillBeDone_.front());
@@ -104,7 +104,7 @@ void QueueOfMessages::runQueue() {
     }
 }
 
-void QueueOfMessages::writeRegister(const Record& record) {
+void RealQueueOfMessages::writeRegister(const Record& record) {
     if (record.type == Record::Type::Zero)
         clientReg_->writeRegister3000(record.address, record.value);
     if (record.type == Record::Type::Two)
@@ -116,7 +116,7 @@ void QueueOfMessages::writeRegister(const Record& record) {
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 
-int QueueOfMessages::fillValuesInCommandsHaveBeenDone(
+int RealQueueOfMessages::fillValuesInCommandsHaveBeenDone(
     const std::vector<uint8_t>& data,
     int commandNumber) {
     //	for (auto& item : commandsHaveBeenDone_)
@@ -151,19 +151,19 @@ int QueueOfMessages::fillValuesInCommandsHaveBeenDone(
     return command;
 }
 
-void QueueOfMessages::clearData() {
+void RealQueueOfMessages::clearData() {
     clientData_->clearData();
     data_.clear();
 }
 
-const Record& QueueOfMessages::getRecord() const {
+const Record& RealQueueOfMessages::getRecord() const {
     return answerRecord_;
 }
 
-QueueOfMessages::Message QueueOfMessages::getMessage() const {
+RealQueueOfMessages::Message RealQueueOfMessages::getMessage() const {
     return message_;
 }
 
-const std::vector<uint8_t>& QueueOfMessages::getData() const {
+const std::vector<uint8_t>& RealQueueOfMessages::getData() const {
     return data_;
 }

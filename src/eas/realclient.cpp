@@ -1,8 +1,8 @@
-#include "hostclient.hpp"
+#include "realclient.hpp"
 
 #include <iostream>  //TODO
 
-HostClient::HostClient(const std::string& ip,
+RealClient::RealClient(const std::string& ip,
 					   uint16_t port,
 					   const IoServicePtr& service)
 	: socket_(*(service.get())),
@@ -14,17 +14,17 @@ HostClient::HostClient(const std::string& ip,
 	message_ = Message::error;
 }
 
-HostClient::~HostClient() {}
+RealClient::~RealClient() {}
 
-bool HostClient::connectToHost() {
+bool RealClient::connectToHost() {
 	stopped_ = false;
 	startConnect();
 
 	deadlineTimer_.async_wait(
-		boost::bind(&HostClient::checkDeadline, shared_from_this()));
+		boost::bind(&RealClient::checkDeadline, shared_from_this()));
 }
 
-bool HostClient::disconnectFromHost() {
+bool RealClient::disconnectFromHost() {
 	stopped_ = true;
 	socket_.close();
 	deadlineTimer_.cancel();
@@ -32,7 +32,7 @@ bool HostClient::disconnectFromHost() {
 	return true;
 }
 
-void HostClient::readRegister(uint32_t address) {
+void RealClient::readRegister(uint32_t address) {
 	std::vector<char> sendMessage;
 	sendMessage.resize(12);
 	sendMessage[0] = 0x0b;
@@ -56,7 +56,7 @@ void HostClient::readRegister(uint32_t address) {
 	startWrite(sendMessage);
 }
 
-void HostClient::writeRegister3000(uint32_t address, uint32_t data) {
+void RealClient::writeRegister3000(uint32_t address, uint32_t data) {
 	std::vector<char> sendMessage;
 	sendMessage.resize(14);
 	sendMessage[0] = 0x0b;
@@ -83,7 +83,7 @@ void HostClient::writeRegister3000(uint32_t address, uint32_t data) {
 	startWrite(sendMessage);
 }
 
-void HostClient::writeRegister3002(uint32_t address, uint32_t data) {
+void RealClient::writeRegister3002(uint32_t address, uint32_t data) {
 	std::vector<char> sendMessage;
 	sendMessage.resize(14);
 	sendMessage[0] = 0x0b;
@@ -110,53 +110,53 @@ void HostClient::writeRegister3002(uint32_t address, uint32_t data) {
 	startWrite(sendMessage);
 }
 
-bool HostClient::isStopped() const {
+bool RealClient::isStopped() const {
 	return stopped_;
 }
 
-void HostClient::clearData() {
+void RealClient::clearData() {
 	data_.clear();
 }
 
-const std::vector<uint8_t>& HostClient::getData() const {
+const std::vector<uint8_t>& RealClient::getData() const {
 	return data_;
 }
 
-HostClient::Message HostClient::getMessage() const {
+RealClient::Message RealClient::getMessage() const {
 	return message_;
 }
 
-void HostClient::startConnect() {
+void RealClient::startConnect() {
 	deadlineTimer_.expires_from_now(boost::posix_time::seconds(60));
 	boost::asio::ip::tcp::endpoint ep(
 		boost::asio::ip::address::from_string(ip_), port_);
 	socket_.async_connect(
-		ep, boost::bind(&HostClient::connectHandler, shared_from_this(),
+		ep, boost::bind(&RealClient::connectHandler, shared_from_this(),
 						boost::asio::placeholders::error));
 }
 
-void HostClient::startRead() {
+void RealClient::startRead() {
 	//	deadlineTimer_.expires_from_now(boost::posix_time::seconds(30));
 
 	boost::asio::async_read_until(
 		socket_, inputBuffer_, '\n',
-		boost::bind(&HostClient::readHandler, shared_from_this(),
+		boost::bind(&RealClient::readHandler, shared_from_this(),
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred));
 }
 
-void HostClient::startWrite(const std::vector<char>& message) {
+void RealClient::startWrite(const std::vector<char>& message) {
 	if (stopped_)
 		return;
 
 	boost::asio::async_write(
 		socket_, boost::asio::buffer(message),
-		boost::bind(&HostClient::writeHandler, shared_from_this(),
+		boost::bind(&RealClient::writeHandler, shared_from_this(),
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred));
 }
 
-void HostClient::connectHandler(const boost::system::error_code& error) {
+void RealClient::connectHandler(const boost::system::error_code& error) {
 	if (stopped_)
 		return;
 	if (!error) {
@@ -165,7 +165,7 @@ void HostClient::connectHandler(const boost::system::error_code& error) {
 	}
 }
 
-void HostClient::readHandler(const boost::system::error_code& error, size_t) {
+void RealClient::readHandler(const boost::system::error_code& error, size_t) {
 	if (stopped_)
 		return;
 
@@ -186,7 +186,7 @@ void HostClient::readHandler(const boost::system::error_code& error, size_t) {
 	}
 }
 
-void HostClient::writeHandler(const boost::system::error_code& error, size_t) {
+void RealClient::writeHandler(const boost::system::error_code& error, size_t) {
 	if (stopped_)
 		return;
 
@@ -202,7 +202,7 @@ void HostClient::writeHandler(const boost::system::error_code& error, size_t) {
 	}
 }
 
-void HostClient::checkDeadline() {
+void RealClient::checkDeadline() {
 	if (stopped_)
 		return;
 	std::cout << "Deadline" << std::endl;
@@ -212,5 +212,5 @@ void HostClient::checkDeadline() {
 		deadlineTimer_.expires_at(boost::posix_time::pos_infin);
 	}
 	deadlineTimer_.async_wait(
-		boost::bind(&HostClient::checkDeadline, shared_from_this()));
+		boost::bind(&RealClient::checkDeadline, shared_from_this()));
 }

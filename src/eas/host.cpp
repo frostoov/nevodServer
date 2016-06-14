@@ -22,7 +22,7 @@ Host::~Host() {
 void Host::update(const Subject* subject) {
     if (subject == clientQueue_.get()) {
         if (clientQueue_->getMessage() ==
-            QueueOfMessages::Message::recordRead) {
+			QueueOfMessages::Message::recordRead) {
             Record record = clientQueue_->getRecord();
             std::cout << record.value << std::endl;
 
@@ -42,23 +42,23 @@ void Host::update(const Subject* subject) {
         }
 
         if (clientQueue_->getMessage() ==
-            QueueOfMessages::Message::recordWrite) {
+			QueueOfMessages::Message::recordWrite) {
             Record record = clientQueue_->getRecord();
             resultRecord_ = record;
             std::cout << record.value << std::endl;
             notify();
         }
 
-        if (clientQueue_->getMessage() == QueueOfMessages::Message::connected) {
+		if (clientQueue_->getMessage() == QueueOfMessages::Message::connected) {
             std::cout << "Connected!" << std::endl;
         }
 
         if (clientQueue_->getMessage() ==
-            QueueOfMessages::Message::disconnected) {
+			QueueOfMessages::Message::disconnected) {
             std::cout << "Disconnected!" << std::endl;
         }
 
-        if (clientQueue_->getMessage() == QueueOfMessages::Message::error) {
+		if (clientQueue_->getMessage() == QueueOfMessages::Message::error) {
             std::cout << "Error!" << std::endl;
         }
     }
@@ -73,10 +73,10 @@ void Host::disconnectFromHost() {
 }
 
 Host::MasterPtr Host::addMaster(uint32_t numberMaster) {
-    MasterPtr master =
-        std::make_shared<Master>(0x1000000 * numberMaster, clientQueue_);
-    masters_.insert(std::pair<uint32_t, MasterPtr>(numberMaster, master));
-    return master;
+//    MasterPtr master =
+//		std::make_shared<Master>(0x1000000 * numberMaster, clientQueue_);
+//    masters_.insert(std::pair<uint32_t, MasterPtr>(numberMaster, master));
+//    return master;
 }
 
 void Host::deleteMaster(uint32_t numberMaster) {

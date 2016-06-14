@@ -1,80 +1,52 @@
 #ifndef QUEUEOFMESSAGES_HPP
 #define QUEUEOFMESSAGES_HPP
 
-#include <queue>
 #include <memory>
-#include <string>
-#include <list>
-#include <thread>
-#include <boost/asio.hpp>
 
 #include "../observer/observer.hpp"
 #include "client.hpp"
 #include "registers.hpp"
 
-class QueueOfMessages : public Observer,
-                        public Subject,
-                        public std::enable_shared_from_this<QueueOfMessages> {
+class QueueOfMessages : public Observer, public Subject {
 public:
 	using ClientPtr = std::shared_ptr<Client>;
-    using ObserverPtr = std::shared_ptr<Observer>;
-    using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
+	using ObserverPtr = std::shared_ptr<Observer>;
 
-    enum class Message {
-        connected,
-        disconnected,
-        recordRead,
-        recordWrite,
-        dataRead,
-        error,
-        null
-    };
+	enum class Message {
+		connected,
+		disconnected,
+		recordRead,
+		recordWrite,
+		dataRead,
+		error,
+		null
+	};
 
-	QueueOfMessages(const std::shared_ptr<Client>& clientReg,
-					const std::shared_ptr<Client>& clientData);
-    ~QueueOfMessages();
+	virtual void attachToClients() = 0;
+	virtual void detachFromClients() = 0;
+	virtual void connectToHost() = 0;
+	virtual void disconnectFromHost() = 0;
+	virtual void addCommandToQueue(const Record& record, ObserverPtr sender) = 0;
+	virtual void runQueue() = 0;
+	virtual void clearData() = 0;
 
-    void update(const Subject* subject);
+	virtual const Record& getRecord() const = 0;
+	virtual Message getMessage() const = 0;
+	virtual const std::vector<uint8_t>& getData() const = 0;
 
-    void connectToHost();
-    void disconnectFromHost();
-	void attachToClients();
-	void detachFromClients();
-	void addCommandToQueue(const Record& record, ObserverPtr sender);
-    void runQueue();
-    void clearData();
+	//TODO
+	virtual void write(int32_t number, bool isBan) = 0;
 
-    const Record& getRecord() const;
-    Message getMessage() const;
-    const std::vector<uint8_t>& getData() const;
-
-    void write(int32_t number, bool isBan) { clientReg_->write(number, isBan); }
-
-protected:
-    void writeRegister(const Record& record);
-    int fillValuesInCommandsHaveBeenDone(const std::vector<uint8_t>& data,
-                                         int commandNumber);
-
-private:
-    ClientPtr clientReg_;
-    ClientPtr clientData_;
-    std::queue<std::pair<Record, ObserverPtr>> commandsWillBeDone_;
-    std::vector<std::pair<Record, ObserverPtr>> commandsHaveBeenDone_;
-    Record answerRecord_;
-    Message message_;
-    std::vector<uint8_t> data_;
-    //	string			ip_;
+	virtual ~QueueOfMessages() {}
 };
 
 class QueueOfMessagesFactory {
 public:
 	using QueueOfMessagesPtr = std::shared_ptr<QueueOfMessages>;
+	using ClientPtr = std::shared_ptr<Client>;
 
-	static QueueOfMessagesPtr create(
-		const std::shared_ptr<Client>& clientReg,
-		const std::shared_ptr<Client>& clientData) {
-		return std::make_shared<QueueOfMessages>(clientReg, clientData);
-	}
+	virtual QueueOfMessagesPtr create(const ClientPtr clientReg,
+									  const ClientPtr clientData) = 0;
 };
 
 #endif  // QUEUEOFMESSAGES_HPP

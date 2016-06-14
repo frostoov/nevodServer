@@ -13,7 +13,7 @@ Adc::~Adc() {
 void Adc::update(const Subject* subject) {
     if (subject == clientQueue_.get()) {
         if (clientQueue_->getMessage() ==
-            QueueOfMessages::Message::recordRead) {
+			QueueOfMessages::Message::recordRead) {
             Record record = clientQueue_->getRecord();
             std::cout << record.address << "\t" << record.value << std::endl;
             for (auto reg : registers_.readRecords)
@@ -22,7 +22,7 @@ void Adc::update(const Subject* subject) {
         }
 
         if (clientQueue_->getMessage() ==
-            QueueOfMessages::Message::recordWrite) {
+			QueueOfMessages::Message::recordWrite) {
             Record record = clientQueue_->getRecord();
             std::cout << record.address << "\t" << record.value << std::endl;
         }
