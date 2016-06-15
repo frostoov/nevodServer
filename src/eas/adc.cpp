@@ -3,15 +3,15 @@
 
 Adc::Adc(uint32_t offset, QueuePtr clientQueue) : clientQueue_(clientQueue) {
     offset_ = offset + 0x10000;
-    clientQueue_->attach(this);
+	clientQueue_->attach(Observer::shared_from_this());
 }
 
 Adc::~Adc() {
-    clientQueue_->detach(this);
+	clientQueue_->detach(Observer::shared_from_this());
 }
 
-void Adc::update(const Subject* subject) {
-    if (subject == clientQueue_.get()) {
+void Adc::update(const SubjectPtr subject) {
+	if (subject == clientQueue_) {
         if (clientQueue_->getMessage() ==
 			QueueOfMessages::Message::recordRead) {
             Record record = clientQueue_->getRecord();

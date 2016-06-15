@@ -11,8 +11,8 @@ RealQueueOfMessages::~RealQueueOfMessages() {
 
 }
 
-void RealQueueOfMessages::update(const Subject* subject) {
-    if (subject == clientReg_.get()) {
+void RealQueueOfMessages::update(const SubjectPtr subject) {
+	if (subject == clientReg_) {
 		if (clientReg_->getMessage() == Client::Message::readyRead) {
 			static size_t commandNumberBegin = 0;
 			static size_t commandNumberEnd = 0;
@@ -22,11 +22,11 @@ void RealQueueOfMessages::update(const Subject* subject) {
                 if (commandsHaveBeenDone_[i].first.type == Record::Type::Read) {
                     message_ = Message::recordRead;
                     answerRecord_ = commandsHaveBeenDone_[i].first;
-                    notify(commandsHaveBeenDone_[i].second.get());
+					notify(commandsHaveBeenDone_[i].second);
                 } else {
                     message_ = Message::recordWrite;
                     answerRecord_ = commandsHaveBeenDone_[i].first;
-                    notify(commandsHaveBeenDone_[i].second.get());
+					notify(commandsHaveBeenDone_[i].second);
                 }
             }
             commandNumberBegin = commandNumberEnd;
@@ -52,7 +52,7 @@ void RealQueueOfMessages::update(const Subject* subject) {
         }
     }
 
-    if (subject == clientData_.get()) {
+	if (subject == clientData_) {
 		if (clientData_->getMessage() == Client::Message::readyRead) {
             static int packetCount = 0;
             message_ = Message::dataRead;
@@ -82,13 +82,13 @@ void RealQueueOfMessages::disconnectFromHost() {
 }
 
 void RealQueueOfMessages::attachToClients()	{
-	clientReg_->attach(this);
-	clientData_->attach(this);
+	clientReg_->attach(Observer::shared_from_this());
+	clientData_->attach(Observer::shared_from_this());
 }
 
 void RealQueueOfMessages::detachFromClients()	{
-	clientReg_->detach(this);
-	clientData_->detach(this);
+	clientReg_->detach(Observer::shared_from_this());
+	clientData_->detach(Observer::shared_from_this());
 }
 
 void RealQueueOfMessages::addCommandToQueue(const Record& record,

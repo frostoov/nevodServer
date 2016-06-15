@@ -12,6 +12,8 @@ class Client : public Subject {
 public:
 	enum class Message { connected, disconnected, readyRead, error, null };
 
+	virtual ~Client();
+
 	virtual bool connectToHost() = 0;
 	virtual bool disconnectFromHost() = 0;
 	virtual void readRegister(uint32_t address) = 0;
@@ -24,8 +26,6 @@ public:
 
 	//TODO
 	virtual void write(int32_t number, bool isBan) = 0;
-
-	virtual ~Client() {}
 };
 
 class ClientFactory {

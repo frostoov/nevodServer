@@ -12,7 +12,9 @@ set(test_files
     rpcserver.cpp
     configparsers.cpp
     keeper.cpp
-    eas.cpp
+    master.cpp
+    host.cpp
+    queueofmessages.cpp
 )
 
 add_library(catch INTERFACE)

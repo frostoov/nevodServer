@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 project(nevodserver)
 
 set(mocks_files_source
-    clientfake.hpp
-    clientfake.cpp
+    clientmock.hpp
+    clientmock.cpp
 )
 
 add_library(mocks ${mocks_files_source})

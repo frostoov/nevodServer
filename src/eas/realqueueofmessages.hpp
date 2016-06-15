@@ -11,9 +11,7 @@
 #include "../observer/observer.hpp"
 #include "queueofmessages.hpp"
 
-class RealQueueOfMessages
-	: public QueueOfMessages,
-	  public std::enable_shared_from_this<RealQueueOfMessages> {
+class RealQueueOfMessages : public QueueOfMessages {
 public:
     using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
 
@@ -21,7 +19,7 @@ public:
 						const std::shared_ptr<Client>& clientData);
 	~RealQueueOfMessages();
 
-    void update(const Subject* subject);
+	void update(const SubjectPtr subject);
 
     void connectToHost();
     void disconnectFromHost();
@@ -64,4 +62,4 @@ public:
 	}
 };
 
-#endif//REALQUEUEOFMESSAGES_HPP
+#endif  // REALQUEUEOFMESSAGES_HPP

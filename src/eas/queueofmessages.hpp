@@ -26,7 +26,8 @@ public:
 	virtual void detachFromClients() = 0;
 	virtual void connectToHost() = 0;
 	virtual void disconnectFromHost() = 0;
-	virtual void addCommandToQueue(const Record& record, ObserverPtr sender) = 0;
+	virtual void addCommandToQueue(const Record& record,
+								   ObserverPtr sender) = 0;
 	virtual void runQueue() = 0;
 	virtual void clearData() = 0;
 
@@ -34,10 +35,10 @@ public:
 	virtual Message getMessage() const = 0;
 	virtual const std::vector<uint8_t>& getData() const = 0;
 
-	//TODO
+	// TODO
 	virtual void write(int32_t number, bool isBan) = 0;
 
-	virtual ~QueueOfMessages() {}
+	virtual ~QueueOfMessages();
 };
 
 class QueueOfMessagesFactory {

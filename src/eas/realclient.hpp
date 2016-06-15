@@ -14,7 +14,7 @@ class RealClient : public Client,
 				   public std::enable_shared_from_this<RealClient> {
 public:
 	using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
-	using HostClientPtr = std::shared_ptr<RealClient>;
+	using RealClientPtr = std::shared_ptr<RealClient>;
 
 	RealClient(const std::string& ip,
 						uint16_t port,

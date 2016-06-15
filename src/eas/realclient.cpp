@@ -21,7 +21,7 @@ bool RealClient::connectToHost() {
 	startConnect();
 
 	deadlineTimer_.async_wait(
-		boost::bind(&RealClient::checkDeadline, shared_from_this()));
+		boost::bind(&RealClient::checkDeadline, Client::shared_from_this()));
 }
 
 bool RealClient::disconnectFromHost() {
@@ -130,9 +130,9 @@ void RealClient::startConnect() {
 	deadlineTimer_.expires_from_now(boost::posix_time::seconds(60));
 	boost::asio::ip::tcp::endpoint ep(
 		boost::asio::ip::address::from_string(ip_), port_);
-	socket_.async_connect(
-		ep, boost::bind(&RealClient::connectHandler, shared_from_this(),
-						boost::asio::placeholders::error));
+	socket_.async_connect(ep, boost::bind(&RealClient::connectHandler,
+										  shared_from_this(),
+										  boost::asio::placeholders::error));
 }
 
 void RealClient::startRead() {
@@ -140,7 +140,7 @@ void RealClient::startRead() {
 
 	boost::asio::async_read_until(
 		socket_, inputBuffer_, '\n',
-		boost::bind(&RealClient::readHandler, shared_from_this(),
+		boost::bind(&RealClient::readHandler, Client::shared_from_this(),
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred));
 }
@@ -151,7 +151,7 @@ void RealClient::startWrite(const std::vector<char>& message) {
 
 	boost::asio::async_write(
 		socket_, boost::asio::buffer(message),
-		boost::bind(&RealClient::writeHandler, shared_from_this(),
+		boost::bind(&RealClient::writeHandler, Client::shared_from_this(),
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred));
 }
@@ -212,5 +212,5 @@ void RealClient::checkDeadline() {
 		deadlineTimer_.expires_at(boost::posix_time::pos_infin);
 	}
 	deadlineTimer_.async_wait(
-		boost::bind(&RealClient::checkDeadline, shared_from_this()));
+		boost::bind(&RealClient::checkDeadline, Client::shared_from_this()));
 }

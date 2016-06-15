@@ -6,7 +6,7 @@
 class Master : public Observer, public Subject {
 public:
 
-	virtual~ Master() {}
+	virtual~ Master();
 };
 
 #endif  // MASTER_HPP

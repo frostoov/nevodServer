@@ -12,8 +12,7 @@
 #include "registers.hpp"
 #include "master.hpp"
 
-class RealMaster : public Master,
-				   public std::enable_shared_from_this<RealMaster> {
+class RealMaster : public Master {
 public:
 	using QueuePtr = std::shared_ptr<QueueOfMessages>;
     using AdcPtr = std::shared_ptr<Adc>;
@@ -21,7 +20,7 @@ public:
 	RealMaster(uint32_t offset, QueuePtr clientQueue);
 	~RealMaster();
 
-    void update(const Subject* subject);
+	void update(const SubjectPtr subject);
 
     AdcPtr addAdc(uint32_t numberAdc);
     void deleteAdc(uint32_t numberAdc);
