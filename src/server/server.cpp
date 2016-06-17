@@ -1,19 +1,19 @@
-#include "rpcserver.hpp"
+#include "server.hpp"
 
-RpcServer::RpcServer(uint16_t port) : Server(port) {
+Server::Server(uint16_t port) : RpcServer(port) {
     easRpc_ = std::make_unique<EasRpc>(this->getIoService());
     uranRpc_ = std::make_unique<UranRpc>(dispatcher_);
 
     initializeDispatcherOfEasRpc();
 }
 
-RpcServer::~RpcServer() {}
+Server::~Server() {}
 
-void RpcServer::start() {
+void Server::start() {
     this->run();
 }
 
-void RpcServer::initializeDispatcherOfEasRpc() {
+void Server::initializeDispatcherOfEasRpc() {
     auto& dispatcher = getDispatcher();
 
     //	bool run = true;

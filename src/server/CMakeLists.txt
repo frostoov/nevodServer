@@ -4,8 +4,8 @@ project(nevodserver)
 add_subdirectory(rpcserver)
 
 set(server_files_source
-    rpcserver.hpp
-    rpcserver.cpp
+    server.hpp
+    server.cpp
     easrpc.hpp
     easrpc.cpp
     uranrpc.hpp

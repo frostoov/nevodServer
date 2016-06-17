@@ -1,9 +1,9 @@
-#include "server/rpcserver.hpp"
+#include "server/server.hpp"
 
 #include "eas/easstation.hpp"
 
 int main(int argc, char* argv[]) {
-	RpcServer server(2222);
+	Server server(2222);
 	server.start();
 
 	//	auto service = std::make_shared<boost::asio::io_service>();

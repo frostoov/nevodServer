@@ -119,8 +119,6 @@ void RealQueueOfMessages::writeRegister(const Record& record) {
 int RealQueueOfMessages::fillValuesInCommandsHaveBeenDone(
     const std::vector<uint8_t>& data,
     int commandNumber) {
-    //	for (auto& item : commandsHaveBeenDone_)
-    //		item.first.value = 13232;
     int command = commandNumber;
 	for (size_t i = 0; i < data.size(); i++) {
         if (data[i] == 0x0b && data[i + 1] == 0xb9 && data[i + 2] == 0x0b &&

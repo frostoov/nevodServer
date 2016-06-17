@@ -1,15 +1,12 @@
 #include "tcpconnection.hpp"
 
-#include <iostream>  //TODO
-
 TcpConnection::TcpConnection(boost::asio::io_service& service,
                              Dispatcher& dispatcher)
     : socket(service), dispatcher_(dispatcher) {
-    //	formatHandler = std::make_shared<JsonFormatHandler>();
     buf.resize(2048);
 
-    for (auto str : dispatcher_.getMethodNames())
-        std::cout << str << std::endl;
+//    for (auto str : dispatcher_.getMethodNames())
+//        std::cout << str << std::endl;
 }
 
 TcpConnection::~TcpConnection() {}

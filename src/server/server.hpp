@@ -1,20 +1,20 @@
-#ifndef RPCSERVER_H
-#define RPCSERVER_H
+#ifndef SERVER_H
+#define SERVER_H
 
 #include <cstdint>
 #include <memory>
 
-#include "rpcserver/server.hpp"
+#include "rpcserver/rpcserver.hpp"
 #include "easrpc.hpp"
 #include "uranrpc.hpp"
 
-class RpcServer : public Server {
+class Server : public RpcServer {
 public:
     using EasRpcPtr = std::unique_ptr<EasRpc>;
     using UranRpcPtr = std::unique_ptr<UranRpc>;
 
-	RpcServer(uint16_t port);
-    ~RpcServer();
+	Server(uint16_t port);
+	~Server();
 
     void start();
 
@@ -28,4 +28,4 @@ private:
     UranRpcPtr uranRpc_;
 };
 
-#endif  // RPCSERVER_H
+#endif//SERVER_H

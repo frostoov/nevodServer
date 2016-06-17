@@ -1,5 +1,5 @@
-#ifndef SERVER_H
-#define SERVER_H
+#ifndef RPCSERVER_HPP
+#define RPCSERVER_HPP
 
 #include <string>
 #include <boost/asio.hpp>
@@ -7,17 +7,17 @@
 #include "dispatcher.hpp"
 #include "tcpconnection.hpp"
 
-class Server {
+class RpcServer {
 public:
     using ioServicePtr = std::shared_ptr<boost::asio::io_service>;
 
-    Server(unsigned short port);
-	~Server();
+	RpcServer(unsigned short port);
+	~RpcServer();
 
-    Server(const Server&) = delete;
-    Server& operator=(const Server&) = delete;
-    Server(Server&&) = delete;
-    Server& operator=(Server&&) = delete;
+	RpcServer(const RpcServer&) = delete;
+	RpcServer& operator=(const RpcServer&) = delete;
+	RpcServer(RpcServer&&) = delete;
+	RpcServer& operator=(RpcServer&&) = delete;
 
     void run();
 
@@ -37,4 +37,4 @@ private:
     boost::asio::ip::tcp::acceptor acceptor_;
 };
 
-#endif
+#endif//RPCSERVER_HPP

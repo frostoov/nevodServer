@@ -27,7 +27,7 @@ public:
 	}
 
 	void writeRegister3002(uint32_t address, uint16_t data) {
-		finishedQueue_.push_back(Record{address, data, Record::Type::Zero});
+		finishedQueue_.push_back(Record{address, data, Record::Type::Two});
 	}
 
 	void clearData() {

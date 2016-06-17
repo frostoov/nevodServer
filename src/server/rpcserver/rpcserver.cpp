@@ -1,33 +1,33 @@
 #include <vector>
 #include <iostream>  //TODO
 
-#include "server.hpp"
+#include "rpcserver.hpp"
 #include "jsonwriter.hpp"
 
-Server::Server(unsigned short port)
+RpcServer::RpcServer(unsigned short port)
     : service_(std::make_shared<boost::asio::io_service>()),
       acceptor_(
           *(service_.get()),
           boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)) {}
 
-Server::~Server() {}
+RpcServer::~RpcServer() {}
 
-void Server::run() {
+void RpcServer::run() {
     startAccept();
     service_->run();
 }
 
-void Server::startAccept() {
+void RpcServer::startAccept() {
     TcpConnection::TcpConnectionPtr newConnection =
         TcpConnection::create(acceptor_.get_io_service(), dispatcher_);
 
     acceptor_.async_accept(
         newConnection->getSocket(),
-        boost::bind(&Server::handleAccept, this, newConnection,
+        boost::bind(&RpcServer::handleAccept, this, newConnection,
                     boost::asio::placeholders::error));
 }
 
-void Server::handleAccept(TcpConnection::TcpConnectionPtr newConnection,
+void RpcServer::handleAccept(TcpConnection::TcpConnectionPtr newConnection,
                           const boost::system::error_code& error) {
     if (!error) {
         static int numberOfClient = 0;
@@ -38,4 +38,4 @@ void Server::handleAccept(TcpConnection::TcpConnectionPtr newConnection,
     startAccept();
 }
 
-void Server::handleRequest(const boost::system::error_code& error, size_t) {}
+void RpcServer::handleRequest(const boost::system::error_code& error, size_t) {}

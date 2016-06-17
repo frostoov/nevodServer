@@ -7,9 +7,18 @@
 struct Record {
     enum class Type { Zero, Two, Read, Sleep };
 
-    uint32_t address;
+	friend bool operator== (const Record& first, const Record& second) {
+		if (first.address == second.address &&
+				first.value == second.value &&
+				first.type == second.type)
+			return true;
+		else
+			return false;
+	}
+
+	uint32_t address;
     uint16_t value;
-    Type type;
+	Type type;
 };
 
 struct HostRegisters {

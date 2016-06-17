@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "../../src/server/rpcserver.hpp"
+#include "../../src/server/server.hpp"
 #include "tcpconnectiontest.hpp"
 
 class RpcServerTest : public RpcServer {

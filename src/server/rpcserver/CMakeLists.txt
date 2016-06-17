@@ -9,8 +9,8 @@ set(rpcserver_files_source
     jsonreader.cpp
     jsonwriter.hpp
     jsonwriter.cpp
-    server.hpp
-    server.cpp
+    rpcserver.hpp
+    rpcserver.cpp
     tcpconnection.cpp
     tcpconnection.hpp
     fault.hpp
