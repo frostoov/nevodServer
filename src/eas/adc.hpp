@@ -6,14 +6,14 @@
 
 #include "queueofmessages.hpp"
 
-class Adc : public Observer {
+class Adc : public Observer, public std::enable_shared_from_this<Adc> {
 public:
 	using QueuePtr = std::shared_ptr<QueueOfMessages>;
 
     Adc(uint32_t offset, QueuePtr clientQueue);
     ~Adc();
 
-	void update(const SubjectPtr subject);
+	void update(const Subject* subject);
     void readState();
 
     void writeControlRegister();

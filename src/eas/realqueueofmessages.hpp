@@ -19,7 +19,7 @@ public:
 						const std::shared_ptr<Client>& clientData);
 	~RealQueueOfMessages();
 
-	void update(const SubjectPtr subject);
+	void update(const Subject* subject);
 
     void connectToHost();
     void disconnectFromHost();

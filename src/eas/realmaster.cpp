@@ -5,15 +5,15 @@ RealMaster::RealMaster(uint32_t offset, QueuePtr clientQueue)
     : clientQueue_(clientQueue) {
     offset_ = offset + 0x200000;
     offsetLink_ = offset;
-	clientQueue_->attach(Observer::shared_from_this());
+	clientQueue_->attach(this);
 }
 
 RealMaster::~RealMaster() {
     //	clientQueue_->detach(this);
 }
 
-void RealMaster::update(const SubjectPtr subject) {
-	if (subject == clientQueue_) {
+void RealMaster::update(const Subject* subject) {
+	if (subject == clientQueue_.get()) {
         if (clientQueue_->getMessage() ==
 			QueueOfMessages::Message::recordRead) {
             Record record = clientQueue_->getRecord();
@@ -47,7 +47,7 @@ void RealMaster::readState() {
         Record recordWithOffset(*record);
         recordWithOffset.address += offset_;
 		clientQueue_->addCommandToQueue(recordWithOffset,
-										Observer::shared_from_this());
+										shared_from_this());
     }
 }
 
@@ -56,7 +56,7 @@ void RealMaster::writeResetRegister() {
     recordWithValue.address += offset_;
     recordWithValue.value = 3;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void RealMaster::writeResolutionOfTimer(bool resolution) {
@@ -65,7 +65,7 @@ void RealMaster::writeResolutionOfTimer(bool resolution) {
         recordWithValue.address += offset_;
         recordWithValue.value = 1;
 		clientQueue_->addCommandToQueue(recordWithValue,
-										Observer::shared_from_this());
+										shared_from_this());
     }
 }
 
@@ -74,7 +74,7 @@ void RealMaster::writeTestRegister(uint16_t data) {
     recordWithValue.address += offset_;
     recordWithValue.value = data;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void RealMaster::writeCoincidence(uint32_t coincidence) {
@@ -98,7 +98,7 @@ void RealMaster::writeCoincidence(uint32_t coincidence) {
             break;
     }
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void RealMaster::writeResetCounter() {
@@ -106,7 +106,7 @@ void RealMaster::writeResetCounter() {
     recordWithValue.address += offset_;
     recordWithValue.value = 1;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void RealMaster::writeTemporaryWindow(uint16_t window) {
@@ -114,7 +114,7 @@ void RealMaster::writeTemporaryWindow(uint16_t window) {
     recordWithValue.address += offset_;
     recordWithValue.value = window;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void RealMaster::writeChErrorCount(uint16_t data) {
@@ -122,7 +122,7 @@ void RealMaster::writeChErrorCount(uint16_t data) {
     recordWithValue.address += offset_;
     recordWithValue.value = data;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void RealMaster::writeControlTrigger(int i) {
@@ -135,7 +135,7 @@ void RealMaster::writeControlTrigger(int i) {
     if (i == 2)
         recordWithValue.value = 3;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void RealMaster::writeProgramTrigger(bool trigger) {
@@ -144,7 +144,7 @@ void RealMaster::writeProgramTrigger(bool trigger) {
         recordWithValue.address += offset_;
         recordWithValue.value = 1;
 		clientQueue_->addCommandToQueue(recordWithValue,
-										Observer::shared_from_this());
+										shared_from_this());
     }
 }
 
@@ -153,7 +153,7 @@ void RealMaster::writeResetVme() {
     recordWithValue.address += offset_;
     recordWithValue.value = 1;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void RealMaster::writeMaskOfActiveChannels(
@@ -165,7 +165,7 @@ void RealMaster::writeMaskOfActiveChannels(
         if (activeChannels[i] == true)
             recordWithValue.value += (1 << i);
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void RealMaster::writeTime(uint16_t hours,
@@ -182,6 +182,6 @@ void RealMaster::writeTime(uint16_t hours,
         record.value = 0x34;
     }
     for (auto record : recordsWithValues) {
-		clientQueue_->addCommandToQueue(record, Observer::shared_from_this());
+		clientQueue_->addCommandToQueue(record, shared_from_this());
     }
 }

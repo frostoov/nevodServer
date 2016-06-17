@@ -8,24 +8,24 @@ Observer::~Observer() {}
 
 Subject::~Subject() {}
 
-void Subject::attach(const ObserverPtr obs) {
+void Subject::attach(Observer* obs) {
 	observers_.push_back(obs);
 }
 
-void Subject::detach(const ObserverPtr obs) {
+void Subject::detach(Observer* obs) {
     observers_.remove(obs);
 }
 
 void Subject::notify() {
 	for (auto& obs : observers_)
-		obs->update(shared_from_this());
+		obs->update(this);
 }
 
-void Subject::notify(const ObserverPtr obs) {
-	obs->update(shared_from_this());
+void Subject::notify(Observer* obs) {
+	obs->update(this);
 }
 
-bool Subject::isAttach(const ObserverPtr obs) {
+bool Subject::isAttach(Observer* obs) {
 	if (std::find(observers_.begin(), observers_.end(), obs) !=
 		observers_.end())
 		return true;

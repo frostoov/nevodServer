@@ -4,6 +4,8 @@ project(nevodserver)
 set(mocks_files_source
     clientmock.hpp
     clientmock.cpp
+    hostmock.cpp
+    hostmock.hpp
 )
 
 add_library(mocks ${mocks_files_source})

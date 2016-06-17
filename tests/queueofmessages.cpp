@@ -3,6 +3,7 @@
 
 #include "../src/eas/realqueueofmessages.hpp"
 #include "mocks/clientmock.hpp"
+#include "mocks/hostmock.hpp"
 
 
 TEST_CASE("Queue Of Messages") {
@@ -20,7 +21,8 @@ TEST_CASE("Queue Of Messages") {
 		REQUIRE(clientData->isAttach(queue.get()) == false);
 	}
 
-	SECTION("") {
+//	SECTION("Does Queue work correctly") {
+//		HostMock host(queue);
 
-	}
+//	}
 }

@@ -9,19 +9,19 @@ Host::Host(const std::shared_ptr<QueueOfMessages>& clientQueue) {
 
 	clientQueue_ = clientQueue;
 
-	clientQueue_->attach(Observer::shared_from_this());
+	clientQueue_->attach(this);
 	clientQueue_->attachToClients();
     offset_ = 0x400000;
 }
 
 Host::~Host() {
 	clientQueue_->detachFromClients();
-	clientQueue_->detach(Observer::shared_from_this());
+	clientQueue_->detach(this);
     clientQueue_.reset();
 }
 
-void Host::update(const SubjectPtr subject) {
-	if (subject == clientQueue_) {
+void Host::update(const Subject* subject) {
+	if (subject == clientQueue_.get()) {
         if (clientQueue_->getMessage() ==
 			QueueOfMessages::Message::recordRead) {
             Record record = clientQueue_->getRecord();
@@ -88,7 +88,7 @@ void Host::deleteMaster(uint32_t numberMaster) {
 void Host::readState() {
     for (auto record : registers_.readRecords)
         clientQueue_->addCommandToQueue(getRecordWithOffset(*record),
-										Observer::shared_from_this());
+										shared_from_this());
 }
 
 void Host::runQueue() {
@@ -105,7 +105,7 @@ void Host::writeBanOfTimestamps(bool ban) {
         recordWithValue.value = 0;
 
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void Host::writeTestRegister(uint16_t data) {
@@ -113,7 +113,7 @@ void Host::writeTestRegister(uint16_t data) {
     recordWithValue.address += offset_;
     recordWithValue.value = data;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void Host::writeCoarseReset(const std::array<bool, 4>& resetLink) {
@@ -124,7 +124,7 @@ void Host::writeCoarseReset(const std::array<bool, 4>& resetLink) {
         if (resetLink[i] == true)
             recordWithValue.value += (1 << i);
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void Host::writeResolutionOfLinks(const std::array<bool, 4>& resolutionLink) {
@@ -135,7 +135,7 @@ void Host::writeResolutionOfLinks(const std::array<bool, 4>& resolutionLink) {
         if (resolutionLink[i] == true)
             recordWithValue.value += (1 << i);
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void Host::writeExchangeRegister(uint16_t data) {
@@ -143,7 +143,7 @@ void Host::writeExchangeRegister(uint16_t data) {
     recordWithValue.address += offset_;
     recordWithValue.value = data;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void Host::writeControlDma(int oneOnTwoReset) {
@@ -154,7 +154,7 @@ void Host::writeControlDma(int oneOnTwoReset) {
     if (oneOnTwoReset == 1)
         recordWithValue.value = 1;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void Host::writeClusterNumberLink(uint32_t numberLink, uint16_t numberCluster) {
@@ -176,7 +176,7 @@ void Host::writeClusterNumberLink(uint32_t numberLink, uint16_t numberCluster) {
     recordWithValue.address += offset_;
     recordWithValue.value = numberCluster;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void Host::writeStartTaskLink(uint32_t numberLink, uint32_t numberBank) {
@@ -204,7 +204,7 @@ void Host::writeRegisterOfReadData(const std::array<bool, 4>& readLink) {
         if (readLink[i] == true)
             recordWithValue.value += (3 << (i * 2));
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void Host::writeResolutionAndForbidOfData(bool resolution) {
@@ -217,7 +217,7 @@ void Host::writeResolutionAndForbidOfData(bool resolution) {
     //	recordWithValue.address += offset_;
     recordWithValue.value = 1;
 	clientQueue_->addCommandToQueue(recordWithValue,
-									Observer::shared_from_this());
+									shared_from_this());
 }
 
 void Host::writeClearDataBuffer(bool clear) {
@@ -226,7 +226,7 @@ void Host::writeClearDataBuffer(bool clear) {
         //		recordWithValue.address += offset_;
         recordWithValue.value = 1;
 		clientQueue_->addCommandToQueue(recordWithValue,
-										Observer::shared_from_this());
+										shared_from_this());
     }
 }
 
@@ -241,7 +241,7 @@ void Host::writeRegister(uint32_t address, uint32_t data, Record::Type type) {
     record.address = address;
     record.value = data;
     record.type = type;
-	clientQueue_->addCommandToQueue(record, Observer::shared_from_this());
+	clientQueue_->addCommandToQueue(record, shared_from_this());
     clientQueue_->runQueue();
 }
 
@@ -249,7 +249,7 @@ void Host::readRegister(uint32_t address) {
     Record record;
     record.address = address;
     record.type = Record::Type::Read;
-	clientQueue_->addCommandToQueue(record, Observer::shared_from_this());
+	clientQueue_->addCommandToQueue(record, shared_from_this());
     clientQueue_->runQueue();
 }
 
@@ -290,7 +290,7 @@ void Host::initializeTable(uint32_t numberMaster,
     for (int i = 0; i < table.size(); i++) {
         clientQueue_->addCommandToQueue(
 			Record{address, table[i], Record::Type::Zero},
-			Observer::shared_from_this());
+			shared_from_this());
         address += 2;
     }
 }
@@ -301,7 +301,7 @@ void Host::initializeTable(uint32_t numberMaster) {
 
 void Host::writeSleep(uint32_t milliseconds) {
     Record record{milliseconds, 0, Record::Type::Sleep};
-	clientQueue_->addCommandToQueue(record, Observer::shared_from_this());
+	clientQueue_->addCommandToQueue(record, shared_from_this());
 }
 
 Host::QueuePtr Host::getQueue() {

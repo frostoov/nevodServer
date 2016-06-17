@@ -2,6 +2,7 @@
 #define CLIENTFAKE_HPP
 
 #include "../src/eas/client.hpp"
+#include "../src/eas/registers.hpp"
 
 class ClientMock : public Client {
 public:
@@ -18,15 +19,15 @@ public:
 	}
 
 	void readRegister(uint32_t address) {
-
+		finishedQueue_.push_back(Record{address, 0x0, Record::Type::Read});
 	}
 
-	void writeRegister3000(uint32_t address, uint32_t data) {
-
+	void writeRegister3000(uint32_t address, uint16_t data) {
+		finishedQueue_.push_back(Record{address, data, Record::Type::Zero});
 	}
 
-	void writeRegister3002(uint32_t address, uint32_t data) {
-
+	void writeRegister3002(uint32_t address, uint16_t data) {
+		finishedQueue_.push_back(Record{address, data, Record::Type::Zero});
 	}
 
 	void clearData() {
@@ -44,6 +45,17 @@ public:
 	void write(int32_t number, bool isBan) {
 
 	}
+
+	const std::list<Record>& getFinishedQueue() const {
+		return finishedQueue_;
+	}
+
+	void clearFinishedQueue() {
+		finishedQueue_.clear();
+	}
+
+private:
+	std::list<Record> finishedQueue_;
 
 };
 

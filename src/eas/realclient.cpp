@@ -21,7 +21,7 @@ bool RealClient::connectToHost() {
 	startConnect();
 
 	deadlineTimer_.async_wait(
-		boost::bind(&RealClient::checkDeadline, Client::shared_from_this()));
+		boost::bind(&RealClient::checkDeadline, shared_from_this()));
 }
 
 bool RealClient::disconnectFromHost() {
@@ -56,7 +56,7 @@ void RealClient::readRegister(uint32_t address) {
 	startWrite(sendMessage);
 }
 
-void RealClient::writeRegister3000(uint32_t address, uint32_t data) {
+void RealClient::writeRegister3000(uint32_t address, uint16_t data) {
 	std::vector<char> sendMessage;
 	sendMessage.resize(14);
 	sendMessage[0] = 0x0b;
@@ -83,7 +83,7 @@ void RealClient::writeRegister3000(uint32_t address, uint32_t data) {
 	startWrite(sendMessage);
 }
 
-void RealClient::writeRegister3002(uint32_t address, uint32_t data) {
+void RealClient::writeRegister3002(uint32_t address, uint16_t data) {
 	std::vector<char> sendMessage;
 	sendMessage.resize(14);
 	sendMessage[0] = 0x0b;
@@ -140,7 +140,7 @@ void RealClient::startRead() {
 
 	boost::asio::async_read_until(
 		socket_, inputBuffer_, '\n',
-		boost::bind(&RealClient::readHandler, Client::shared_from_this(),
+		boost::bind(&RealClient::readHandler, shared_from_this(),
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred));
 }
@@ -151,7 +151,7 @@ void RealClient::startWrite(const std::vector<char>& message) {
 
 	boost::asio::async_write(
 		socket_, boost::asio::buffer(message),
-		boost::bind(&RealClient::writeHandler, Client::shared_from_this(),
+		boost::bind(&RealClient::writeHandler, shared_from_this(),
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred));
 }
@@ -212,5 +212,5 @@ void RealClient::checkDeadline() {
 		deadlineTimer_.expires_at(boost::posix_time::pos_infin);
 	}
 	deadlineTimer_.async_wait(
-		boost::bind(&RealClient::checkDeadline, Client::shared_from_this()));
+		boost::bind(&RealClient::checkDeadline, shared_from_this()));
 }

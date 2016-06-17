@@ -11,7 +11,9 @@
 #include "registers.hpp"
 #include "queueofmessages.hpp"
 
-class Host : public Subject, public Observer {
+class Host : public Subject,
+			 public Observer,
+			 public std::enable_shared_from_this<Host> {
 public:
 	using MasterPtr = std::shared_ptr<Master>;
 	using QueuePtr = std::shared_ptr<QueueOfMessages>;
@@ -20,7 +22,7 @@ public:
 	Host(const std::shared_ptr<QueueOfMessages>& clientQueue);
     ~Host();
 
-	void update(const SubjectPtr subject);
+	void update(const Subject* subject);
 
     MasterPtr addMaster(uint32_t numberMaster);
     void deleteMaster(uint32_t numberMaster);

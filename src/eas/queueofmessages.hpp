@@ -38,7 +38,7 @@ public:
 	// TODO
 	virtual void write(int32_t number, bool isBan) = 0;
 
-	virtual ~QueueOfMessages();
+	virtual ~QueueOfMessages() {}
 };
 
 class QueueOfMessagesFactory {

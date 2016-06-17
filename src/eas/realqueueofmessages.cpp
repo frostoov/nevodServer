@@ -11,8 +11,8 @@ RealQueueOfMessages::~RealQueueOfMessages() {
 
 }
 
-void RealQueueOfMessages::update(const SubjectPtr subject) {
-	if (subject == clientReg_) {
+void RealQueueOfMessages::update(const Subject* subject) {
+	if (subject == clientReg_.get()) {
 		if (clientReg_->getMessage() == Client::Message::readyRead) {
 			static size_t commandNumberBegin = 0;
 			static size_t commandNumberEnd = 0;
@@ -22,11 +22,11 @@ void RealQueueOfMessages::update(const SubjectPtr subject) {
                 if (commandsHaveBeenDone_[i].first.type == Record::Type::Read) {
                     message_ = Message::recordRead;
                     answerRecord_ = commandsHaveBeenDone_[i].first;
-					notify(commandsHaveBeenDone_[i].second);
+					notify(commandsHaveBeenDone_[i].second.get());
                 } else {
                     message_ = Message::recordWrite;
                     answerRecord_ = commandsHaveBeenDone_[i].first;
-					notify(commandsHaveBeenDone_[i].second);
+					notify(commandsHaveBeenDone_[i].second.get());
                 }
             }
             commandNumberBegin = commandNumberEnd;
@@ -52,7 +52,7 @@ void RealQueueOfMessages::update(const SubjectPtr subject) {
         }
     }
 
-	if (subject == clientData_) {
+	if (subject == clientData_.get()) {
 		if (clientData_->getMessage() == Client::Message::readyRead) {
             static int packetCount = 0;
             message_ = Message::dataRead;
@@ -82,13 +82,13 @@ void RealQueueOfMessages::disconnectFromHost() {
 }
 
 void RealQueueOfMessages::attachToClients()	{
-	clientReg_->attach(Observer::shared_from_this());
-	clientData_->attach(Observer::shared_from_this());
+	clientReg_->attach(this);
+	clientData_->attach(this);
 }
 
 void RealQueueOfMessages::detachFromClients()	{
-	clientReg_->detach(Observer::shared_from_this());
-	clientData_->detach(Observer::shared_from_this());
+	clientReg_->detach(this);
+	clientData_->detach(this);
 }
 
 void RealQueueOfMessages::addCommandToQueue(const Record& record,

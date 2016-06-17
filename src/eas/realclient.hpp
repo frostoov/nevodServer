@@ -24,8 +24,8 @@ public:
 	bool connectToHost();
 	bool disconnectFromHost();
 	void readRegister(uint32_t address);
-	void writeRegister3000(uint32_t address, uint32_t data);
-	void writeRegister3002(uint32_t address, uint32_t data);
+	void writeRegister3000(uint32_t address, uint16_t data);
+	void writeRegister3002(uint32_t address, uint16_t data);
 	bool isStopped() const;
 	void clearData();
 

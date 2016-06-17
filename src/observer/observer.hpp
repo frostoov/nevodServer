@@ -9,33 +9,30 @@
 class Subject;
 class Observer;
 
-class Observer : public std::enable_shared_from_this<Observer> {
+class Observer {
 public:
-	using SubjectPtr = std::shared_ptr<Subject>;
-
 	virtual ~Observer();
-	virtual void update(const SubjectPtr subject) = 0;
+	virtual void update(const Subject* subject) = 0;
 
 protected:
     Observer();
 };
 
-class Subject : public std::enable_shared_from_this<Subject> {
+class Subject {
 public:
-	using ObserverPtr = std::shared_ptr<Observer>;
 
     virtual ~Subject();
-	virtual void attach(const ObserverPtr obs);
-	virtual void detach(const ObserverPtr obs);
+	virtual void attach(Observer* obs);
+	virtual void detach(Observer* obs);
     virtual void notify();
-	virtual void notify(const ObserverPtr obs);
-	virtual bool isAttach(const ObserverPtr obs);
+	virtual void notify(Observer* obs);
+	virtual bool isAttach(Observer* obs);
 
 protected:
     Subject();
 
 private:
-	std::list<ObserverPtr> observers_;
+	std::list<Observer*> observers_;
 };
 
 #endif  // OBSERVER_H
