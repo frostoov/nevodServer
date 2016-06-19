@@ -3,8 +3,6 @@
 
 #include <list>
 #include <algorithm>
-#include <memory>
-
 
 class Subject;
 class Observer;

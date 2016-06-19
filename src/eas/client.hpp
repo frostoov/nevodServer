@@ -12,7 +12,7 @@ class Client : public Subject {
 public:
 	enum class Message { connected, disconnected, readyRead, error, null };
 
-	virtual ~Client() {}
+    virtual ~Client() {}
 
 	virtual bool connectToHost() = 0;
 	virtual bool disconnectFromHost() = 0;

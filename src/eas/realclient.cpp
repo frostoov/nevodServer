@@ -11,7 +11,7 @@ RealClient::RealClient(const std::string& ip,
 	  stopped_(true),
 	  deadlineTimer_(*(service.get())),
 	  heartbeatTimer_(*(service.get())) {
-	message_ = Message::error;
+    message_ = Message::error;
 }
 
 RealClient::~RealClient() {}
