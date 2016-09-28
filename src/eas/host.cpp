@@ -131,11 +131,11 @@ void Host::writeResolutionOfLinks(const std::array<bool, 4>& resolutionLink) {
     Record recordWithValue(registers_.write.resolution_of_links);
     recordWithValue.address += offset_;
     recordWithValue.value = 0;
-    for (int i = 0; i < resolutionLink.size(); i++)
+    for (size_t i = 0; i < resolutionLink.size(); i++)
         if (resolutionLink[i] == true)
             recordWithValue.value += (1 << i);
 	clientQueue_->addCommandToQueue(recordWithValue,
-									shared_from_this());
+                                    shared_from_this());
 }
 
 void Host::writeExchangeRegister(uint16_t data) {

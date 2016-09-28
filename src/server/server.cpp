@@ -56,4 +56,40 @@ void Server::initializeDispatcherOfEasRpc() {
     dispatcher.addMethod("eas_writeSetCoincidence",
                          &EasStation::writeSetCoincidence,
                          *(easStation_.get()));
+    dispatcher.addMethod("eas_writeResetCounter",
+                         &EasStation::writeResetCounter,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeSetTimeGate",
+                         &EasStation::writeSetTimeGate,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeActiveChannels",
+                         &EasStation::writeActiveChannels,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeControlTrigger",
+                         &EasStation::writeControlTrigger,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeProgramTrigger",
+                         &EasStation::writeProgramTrigger,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeResetVme",
+                         &EasStation::writeResetVme,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeTime",
+                         &EasStation::writeTime,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeControlRegister",
+                         &EasStation::writeControlRegister,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeThreshold",
+                         &EasStation::writeThreshold,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeDelay",
+                         &EasStation::writeDelay,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeResetChannel",
+                         &EasStation::writeResetChannel,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_writeSmoothing",
+                         &EasStation::writeSmoothing,
+                         *(easStation_.get()));
 }

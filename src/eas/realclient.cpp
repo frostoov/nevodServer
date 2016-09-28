@@ -20,9 +20,9 @@ bool RealClient::connectToHost() {
     stopped_ = false;
     startConnect();
 
-    //    deadlineTimer_.async_wait(
-    //                boost::bind(&RealClient::checkDeadline,
-    //                shared_from_this()));
+    deadlineTimer_.async_wait(
+        boost::bind(&RealClient::checkDeadline, shared_from_this()));
+    return true;
 }
 
 bool RealClient::disconnectFromHost() {
@@ -128,16 +128,16 @@ RealClient::Message RealClient::getMessage() const {
 }
 
 void RealClient::startConnect() {
-    //    deadlineTimer_.expires_from_now(boost::posix_time::seconds(60));
+    deadlineTimer_.expires_from_now(boost::posix_time::seconds(60));
     boost::asio::ip::tcp::endpoint ep(
         boost::asio::ip::address::from_string(ip_), port_);
     socket_.async_connect(
         ep, boost::bind(&RealClient::connectHandler, shared_from_this(),
                         boost::asio::placeholders::error));
-//    boost::asio::async_connect(
-//        socket_, ep,
-//        boost::bind(&RealClient::connectHandler, shared_from_this(),
-//                    boost::asio::placeholders::error));
+    //    boost::asio::async_connect(
+    //        socket_, ep,
+    //        boost::bind(&RealClient::connectHandler, shared_from_this(),
+    //                    boost::asio::placeholders::error));
 }
 
 void RealClient::startRead() {
@@ -207,15 +207,15 @@ void RealClient::writeHandler(const boost::system::error_code& error, size_t) {
     }
 }
 
-// void RealClient::checkDeadline() {
-//	if (stopped_)
-//		return;
-//	std::cout << "Deadline" << std::endl;
-//	if (deadlineTimer_.expires_at() <=
-//		boost::asio::deadline_timer::traits_type::now()) {
-//		socket_.close();
-//		deadlineTimer_.expires_at(boost::posix_time::pos_infin);
-//	}
-//	deadlineTimer_.async_wait(
-//		boost::bind(&RealClient::checkDeadline, shared_from_this()));
-//}
+ void RealClient::checkDeadline() {
+    if (stopped_)
+        return;
+    std::cout << "Deadline" << std::endl;
+    if (deadlineTimer_.expires_at() <=
+        boost::asio::deadline_timer::traits_type::now()) {
+        socket_.close();
+        deadlineTimer_.expires_at(boost::posix_time::pos_infin);
+    }
+    deadlineTimer_.async_wait(
+        boost::bind(&RealClient::checkDeadline, shared_from_this()));
+}

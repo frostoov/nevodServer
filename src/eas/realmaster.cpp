@@ -51,7 +51,7 @@ void RealMaster::readState() {
     }
 }
 
-void RealMaster::writeResetRegister() {
+void RealMaster::writeHardReset() {
     Record recordWithValue(registers_.write.reset_register);
     recordWithValue.address += offset_;
     recordWithValue.value = 3;
@@ -184,4 +184,8 @@ void RealMaster::writeTime(uint16_t hours,
     for (auto record : recordsWithValues) {
 		clientQueue_->addCommandToQueue(record, shared_from_this());
     }
+}
+
+const std::vector<RealMaster::AdcPtr>& RealMaster::getAdcs() const {
+    return adcs_;
 }

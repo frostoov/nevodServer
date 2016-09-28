@@ -27,7 +27,7 @@ public:
     void deleteAdc(uint32_t numberAdc);
     void readState();
 
-    void writeResetRegister();
+    void writeHardReset();
     void writeResolutionOfTimer(bool resolution);
     void writeTestRegister(uint16_t data);
     void writeCoincidence(uint32_t coincidence);
@@ -42,6 +42,8 @@ public:
                    uint16_t minutes,
                    uint16_t seconds,
                    uint16_t ms);
+
+    const std::vector<AdcPtr>& getAdcs() const;
 
 private:
     QueuePtr clientQueue_;
