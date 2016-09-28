@@ -6,6 +6,8 @@
 class Master : public Observer, public Subject {
 public:
 
+    virtual void writeResetRegister() = 0;
+
 	virtual~ Master();
 };
 

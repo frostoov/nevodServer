@@ -1,5 +1,5 @@
-#ifndef OBSERVER_H
-#define OBSERVER_H
+#ifndef OBSERVER_HPP
+#define OBSERVER_HPP
 
 #include <list>
 #include <algorithm>
@@ -30,7 +30,7 @@ protected:
     Subject();
 
 private:
-	std::list<Observer*> observers_;
+    std::list<Observer*> observers_;
 };
 
-#endif  // OBSERVER_H
+#endif//OBSERVER_HPP

@@ -287,7 +287,7 @@ void Host::initializeTable(uint32_t numberMaster,
     table[8 * numbersOfChannels.size() + 6] = 4;
     table[8 * numbersOfChannels.size() + 7] = 0;
 
-    for (int i = 0; i < table.size(); i++) {
+    for (size_t i = 0; i < table.size(); i++) {
         clientQueue_->addCommandToQueue(
 			Record{address, table[i], Record::Type::Zero},
 			shared_from_this());
@@ -310,4 +310,8 @@ Host::QueuePtr Host::getQueue() {
 
 Record Host::getResult() const {
     return resultRecord_;
+}
+
+std::map<uint32_t, Host::MasterPtr> Host::getMasters() const {
+    return masters_;
 }

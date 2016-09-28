@@ -1,5 +1,5 @@
-#ifndef TCPCONNECTION_H
-#define TCPCONNECTION_H
+#ifndef TCPCONNECTION_HPP
+#define TCPCONNECTION_HPP
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
@@ -37,4 +37,4 @@ private:
     boost::asio::streambuf response_;
 };
 
-#endif  // TCPCONNECTION_H
+#endif//TCPCONNECTION_HPP

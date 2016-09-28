@@ -1,5 +1,5 @@
-#ifndef FAULT_H
-#define FAULT_H
+#ifndef FAULT_HPP
+#define FAULT_HPP
 
 #include <cassert>
 #include <cstdint>
@@ -92,4 +92,4 @@ public:
     }
 };
 
-#endif
+#endif//FAULT_HPP

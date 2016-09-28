@@ -23,7 +23,7 @@ public:
 	}
 
 	void writeRegister3000(uint32_t address, uint16_t data) {
-		finishedQueue_.push_back(Record{address, data, Record::Type::Zero});
+        finishedQueue_.push_back(Record{address, data, Record::Type::Zero});
 	}
 
 	void writeRegister3002(uint32_t address, uint16_t data) {
@@ -35,7 +35,7 @@ public:
 	}
 
 	const std::vector<uint8_t>& getData() const {
-		return std::vector<uint8_t>{1, 2, 3, 4};
+        return std::vector<uint8_t>{1, 2, 3, 4};
 	}
 
 	Message getMessage() const {
@@ -56,7 +56,6 @@ public:
 
 private:
 	std::list<Record> finishedQueue_;
-
 };
 
 #endif//CLIENTFAKE_HPP

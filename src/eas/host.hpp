@@ -55,6 +55,7 @@ public:
     QueuePtr getQueue();
     Record getResult() const;
     HostRegisters getRegisters() const;
+    std::map<uint32_t, MasterPtr> getMasters() const;
 
     void writeRegister(uint32_t address, uint32_t data, Record::Type type);
     void readRegister(uint32_t address);

@@ -30,5 +30,5 @@ bool Subject::isAttach(Observer* obs) {
 		observers_.end())
 		return true;
 	else
-		return false;
+        return false;
 }

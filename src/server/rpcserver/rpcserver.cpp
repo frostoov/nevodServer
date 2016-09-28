@@ -17,6 +17,14 @@ void RpcServer::run() {
     service_->run();
 }
 
+Dispatcher&RpcServer::getDispatcher() {
+    return dispatcher_;
+}
+
+RpcServer::ioServicePtr&RpcServer::getIoService() {
+    return service_;
+}
+
 void RpcServer::startAccept() {
     TcpConnection::TcpConnectionPtr newConnection =
         TcpConnection::create(acceptor_.get_io_service(), dispatcher_);

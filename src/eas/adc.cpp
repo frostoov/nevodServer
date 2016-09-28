@@ -3,17 +3,17 @@
 
 Adc::Adc(uint32_t offset, QueuePtr clientQueue) : clientQueue_(clientQueue) {
     offset_ = offset + 0x10000;
-	clientQueue_->attach(this);
+    clientQueue_->attach(this);
 }
 
 Adc::~Adc() {
-	clientQueue_->detach(this);
+    clientQueue_->detach(this);
 }
 
 void Adc::update(const Subject* subject) {
-	if (subject == clientQueue_.get()) {
+    if (subject == clientQueue_.get()) {
         if (clientQueue_->getMessage() ==
-			QueueOfMessages::Message::recordRead) {
+            QueueOfMessages::Message::recordRead) {
             Record record = clientQueue_->getRecord();
             std::cout << record.address << "\t" << record.value << std::endl;
             for (auto reg : registers_.readRecords)
@@ -22,7 +22,7 @@ void Adc::update(const Subject* subject) {
         }
 
         if (clientQueue_->getMessage() ==
-			QueueOfMessages::Message::recordWrite) {
+            QueueOfMessages::Message::recordWrite) {
             Record record = clientQueue_->getRecord();
             std::cout << record.address << "\t" << record.value << std::endl;
         }

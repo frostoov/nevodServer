@@ -20,7 +20,7 @@ TEST_CASE("Queue Of Messages") {
 
 		queue->detachFromClients();
 		REQUIRE(clientReg->isAttach(queue.get()) == false);
-		REQUIRE(clientData->isAttach(queue.get()) == false);
+        REQUIRE(clientData->isAttach(queue.get()) == false);
 	}
 
 	SECTION("Does QueueOfMessages's work correctly") {

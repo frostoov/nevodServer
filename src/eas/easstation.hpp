@@ -29,10 +29,15 @@ public:
     bool writeControlDma(int idHost, bool isOn);
     bool writeStartTaskMaster(int idMaster);
     bool writeRegisterOfReadData(int idHost);
+    bool writePermissionOfData(int idMaster);
+    bool writeClearDataBuffer(int idHost);
+    bool writeResetRegister(int idMaster);
+    bool writePermissionOfTimer(int idMaster);
+    bool writeSetCoincidence(int idMaster, int coincidence);
 
 private:
     IoServicePtr service_;
     std::map<uint32_t, HostPtr> hosts_;
 };
 
-#endif  // EASSTATION_HPP
+#endif//EASSTATION_HPP

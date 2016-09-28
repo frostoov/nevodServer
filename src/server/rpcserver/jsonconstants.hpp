@@ -1,5 +1,5 @@
-#ifndef JSON_H
-#define JSON_H
+#ifndef JSONCONSTANTS_HPP
+#define JSONCONSTANTS_HPP
 
 #include <string>
 
@@ -16,7 +16,6 @@ static const std::string RESULT_NAME = "result";
 static const std::string ERROR_NAME = "error";
 static const std::string ERROR_CODE_NAME = "code";
 static const std::string ERROR_MESSAGE_NAME = "message";
-
 }  // namespace json
 
 #endif

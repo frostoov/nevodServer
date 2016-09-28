@@ -21,8 +21,8 @@ public:
 
     void run();
 
-	Dispatcher& getDispatcher() { return dispatcher_; }
-	ioServicePtr& getIoService() { return service_; }
+    Dispatcher& getDispatcher();
+    ioServicePtr& getIoService();
 
 protected:
     void startAccept();

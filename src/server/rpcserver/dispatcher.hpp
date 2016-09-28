@@ -1,5 +1,5 @@
-#ifndef DISPATCHER_H
-#define DISPATCHER_H
+#ifndef DISPATCHER_HPP
+#define DISPATCHER_HPP
 
 #include <functional>
 #include <utility>
@@ -189,4 +189,4 @@ private:
     std::map<std::string, MethodWrapper> methods_;
 };
 
-#endif
+#endif//DISPATCHER_HPP

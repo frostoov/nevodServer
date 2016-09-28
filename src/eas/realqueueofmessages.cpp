@@ -1,32 +1,31 @@
 #include "realqueueofmessages.hpp"
 #include <iostream>
 
-RealQueueOfMessages::RealQueueOfMessages(const std::shared_ptr<Client>& clientReg,
-								 const std::shared_ptr<Client>& clientData) {
-	clientReg_ = clientReg;
-	clientData_ = clientData;
+RealQueueOfMessages::RealQueueOfMessages(
+    const std::shared_ptr<Client>& clientReg,
+    const std::shared_ptr<Client>& clientData) {
+    clientReg_ = clientReg;
+    clientData_ = clientData;
 }
 
-RealQueueOfMessages::~RealQueueOfMessages() {
-
-}
+RealQueueOfMessages::~RealQueueOfMessages() {}
 
 void RealQueueOfMessages::update(const Subject* subject) {
-	if (subject == clientReg_.get()) {
-		if (clientReg_->getMessage() == Client::Message::readyRead) {
-			static size_t commandNumberBegin = 0;
-			static size_t commandNumberEnd = 0;
+    if (subject == clientReg_.get()) {
+        if (clientReg_->getMessage() == Client::Message::readyRead) {
+            static size_t commandNumberBegin = 0;
+            static size_t commandNumberEnd = 0;
             commandNumberEnd = fillValuesInCommandsHaveBeenDone(
                 clientReg_->getData(), commandNumberBegin);
-			for (size_t i = commandNumberBegin; i < commandNumberEnd; i++) {
+            for (size_t i = commandNumberBegin; i < commandNumberEnd; i++) {
                 if (commandsHaveBeenDone_[i].first.type == Record::Type::Read) {
                     message_ = Message::recordRead;
                     answerRecord_ = commandsHaveBeenDone_[i].first;
-					notify(commandsHaveBeenDone_[i].second.get());
+                    notify(commandsHaveBeenDone_[i].second.get());
                 } else {
                     message_ = Message::recordWrite;
                     answerRecord_ = commandsHaveBeenDone_[i].first;
-					notify(commandsHaveBeenDone_[i].second.get());
+                    notify(commandsHaveBeenDone_[i].second.get());
                 }
             }
             commandNumberBegin = commandNumberEnd;
@@ -36,24 +35,24 @@ void RealQueueOfMessages::update(const Subject* subject) {
             }
         }
 
-		if (clientReg_->getMessage() == Client::Message::connected) {
+        if (clientReg_->getMessage() == Client::Message::connected) {
             message_ = Message::connected;
             notify();
         }
 
-		if (clientReg_->getMessage() == Client::Message::disconnected) {
+        if (clientReg_->getMessage() == Client::Message::disconnected) {
             message_ = Message::disconnected;
             notify();
         }
 
-		if (clientReg_->getMessage() == Client::Message::error) {
+        if (clientReg_->getMessage() == Client::Message::error) {
             message_ = Message::error;
             notify();
         }
     }
 
-	if (subject == clientData_.get()) {
-		if (clientData_->getMessage() == Client::Message::readyRead) {
+    if (subject == clientData_.get()) {
+        if (clientData_->getMessage() == Client::Message::readyRead) {
             static int packetCount = 0;
             message_ = Message::dataRead;
             if (packetCount < 200) {
@@ -81,18 +80,18 @@ void RealQueueOfMessages::disconnectFromHost() {
     clientData_->disconnectFromHost();
 }
 
-void RealQueueOfMessages::attachToClients()	{
-	clientReg_->attach(this);
-	clientData_->attach(this);
+void RealQueueOfMessages::attachToClients() {
+    clientReg_->attach(this);
+    clientData_->attach(this);
 }
 
-void RealQueueOfMessages::detachFromClients()	{
-	clientReg_->detach(this);
-	clientData_->detach(this);
+void RealQueueOfMessages::detachFromClients() {
+    clientReg_->detach(this);
+    clientData_->detach(this);
 }
 
 void RealQueueOfMessages::addCommandToQueue(const Record& record,
-                                        ObserverPtr sender) {
+                                            ObserverPtr sender) {
     commandsWillBeDone_.push(std::pair<Record, ObserverPtr>(record, sender));
 }
 
@@ -120,7 +119,7 @@ int RealQueueOfMessages::fillValuesInCommandsHaveBeenDone(
     const std::vector<uint8_t>& data,
     int commandNumber) {
     int command = commandNumber;
-	for (size_t i = 0; i < data.size(); i++) {
+    for (size_t i = 0; i < data.size(); i++) {
         if (data[i] == 0x0b && data[i + 1] == 0xb9 && data[i + 2] == 0x0b &&
             data[i + 3] == 0xb9) {
             uint16_t value = data[i + 10] << 8;

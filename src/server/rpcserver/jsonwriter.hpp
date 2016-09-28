@@ -17,7 +17,6 @@ public:
 
     void setJson(const Json& json);
 
-    //	const char* getData();
     std::string getData() const;
     size_t getSize();
     void startDocument();

@@ -27,7 +27,7 @@ public:
 	virtual void connectToHost() = 0;
 	virtual void disconnectFromHost() = 0;
 	virtual void addCommandToQueue(const Record& record,
-								   ObserverPtr sender) = 0;
+                                   ObserverPtr sender) = 0;
 	virtual void runQueue() = 0;
 	virtual void clearData() = 0;
 
@@ -47,7 +47,9 @@ public:
 	using ClientPtr = std::shared_ptr<Client>;
 
 	virtual QueueOfMessagesPtr create(const ClientPtr clientReg,
-									  const ClientPtr clientData) = 0;
+                                      const ClientPtr clientData) = 0;
+
+    virtual ~QueueOfMessagesFactory() {}
 };
 
 #endif  // QUEUEOFMESSAGES_HPP

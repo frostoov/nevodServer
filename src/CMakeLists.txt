@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 project(nevodserver)
 
 add_subdirectory(eas)
-add_subdirectory(uran)
 add_subdirectory(server)
 add_subdirectory(keeper)
 add_subdirectory(observer)

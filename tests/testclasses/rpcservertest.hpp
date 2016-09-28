@@ -39,4 +39,4 @@ private:
 	TcpConnectionTestPtr connection_;
 };
 
-#endif  // RPCSERVERTEST_HPP
+#endif//RPCSERVERTEST_HPP

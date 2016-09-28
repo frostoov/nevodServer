@@ -6,10 +6,6 @@ add_subdirectory(rpcserver)
 set(server_files_source
     server.hpp
     server.cpp
-    easrpc.hpp
-    easrpc.cpp
-    uranrpc.hpp
-    uranrpc.cpp
 )
 
 add_library(server ${server_files_source})
