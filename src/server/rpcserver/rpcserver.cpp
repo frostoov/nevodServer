@@ -4,46 +4,79 @@
 #include "rpcserver.hpp"
 #include "jsonwriter.hpp"
 
-RpcServer::RpcServer(unsigned short port)
+RpcServer::RpcServer(uint16_t controlPort, uint16_t dataPort)
     : service_(std::make_shared<boost::asio::io_service>()),
-      acceptor_(
+      controlAcceptor_(
           *(service_.get()),
-          boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)) {}
+          boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(),
+                                         controlPort)),
+      dataAcceptor_(*(service_.get()),
+                    boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(),
+                                                   dataPort)) {}
 
 RpcServer::~RpcServer() {}
 
 void RpcServer::run() {
-    startAccept();
+    addClientToClients();
+    startControlAccept();
+    startDataAccept();
     service_->run();
 }
 
-Dispatcher&RpcServer::getDispatcher() {
+Dispatcher& RpcServer::getDispatcher() {
     return dispatcher_;
 }
 
-RpcServer::ioServicePtr&RpcServer::getIoService() {
+RpcServer::ioServicePtr& RpcServer::getIoService() {
     return service_;
 }
 
-void RpcServer::startAccept() {
-    TcpConnection::TcpConnectionPtr newConnection =
-        TcpConnection::create(acceptor_.get_io_service(), dispatcher_);
+void RpcServer::startControlAccept() {
+    controlAcceptor_.async_accept(
+        clients_.back().control->getSocket(),
+        boost::bind(&RpcServer::handleControlAccept, this,
+                    clients_.back().control, boost::asio::placeholders::error));
+}
 
-    acceptor_.async_accept(
-        newConnection->getSocket(),
-        boost::bind(&RpcServer::handleAccept, this, newConnection,
+void RpcServer::startDataAccept() {
+    dataAcceptor_.async_accept(
+        clients_.back().data->getSocket(),
+        boost::bind(&RpcServer::handleDataAccept, this, clients_.back().data,
                     boost::asio::placeholders::error));
 }
 
-void RpcServer::handleAccept(TcpConnection::TcpConnectionPtr newConnection,
-                          const boost::system::error_code& error) {
+void RpcServer::addClientToClients() {
+    if (clients_.empty()) {
+        clients_.push_back(Connections(*(service_.get()), dispatcher_));
+        return;
+    }
+    if (clients_.back().control->isConnected() &&
+        clients_.back().data->isConnected())
+        clients_.push_back(Connections(*(service_.get()), dispatcher_));
+}
+
+void RpcServer::handleControlAccept(TcpControlConnectionPtr newConnection,
+                                    const boost::system::error_code& error) {
     if (!error) {
         static int numberOfClient = 0;
-        std::cout << "His number is " << numberOfClient << std::endl;
+        std::cout << "His control number is " << numberOfClient << std::endl;
         numberOfClient++;
         newConnection->start();
     }
-    startAccept();
+    addClientToClients();
+    startControlAccept();
+}
+
+void RpcServer::handleDataAccept(RpcServer::TcpDataConnectionPtr newConnection,
+                                 const boost::system::error_code& error) {
+    if (!error) {
+        static int numberOfClient = 0;
+        std::cout << "His data number is " << numberOfClient << std::endl;
+        numberOfClient++;
+        newConnection->start();
+    }
+    addClientToClients();
+    startDataAccept();
 }
 
 void RpcServer::handleRequest(const boost::system::error_code& error, size_t) {}

@@ -24,7 +24,7 @@ void EasStation::deleteHost(uint32_t numberHost) {
     hosts_.erase(numberHost);
 }
 
-bool EasStation::writeBanOfTimestamps(int32_t idHost, bool isBan) {
+bool EasStation::writeBanOfTimestamps(int idHost, bool isBan) {
     //	hosts_[0]->write(idHost, isBan);
     hosts_[0]->writeBanOfTimestamps(isBan);
     hosts_[0]->runQueue();
@@ -57,7 +57,7 @@ bool EasStation::writeStartTaskMaster(int idMaster) {
     //    hosts_[idHost]->getMasters()[idMaster]-
 }
 
-bool EasStation::writeRegisterOfReadData(uint32_t idHost,
+bool EasStation::writeRegisterOfReadData(int idHost,
                                          bool isOnFirst,
                                          bool isOnSecond,
                                          bool isOnThird,
@@ -66,7 +66,7 @@ bool EasStation::writeRegisterOfReadData(uint32_t idHost,
         std::array<bool, 4>{{isOnFirst, isOnSecond, isOnThird, isOnFourth}});
 }
 
-bool EasStation::writePermissionOfData(uint32_t idHost,
+bool EasStation::writePermissionOfData(int idHost,
                                        bool isOnFirst,
                                        bool isOnSecond,
                                        bool isOnThird,
@@ -91,26 +91,26 @@ bool EasStation::writePermissionOfTimer(int idMaster) {
     hosts_[idHost]->getMasters()[idMaster]->writeResolutionOfTimer(true);
 }
 
-bool EasStation::writeSetCoincidence(uint32_t idMaster, uint32_t coincidence) {
+bool EasStation::writeSetCoincidence(int idMaster, int coincidence) {
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
     hosts_[idHost]->getMasters()[idMaster]->writeCoincidence(coincidence);
 }
 
-bool EasStation::writeResetCounter(uint32_t idMaster) {
+bool EasStation::writeResetCounter(int idMaster) {
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
     hosts_[idHost]->getMasters()[realIdMaster]->writeResetCounter();
 }
 
-bool EasStation::writeSetTimeGate(uint32_t idMaster, int ns) {
+bool EasStation::writeSetTimeGate(int idMaster, int ns) {
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
     uint16_t window = 0;  // TODO ns to window
     hosts_[idHost]->getMasters()[realIdMaster]->writeTemporaryWindow(window);
 }
 
-bool EasStation::writeActiveChannels(uint32_t idMaster,
+bool EasStation::writeActiveChannels(int idMaster,
                                      bool isOnFirst,
                                      bool isOnSecond,
                                      bool isOnThird,
@@ -126,25 +126,25 @@ bool EasStation::writeActiveChannels(uint32_t idMaster,
                              isOnFifth, isOnSixth, isOnSeventh, isOnEighth}});
 }
 
-bool EasStation::writeControlTrigger(uint32_t idMaster, int mode) {
+bool EasStation::writeControlTrigger(int idMaster, int mode) {
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
     hosts_[idHost]->getMasters()[realIdMaster]->writeControlTrigger(mode);
 }
 
-bool EasStation::writeProgramTrigger(uint32_t idMaster) {
+bool EasStation::writeProgramTrigger(int idMaster) {
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
     hosts_[idHost]->getMasters()[realIdMaster]->writeProgramTrigger(true);
 }
 
-bool EasStation::writeResetVme(uint32_t idMaster) {
+bool EasStation::writeResetVme(int idMaster) {
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
     hosts_[idHost]->getMasters()[realIdMaster]->writeResetVme();
 }
 
-bool EasStation::writeTime(uint32_t idMaster,
+bool EasStation::writeTime(int idMaster,
                            int hours,
                            int min,
                            int sec,
@@ -154,7 +154,7 @@ bool EasStation::writeTime(uint32_t idMaster,
     hosts_[idHost]->getMasters()[realIdMaster]->writeTime(hours, min, sec, ms);
 }
 
-bool EasStation::writeControlRegister(uint32_t idPaa) {
+bool EasStation::writeControlRegister(int idPaa) {
     uint32_t idHost = static_cast<uint32_t>(idPaa) / 100;
     uint32_t idMaster = (idPaa / 10) & 10;
     uint32_t realIdPaa = idPaa % 10;
@@ -164,7 +164,7 @@ bool EasStation::writeControlRegister(uint32_t idPaa) {
         ->writeControlRegister();
 }
 
-bool EasStation::writeThreshold(uint32_t idPaa, uint16_t threshold) {
+bool EasStation::writeThreshold(int idPaa, int threshold) {
     uint32_t idHost = static_cast<uint32_t>(idPaa) / 100;
     uint32_t idMaster = (idPaa / 10) & 10;
     uint32_t realIdPaa = idPaa % 10;
@@ -175,7 +175,7 @@ bool EasStation::writeThreshold(uint32_t idPaa, uint16_t threshold) {
             ->writeThreshold(i, threshold);
 }
 
-bool EasStation::writeDelay(uint32_t idPaa, uint32_t channel, uint16_t delay) {
+bool EasStation::writeDelay(int idPaa, int channel, int delay) {
     uint32_t idHost = static_cast<uint32_t>(idPaa) / 100;
     uint32_t idMaster = (idPaa / 10) & 10;
     uint32_t realIdPaa = idPaa % 10;
@@ -183,7 +183,7 @@ bool EasStation::writeDelay(uint32_t idPaa, uint32_t channel, uint16_t delay) {
         channel, delay);
 }
 
-bool EasStation::writeResetChannel(uint32_t idPaa, uint32_t channel) {
+bool EasStation::writeResetChannel(int idPaa, int channel) {
     uint32_t idHost = static_cast<uint32_t>(idPaa) / 100;
     uint32_t idMaster = (idPaa / 10) & 10;
     uint32_t realIdPaa = idPaa % 10;
@@ -193,7 +193,7 @@ bool EasStation::writeResetChannel(uint32_t idPaa, uint32_t channel) {
         ->writeResetChannel(channel);
 }
 
-bool EasStation::writeSmoothing(uint32_t idPaa, uint16_t smoothing) {
+bool EasStation::writeSmoothing(int idPaa, int smoothing) {
     uint32_t idHost = static_cast<uint32_t>(idPaa) / 100;
     uint32_t idMaster = (idPaa / 10) & 10;
     uint32_t realIdPaa = idPaa % 10;

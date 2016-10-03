@@ -12,7 +12,7 @@ public:
     using EasStationPtr = std::unique_ptr<EasStation>;
     using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
 
-    Server(uint16_t port);
+    Server(uint16_t controlPort, uint16_t dataPort);
 	~Server();
 
     void start();

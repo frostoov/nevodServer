@@ -11,8 +11,10 @@ set(rpcserver_files_source
     jsonwriter.cpp
     rpcserver.hpp
     rpcserver.cpp
-    tcpconnection.cpp
-    tcpconnection.hpp
+    tcpcontrolconnection.cpp
+    tcpcontrolconnection.hpp
+    tcpdataconnection.cpp
+    tcpdataconnection.hpp
     fault.hpp
     request.hpp
     request.cpp

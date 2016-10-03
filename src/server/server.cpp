@@ -1,6 +1,7 @@
 #include "server.hpp"
 
-Server::Server(uint16_t port) : RpcServer(port) {
+Server::Server(uint16_t controlPort, uint16_t dataPort)
+    : RpcServer(controlPort, dataPort) {
     easStation_ = std::make_unique<EasStation>(this->getIoService());
 
     initializeDispatcherOfEasRpc();
@@ -29,8 +30,7 @@ void Server::initializeDispatcherOfEasRpc() {
     dispatcher.addMethod("eas_writePermissionOfMasters",
                          &EasStation::writePermissionOfMasters,
                          *(easStation_.get()));
-    dispatcher.addMethod("eas_writeControlDma",
-                         &EasStation::writeControlDma,
+    dispatcher.addMethod("eas_writeControlDma", &EasStation::writeControlDma,
                          *(easStation_.get()));
     dispatcher.addMethod("eas_writeStartTaskMaster",
                          &EasStation::writeStartTaskMaster,
@@ -38,9 +38,9 @@ void Server::initializeDispatcherOfEasRpc() {
     dispatcher.addMethod("eas_writeRegisterOfReadData",
                          &EasStation::writeRegisterOfReadData,
                          *(easStation_.get()));
-    dispatcher.addMethod("eas_writeRegisterOfReadData",
-                         &EasStation::writeRegisterOfReadData,
-                         *(easStation_.get()));
+//    dispatcher.addMethod("eas_writeRegisterOfReadData",
+//                         &EasStation::writeRegisterOfReadData,
+//                         *(easStation_.get()));
     dispatcher.addMethod("eas_writePermissionOfData",
                          &EasStation::writePermissionOfData,
                          *(easStation_.get()));
@@ -48,8 +48,7 @@ void Server::initializeDispatcherOfEasRpc() {
                          &EasStation::writeClearDataBuffer,
                          *(easStation_.get()));
     dispatcher.addMethod("eas_writeResetRegister",
-                         &EasStation::writeResetRegister,
-                         *(easStation_.get()));
+                         &EasStation::writeResetRegister, *(easStation_.get()));
     dispatcher.addMethod("eas_writePermissionOfTimer",
                          &EasStation::writePermissionOfTimer,
                          *(easStation_.get()));
@@ -57,10 +56,8 @@ void Server::initializeDispatcherOfEasRpc() {
                          &EasStation::writeSetCoincidence,
                          *(easStation_.get()));
     dispatcher.addMethod("eas_writeResetCounter",
-                         &EasStation::writeResetCounter,
-                         *(easStation_.get()));
-    dispatcher.addMethod("eas_writeSetTimeGate",
-                         &EasStation::writeSetTimeGate,
+                         &EasStation::writeResetCounter, *(easStation_.get()));
+    dispatcher.addMethod("eas_writeSetTimeGate", &EasStation::writeSetTimeGate,
                          *(easStation_.get()));
     dispatcher.addMethod("eas_writeActiveChannels",
                          &EasStation::writeActiveChannels,
@@ -71,25 +68,19 @@ void Server::initializeDispatcherOfEasRpc() {
     dispatcher.addMethod("eas_writeProgramTrigger",
                          &EasStation::writeProgramTrigger,
                          *(easStation_.get()));
-    dispatcher.addMethod("eas_writeResetVme",
-                         &EasStation::writeResetVme,
+    dispatcher.addMethod("eas_writeResetVme", &EasStation::writeResetVme,
                          *(easStation_.get()));
-    dispatcher.addMethod("eas_writeTime",
-                         &EasStation::writeTime,
+    dispatcher.addMethod("eas_writeTime", &EasStation::writeTime,
                          *(easStation_.get()));
     dispatcher.addMethod("eas_writeControlRegister",
                          &EasStation::writeControlRegister,
                          *(easStation_.get()));
-    dispatcher.addMethod("eas_writeThreshold",
-                         &EasStation::writeThreshold,
+    dispatcher.addMethod("eas_writeThreshold", &EasStation::writeThreshold,
                          *(easStation_.get()));
-    dispatcher.addMethod("eas_writeDelay",
-                         &EasStation::writeDelay,
+    dispatcher.addMethod("eas_writeDelay", &EasStation::writeDelay,
                          *(easStation_.get()));
     dispatcher.addMethod("eas_writeResetChannel",
-                         &EasStation::writeResetChannel,
-                         *(easStation_.get()));
-    dispatcher.addMethod("eas_writeSmoothing",
-                         &EasStation::writeSmoothing,
+                         &EasStation::writeResetChannel, *(easStation_.get()));
+    dispatcher.addMethod("eas_writeSmoothing", &EasStation::writeSmoothing,
                          *(easStation_.get()));
 }

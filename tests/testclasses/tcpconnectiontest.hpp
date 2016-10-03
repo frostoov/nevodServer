@@ -1,12 +1,12 @@
 #ifndef TCPCONNECTIONTEST_HPP
 #define TCPCONNECTIONTEST_HPP
 
-#include "../../src/server/rpcserver/tcpconnection.hpp"
+#include "../../src/server/rpcserver/tcpcontrolconnection.hpp"
 
-class TcpConnectionTest : public TcpConnection {
+class TcpConnectionTest : public TcpControlConnection {
 public:
 	TcpConnectionTest(boost::asio::io_service& service, Dispatcher& dispatcher)
-		: TcpConnection(service, dispatcher) {}
+        : TcpControlConnection(service, dispatcher) {}
 
 	std::string answerToRequestTest(const std::string& message) {
 		return answerToRequest(message);

@@ -34,7 +34,6 @@ public:
 
     void write(int32_t number, bool isBan) {}
 
-
 protected:
     void startConnect();
     void startRead();
@@ -68,4 +67,4 @@ public:
     }
 };
 
-#endif  // REALCLIENT_HPP
+#endif//REALCLIENT_HPP
