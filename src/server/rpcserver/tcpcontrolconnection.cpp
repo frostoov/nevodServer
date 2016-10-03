@@ -36,7 +36,7 @@ void TcpControlConnection::start() {
     //                    boost::asio::placeholders::error));
 
     boost::asio::async_read_until(
-        socket_, response_, '\n',
+        socket_, response_, ';',
         boost::bind(&TcpControlConnection::handleRead, shared_from_this(),
                     boost::asio::placeholders::error));
 }
@@ -61,12 +61,12 @@ void TcpControlConnection::handleRead(const boost::system::error_code& error) {
     //		return;
     //	}
 
-    //	std::cout << buf.size() << std::endl;
-    //	std::cout << std::string(buf.begin(), buf.end()) << std::endl;
+//    std::cout << buf_.size() << std::endl;
+//    std::cout << std::string(buf_.begin(), buf_.end()) << std::endl;
 
     std::istream respStream(&response_);
     std::string msg(std::istreambuf_iterator<char>(respStream), {});
-//    msg.erase(msg.end() - 1);
+    msg.erase(msg.end() - 1);
     std::cout << msg << std::endl;
 
     boost::asio::async_write(

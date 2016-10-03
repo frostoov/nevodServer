@@ -134,14 +134,10 @@ void RealClient::startConnect() {
     socket_.async_connect(
         ep, boost::bind(&RealClient::connectHandler, shared_from_this(),
                         boost::asio::placeholders::error));
-    //    boost::asio::async_connect(
-    //        socket_, ep,
-    //        boost::bind(&RealClient::connectHandler, shared_from_this(),
-    //                    boost::asio::placeholders::error));
 }
 
 void RealClient::startRead() {
-    //	deadlineTimer_.expires_from_now(boost::posix_time::seconds(30));
+    deadlineTimer_.expires_from_now(boost::posix_time::seconds(30));
 
     boost::asio::async_read_until(
         socket_, inputBuffer_, '\n',
@@ -162,6 +158,7 @@ void RealClient::startWrite(const std::vector<char>& message) {
 }
 
 void RealClient::connectHandler(const boost::system::error_code& error) {
+    std::cout << "I am connected to Host!\t" << error.message() << std::endl;
     if (stopped_)
         return;
     if (!error) {
@@ -185,6 +182,17 @@ void RealClient::readHandler(const boost::system::error_code& error, size_t) {
             std::cout << "Received: " << line << std::endl;
 
         startRead();
+
+        message_ = Message::readyRead;
+        const char* bufPtr = boost::asio::buffer_cast<const char*>(inputBuffer_.data());
+        std::string bufStr(bufPtr);
+        std::vector<uint8_t> bufVec(bufStr.length());
+        std::transform(bufStr.begin(), bufStr.end(), bufVec.begin(),
+                       [](char ch)	{
+            return static_cast<uint8_t>(ch);
+        });
+        data_.insert(data_.end(), bufVec.begin(), bufVec.end());
+        this->notify();
     } else {
         std::cout << "Error reading" << std::endl;
         disconnectFromHost();

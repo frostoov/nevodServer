@@ -38,9 +38,9 @@ void Server::initializeDispatcherOfEasRpc() {
     dispatcher.addMethod("eas_writeRegisterOfReadData",
                          &EasStation::writeRegisterOfReadData,
                          *(easStation_.get()));
-//    dispatcher.addMethod("eas_writeRegisterOfReadData",
-//                         &EasStation::writeRegisterOfReadData,
-//                         *(easStation_.get()));
+    //    dispatcher.addMethod("eas_writeRegisterOfReadData",
+    //                         &EasStation::writeRegisterOfReadData,
+    //                         *(easStation_.get()));
     dispatcher.addMethod("eas_writePermissionOfData",
                          &EasStation::writePermissionOfData,
                          *(easStation_.get()));
@@ -82,5 +82,7 @@ void Server::initializeDispatcherOfEasRpc() {
     dispatcher.addMethod("eas_writeResetChannel",
                          &EasStation::writeResetChannel, *(easStation_.get()));
     dispatcher.addMethod("eas_writeSmoothing", &EasStation::writeSmoothing,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_connectToHost", &EasStation::connectToHost,
                          *(easStation_.get()));
 }

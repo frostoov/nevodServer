@@ -8,7 +8,12 @@
 using namespace jsonconstants;
 
 JsonReader::JsonReader(const std::string& data) {
-    document_ = Json::parse(data);
+    std::string msg(data);
+    for (auto& ch : msg)
+        if (ch == '\'')
+            ch = '\"';
+    std::cout << msg << std::endl;
+    document_ = Json::parse(msg);
     // TODO
 }
 

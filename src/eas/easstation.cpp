@@ -144,11 +144,7 @@ bool EasStation::writeResetVme(int idMaster) {
     hosts_[idHost]->getMasters()[realIdMaster]->writeResetVme();
 }
 
-bool EasStation::writeTime(int idMaster,
-                           int hours,
-                           int min,
-                           int sec,
-                           int ms) {
+bool EasStation::writeTime(int idMaster, int hours, int min, int sec, int ms) {
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
     hosts_[idHost]->getMasters()[realIdMaster]->writeTime(hours, min, sec, ms);
@@ -201,4 +197,14 @@ bool EasStation::writeSmoothing(int idPaa, int smoothing) {
         ->getMasters()[idMaster]
         ->getAdcs()[realIdPaa]
         ->writeSmoothing(smoothing);
+}
+
+bool EasStation::connectToHost(int idHost,
+                               const std::string& ip,
+                               int controlPort,
+                               int dataPort) {
+    hosts_.insert(std::pair<uint32_t, HostPtr>(
+        idHost, addHost(idHost, ip, controlPort, dataPort)));
+    hosts_[idHost]->connectToHost();
+    return true;
 }

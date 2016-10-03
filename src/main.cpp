@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 
 //        auto service = std::make_shared<boost::asio::io_service>();
 //        EasStation station(service);
-//        auto host = station.addHost(0, "192.168.1.40", 3000, 3007);
+//        auto host = station.addHost(0, "192.168.2.40", 3000, 3007);
 //        service->run();
 //        host->connectToHost();
 

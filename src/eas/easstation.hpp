@@ -63,6 +63,11 @@ public:
     bool writeResetChannel(int idPaa, int channel);
     bool writeSmoothing(int idPaa, int smoothing);
 
+    bool connectToHost(int idHost,
+                       const std::string& ip,
+                       int controlPort,
+                       int dataPort);
+
 private:
     IoServicePtr service_;
     std::map<uint32_t, HostPtr> hosts_;
