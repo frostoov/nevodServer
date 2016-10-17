@@ -56,8 +56,8 @@ public:
 	using QueueOfMessagesPtr = std::shared_ptr<RealQueueOfMessages>;
 
 	static QueueOfMessagesPtr create(
-		const std::shared_ptr<Client>& clientReg,
-		const std::shared_ptr<Client>& clientData) {
+        const std::shared_ptr<Client>& clientReg,
+        const std::shared_ptr<Client>& clientData) {
 		return std::make_shared<RealQueueOfMessages>(clientReg, clientData);
 	}
 };

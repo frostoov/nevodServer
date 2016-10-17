@@ -128,7 +128,7 @@ RealClient::Message RealClient::getMessage() const {
 }
 
 void RealClient::startConnect() {
-    deadlineTimer_.expires_from_now(boost::posix_time::seconds(60));
+    //    deadlineTimer_.expires_from_now(boost::posix_time::seconds(60));
     boost::asio::ip::tcp::endpoint ep(
         boost::asio::ip::address::from_string(ip_), port_);
     socket_.async_connect(
@@ -137,13 +137,19 @@ void RealClient::startConnect() {
 }
 
 void RealClient::startRead() {
-    deadlineTimer_.expires_from_now(boost::posix_time::seconds(30));
+    //    deadlineTimer_.expires_from_now(boost::posix_time::seconds(30));
 
     boost::asio::async_read_until(
         socket_, inputBuffer_, '\n',
         boost::bind(&RealClient::readHandler, shared_from_this(),
                     boost::asio::placeholders::error,
                     boost::asio::placeholders::bytes_transferred));
+
+    //    boost::asio::async_read_until(
+    //        socket_, inputBuffer_, '\n',
+    //        boost::bind(&RealClient::readHandler, shared_from_this(),
+    //                    boost::asio::placeholders::error,
+    //                    boost::asio::placeholders::bytes_transferred));
 }
 
 void RealClient::startWrite(const std::vector<char>& message) {
@@ -172,26 +178,24 @@ void RealClient::readHandler(const boost::system::error_code& error, size_t) {
         return;
 
     std::cout << "Reading:\t" << error.message() << std::endl;
+    startRead();
 
     if (!error) {
         std::string line;
         std::istream is(&inputBuffer_);
         std::getline(is, line);
 
-        if (!line.empty())
-            std::cout << "Received: " << line << std::endl;
-
-        startRead();
-
         message_ = Message::readyRead;
-        const char* bufPtr = boost::asio::buffer_cast<const char*>(inputBuffer_.data());
-        std::string bufStr(bufPtr);
-        std::vector<uint8_t> bufVec(bufStr.length());
-        std::transform(bufStr.begin(), bufStr.end(), bufVec.begin(),
-                       [](char ch)	{
-            return static_cast<uint8_t>(ch);
-        });
-        data_.insert(data_.end(), bufVec.begin(), bufVec.end());
+        auto bufs = inputBuffer_.data();
+        std::string bufStr(
+            boost::asio::buffers_begin(bufs),
+            boost::asio::buffers_begin(bufs) + inputBuffer_.size());
+        std::cout << bufStr << std::endl;
+        std::vector<uint8_t> bufVec(bufStr.begin(), bufStr.end());
+        if (bufVec.size() < 10)
+            return;
+//        data_.insert(data_.end(), bufVec.begin(), bufVec.end());
+        data_.assign(bufVec.begin(), bufVec.end());
         this->notify();
     } else {
         std::cout << "Error reading" << std::endl;
@@ -215,7 +219,7 @@ void RealClient::writeHandler(const boost::system::error_code& error, size_t) {
     }
 }
 
- void RealClient::checkDeadline() {
+void RealClient::checkDeadline() {
     if (stopped_)
         return;
     std::cout << "Deadline" << std::endl;

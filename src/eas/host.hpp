@@ -7,7 +7,7 @@
 #include <array>
 #include <boost/asio.hpp>
 
-#include "master.hpp"
+#include "realmaster.hpp"
 #include "registers.hpp"
 #include "queueofmessages.hpp"
 
@@ -41,6 +41,7 @@ public:
     void writeStartTaskLink(uint32_t numberLink, uint32_t numberBank);
     void writeRegisterOfReadData(const std::array<bool, 4>& readLink);
     void writeResolutionAndForbidOfData(bool resolution);
+    void writeResolutionDataZero();
     void writeClearDataBuffer(bool clear);
 
     void initializeTable(uint32_t numberMaster,

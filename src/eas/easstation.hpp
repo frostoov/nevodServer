@@ -7,6 +7,8 @@
 #include "host.hpp"
 #include "realclient.hpp"
 #include "realqueueofmessages.hpp"
+//#include "client.hpp"
+//#include "queueofmessages.hpp"
 
 class EasStation {
 public:
@@ -25,19 +27,19 @@ public:
     bool writeBanOfTimestamps(int idHost, bool isBan);
     bool writeRegisterOfMasks(int idHost);
     bool writeHardReset(int idMaster);
-    bool writePermissionOfMasters(int idMaster, bool isOpen);
-    bool writeControlDma(int idHost, bool isOn);
+    bool writePermissionOfMasters(int idMaster, int isOpen);
+    bool writeControlDma(int idHost, int isOn);
     bool writeStartTaskMaster(int idMaster);
     bool writeRegisterOfReadData(int idHost,
-                                 bool isOnFirst,
-                                 bool isOnSecond,
-                                 bool isOnThird,
-                                 bool isOnFourth);
+                                 int isOnFirst,
+                                 int isOnSecond,
+                                 int isOnThird,
+                                 int isOnFourth);
     bool writePermissionOfData(int idHost,
-                               bool isOnFirst,
-                               bool isOnSecond,
-                               bool isOnThird,
-                               bool isOnFourth);
+                               int isOnFirst,
+                               int isOnSecond,
+                               int isOnThird,
+                               int isOnFourth);
     bool writeClearDataBuffer(int idHost);
     bool writeResetRegister(int idMaster);
     bool writePermissionOfTimer(int idMaster);
@@ -45,20 +47,20 @@ public:
     bool writeResetCounter(int idMaster);
     bool writeSetTimeGate(int idMaster, int ns);
     bool writeActiveChannels(int idMaster,
-                             bool isOnFirst,
-                             bool isOnSecond,
-                             bool isOnThird,
-                             bool isOnFourth,
-                             bool isOnFifth,
-                             bool isOnSixth,
-                             bool isOnSeventh,
-                             bool isOnEighth);
+                             int isOnFirst,
+                             int isOnSecond,
+                             int isOnThird,
+                             int isOnFourth,
+                             int isOnFifth,
+                             int isOnSixth,
+                             int isOnSeventh,
+                             int isOnEighth);
     bool writeControlTrigger(int idMaster, int mode);
     bool writeProgramTrigger(int idMaster);
     bool writeResetVme(int idMaster);
     bool writeTime(int idMaster, int hours, int min, int sec, int ms);
     bool writeControlRegister(int idPaa);
-    bool writeThreshold(int idPaa, int threshold);
+    bool writeThreshold(int idPaa, int channel, int threshold);
     bool writeDelay(int idPaa, int channel, int delay);
     bool writeResetChannel(int idPaa, int channel);
     bool writeSmoothing(int idPaa, int smoothing);
@@ -67,6 +69,13 @@ public:
                        const std::string& ip,
                        int controlPort,
                        int dataPort);
+
+    bool addMasterToHost(int idMaster);
+    bool addAdcToMaster(int idPaa);
+    bool setTaskTable(int idMaster);
+    bool write200200(int idMaster);
+    bool resolutionDataZero(int idHost);
+    bool resolutionAndForbidOfData(int idHost, int resolution);
 
 private:
     IoServicePtr service_;

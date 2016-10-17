@@ -3,7 +3,7 @@
 
 #include <cstdint>
 #include <array>
-#include <vector>
+#include <map>
 
 #include "../observer/observer.hpp"
 #include "../eas/adc.hpp"
@@ -12,7 +12,10 @@ class Master : public Observer, public Subject {
 public:
     using AdcPtr = std::shared_ptr<Adc>;
 
+    virtual AdcPtr addAdc(uint32_t numberAdc) = 0;
+
     virtual void writeHardReset() = 0;
+    virtual void write200200() = 0;
     virtual void writeResolutionOfTimer(bool resolution) = 0;
     virtual void writeTestRegister(uint16_t data) = 0;
     virtual void writeCoincidence(uint32_t coincidence) = 0;
@@ -29,9 +32,19 @@ public:
                            uint16_t seconds,
                            uint16_t ms) = 0;
 
-    virtual const std::vector<AdcPtr>& getAdcs() const = 0;
+    virtual std::map<uint32_t, AdcPtr>& getAdcs() = 0;
 
-    virtual ~Master();
+    virtual ~Master() {}
+};
+
+class MasterFactory {
+public:
+    using MasterPtr = std::shared_ptr<Master>;
+    using QueuePtr = std::shared_ptr<QueueOfMessages>;
+
+    virtual MasterPtr create(uint32_t offset, QueuePtr queue) = 0;
+
+    virtual ~MasterFactory() {}
 };
 
 #endif//MASTER_HPP

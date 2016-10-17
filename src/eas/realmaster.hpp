@@ -28,6 +28,7 @@ public:
     void readState();
 
     void writeHardReset();
+    void write200200();
     void writeResolutionOfTimer(bool resolution);
     void writeTestRegister(uint16_t data);
     void writeCoincidence(uint32_t coincidence);
@@ -43,14 +44,22 @@ public:
                    uint16_t seconds,
                    uint16_t ms);
 
-    const std::vector<AdcPtr>& getAdcs() const;
+    std::map<uint32_t, AdcPtr>& getAdcs();
 
 private:
     QueuePtr clientQueue_;
-    std::vector<AdcPtr> adcs_;
+//    std::vector<AdcPtr> adcs_;
+    std::map<uint32_t, AdcPtr> adcs_;
     MasterRegisters registers_;
     uint32_t offset_;
     uint32_t offsetLink_;
+};
+
+class RealMasterFactory : public MasterFactory {
+public:
+    MasterPtr create(uint32_t offset, QueuePtr queue) {
+        return std::make_shared<RealMaster>(offset, queue);
+    }
 };
 
 #endif  // REALMASTER_HPP

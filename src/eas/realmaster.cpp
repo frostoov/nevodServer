@@ -34,12 +34,12 @@ void RealMaster::update(const Subject* subject) {
 RealMaster::AdcPtr RealMaster::addAdc(uint32_t numberAdc) {
     AdcPtr adc = std::make_shared<Adc>(
         offsetLink_ + 0x80000 + 0x20000 * numberAdc, clientQueue_);
-    adcs_.insert(adcs_.begin() + numberAdc, adc);
+    adcs_.insert(std::pair<uint32_t, AdcPtr>(numberAdc, adc));
     return adc;
 }
 
 void RealMaster::deleteAdc(uint32_t numberAdc) {
-    adcs_.erase(adcs_.begin() + numberAdc);
+    adcs_.erase(numberAdc);
 }
 
 void RealMaster::readState() {
@@ -54,9 +54,18 @@ void RealMaster::readState() {
 void RealMaster::writeHardReset() {
     Record recordWithValue(registers_.write.reset_register);
     recordWithValue.address += offset_;
-    recordWithValue.value = 3;
+    recordWithValue.value = 1;	//TODO 3 was here!!!
 	clientQueue_->addCommandToQueue(recordWithValue,
-									shared_from_this());
+                                    shared_from_this());
+    recordWithValue.value = 2;
+    clientQueue_->addCommandToQueue(recordWithValue,
+                                    shared_from_this());
+}
+
+void RealMaster::write200200() {
+    Record recordWithValue{0x200, 1, Record::Type::Zero};
+    recordWithValue.address += offset_;
+    clientQueue_->addCommandToQueue(recordWithValue, shared_from_this());
 }
 
 void RealMaster::writeResolutionOfTimer(bool resolution) {
@@ -186,6 +195,6 @@ void RealMaster::writeTime(uint16_t hours,
     }
 }
 
-const std::vector<RealMaster::AdcPtr>& RealMaster::getAdcs() const {
+std::map<uint32_t, RealMaster::AdcPtr>& RealMaster::getAdcs() {
     return adcs_;
 }

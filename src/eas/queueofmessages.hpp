@@ -46,7 +46,7 @@ public:
 	using QueueOfMessagesPtr = std::shared_ptr<QueueOfMessages>;
 	using ClientPtr = std::shared_ptr<Client>;
 
-	virtual QueueOfMessagesPtr create(const ClientPtr clientReg,
+    virtual QueueOfMessagesPtr create(const ClientPtr clientReg,
                                       const ClientPtr clientData) = 0;
 
     virtual ~QueueOfMessagesFactory() {}

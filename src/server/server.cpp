@@ -85,4 +85,17 @@ void Server::initializeDispatcherOfEasRpc() {
                          *(easStation_.get()));
     dispatcher.addMethod("eas_connectToHost", &EasStation::connectToHost,
                          *(easStation_.get()));
+    dispatcher.addMethod("eas_addMasterToHost", &EasStation::addMasterToHost,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_addAdcToMaster", &EasStation::addAdcToMaster,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_setTaskTable", &EasStation::setTaskTable,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_write200200", &EasStation::write200200,
+                         *(easStation_.get()));
+    dispatcher.addMethod("eas_resolutionDataZero",
+                         &EasStation::resolutionDataZero, *(easStation_.get()));
+    dispatcher.addMethod("eas_resolutionAndForbidofData",
+                         &EasStation::resolutionAndForbidOfData,
+                         *(easStation_.get()));
 }
