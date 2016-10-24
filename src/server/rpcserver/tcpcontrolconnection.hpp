@@ -28,7 +28,7 @@ public:
 protected:
     void handleWrite(const boost::system::error_code& error, size_t);
     void handleRead(const boost::system::error_code& error);
-    std::string answerToRequest(const std::string& message_);
+    std::string answerToRequest(const std::string& message);
 
 private:
     Dispatcher& dispatcher_;

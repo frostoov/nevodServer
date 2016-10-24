@@ -35,9 +35,6 @@ public:
 	virtual Message getMessage() const = 0;
 	virtual const std::vector<uint8_t>& getData() const = 0;
 
-	// TODO
-	virtual void write(int32_t number, bool isBan) = 0;
-
 	virtual ~QueueOfMessages() {}
 };
 

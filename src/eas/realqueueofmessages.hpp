@@ -33,8 +33,6 @@ public:
     Message getMessage() const;
     const std::vector<uint8_t>& getData() const;
 
-    void write(int32_t number, bool isBan) { clientReg_->write(number, isBan); }
-
 protected:
     void writeRegister(const Record& record);
     int fillValuesInCommandsHaveBeenDone(const std::vector<uint8_t>& data,

@@ -13,26 +13,26 @@ RealQueueOfMessages::~RealQueueOfMessages() {}
 void RealQueueOfMessages::update(const Subject* subject) {
     if (subject == clientReg_.get()) {
         if (clientReg_->getMessage() == Client::Message::readyRead) {
-            static size_t commandNumberBegin = 0;
-            static size_t commandNumberEnd = 0;
-            commandNumberEnd = fillValuesInCommandsHaveBeenDone(
-                clientReg_->getData(), commandNumberBegin);
-            for (size_t i = commandNumberBegin; i < commandNumberEnd; i++) {
-                if (commandsHaveBeenDone_[i].first.type == Record::Type::Read) {
-                    message_ = Message::recordRead;
-                    answerRecord_ = commandsHaveBeenDone_[i].first;
-                    notify(commandsHaveBeenDone_[i].second.get());
-                } else {
-                    message_ = Message::recordWrite;
-                    answerRecord_ = commandsHaveBeenDone_[i].first;
-                    notify(commandsHaveBeenDone_[i].second.get());
-                }
-            }
-            commandNumberBegin = commandNumberEnd;
-            if (commandsHaveBeenDone_.empty() == true) {
-                commandNumberBegin = 0;
-                commandNumberEnd = 0;
-            }
+//            static size_t commandNumberBegin = 0;
+//            static size_t commandNumberEnd = 0;
+//            commandNumberEnd = fillValuesInCommandsHaveBeenDone(
+//                clientReg_->getData(), commandNumberBegin);
+//            for (size_t i = commandNumberBegin; i < commandNumberEnd; i++) {
+//                if (commandsHaveBeenDone_[i].first.type == Record::Type::Read) {
+//                    message_ = Message::recordRead;
+//                    answerRecord_ = commandsHaveBeenDone_[i].first;
+//                    notify(commandsHaveBeenDone_[i].second.get());
+//                } else {
+//                    message_ = Message::recordWrite;
+//                    answerRecord_ = commandsHaveBeenDone_[i].first;
+//                    notify(commandsHaveBeenDone_[i].second.get());
+//                }
+//            }
+//            commandNumberBegin = commandNumberEnd;
+//            if (commandsHaveBeenDone_.empty() == true) {
+//                commandNumberBegin = 0;
+//                commandNumberEnd = 0;
+//            }
         }
 
         if (clientReg_->getMessage() == Client::Message::connected) {
@@ -53,19 +53,21 @@ void RealQueueOfMessages::update(const Subject* subject) {
 
     if (subject == clientData_.get()) {
         if (clientData_->getMessage() == Client::Message::readyRead) {
-            static int packetCount = 0;
-            message_ = Message::dataRead;
-            if (packetCount < 200) {
-                data_.insert(data_.end(), clientData_->getData().begin(),
-                             clientData_->getData().end());
-                packetCount++;
-            }
-            if (packetCount == 200) {
-                packetCount = 0;
-                notify();
-                data_.insert(data_.end(), clientData_->getData().begin(),
-                             clientData_->getData().end());
-            }
+//            static int packetCount = 0;
+//            message_ = Message::dataRead;
+//            if (packetCount < 200) {
+//                data_.insert(data_.end(), clientData_->getData().begin(),
+//                             clientData_->getData().end());
+//                packetCount++;
+//            }
+//            if (packetCount == 200) {
+//                packetCount = 0;
+//                notify();
+//                data_.insert(data_.end(), clientData_->getData().begin(),
+//                             clientData_->getData().end());
+//            }
+            data_ = clientData_->getData();
+            notify();
         }
     }
 }

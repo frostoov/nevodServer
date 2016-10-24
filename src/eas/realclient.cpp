@@ -20,8 +20,8 @@ bool RealClient::connectToHost() {
     stopped_ = false;
     startConnect();
 
-    deadlineTimer_.async_wait(
-        boost::bind(&RealClient::checkDeadline, shared_from_this()));
+    //    deadlineTimer_.async_wait(
+    //        boost::bind(&RealClient::checkDeadline, shared_from_this()));
     return true;
 }
 
@@ -164,7 +164,8 @@ void RealClient::startWrite(const std::vector<char>& message) {
 }
 
 void RealClient::connectHandler(const boost::system::error_code& error) {
-    std::cout << "I am connected to Host!\t" << error.message() << std::endl;
+    std::cout << "I am connected to Host!\t" << error.message() << port_
+              << std::endl;
     if (stopped_)
         return;
     if (!error) {
@@ -173,7 +174,8 @@ void RealClient::connectHandler(const boost::system::error_code& error) {
     }
 }
 
-void RealClient::readHandler(const boost::system::error_code& error, size_t) {
+void RealClient::readHandler(const boost::system::error_code& error,
+                             size_t bytes_transferred) {
     if (stopped_)
         return;
 
@@ -194,8 +196,9 @@ void RealClient::readHandler(const boost::system::error_code& error, size_t) {
         std::vector<uint8_t> bufVec(bufStr.begin(), bufStr.end());
         if (bufVec.size() < 10)
             return;
-//        data_.insert(data_.end(), bufVec.begin(), bufVec.end());
+        //        data_.insert(data_.end(), bufVec.begin(), bufVec.end());
         data_.assign(bufVec.begin(), bufVec.end());
+        inputBuffer_.consume(inputBuffer_.size());
         this->notify();
     } else {
         std::cout << "Error reading" << std::endl;

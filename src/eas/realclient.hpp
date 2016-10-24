@@ -39,7 +39,8 @@ protected:
     void startRead();
     void startWrite(const std::vector<char>& message);
     void connectHandler(const boost::system::error_code& error);
-    void readHandler(const boost::system::error_code& error, size_t);
+    void readHandler(const boost::system::error_code& error,
+                     size_t bytes_transferred);
     void writeHandler(const boost::system::error_code& error, size_t);
     void checkDeadline();
 
@@ -67,4 +68,4 @@ public:
     }
 };
 
-#endif//REALCLIENT_HPP
+#endif  // REALCLIENT_HPP

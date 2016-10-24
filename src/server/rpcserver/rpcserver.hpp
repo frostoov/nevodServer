@@ -47,13 +47,14 @@ protected:
                       const boost::system::error_code& error);
     void handleRequest(const boost::system::error_code& error, size_t);
 
+    std::vector<Connections> clients_;
+
 private:
     Dispatcher dispatcher_;
 
     ioServicePtr service_;
     boost::asio::ip::tcp::acceptor controlAcceptor_;
     boost::asio::ip::tcp::acceptor dataAcceptor_;
-    std::vector<Connections> clients_;
 };
 
 #endif//RPCSERVER_HPP

@@ -5,17 +5,27 @@ EasStation::EasStation(const IoServicePtr& service) : service_(service) {
     //    host->connectToHost();
 }
 
-EasStation::~EasStation() {}
-//TODO say no to real factories
+EasStation::~EasStation() {
+    // TODO
+    // queue->detach(this);
+}
+
+void EasStation::update(const Subject* subject) {
+    if (subject == queue_.get()) {
+        data_ = queue_->getData();
+        notify();
+    }
+}
+// TODO say no to real factories
 EasStation::HostPtr EasStation::addHost(uint32_t numberHost,
                                         const std::string& ip,
                                         uint16_t registerPort,
                                         uint16_t dataPort) {
     auto clientReg = RealClientFactory::create(ip, registerPort, service_);
     auto clientData = RealClientFactory::create(ip, dataPort, service_);
-    auto clientQueue =
-        RealQueueOfMessagesFactory::create(clientReg, clientData);
-    HostPtr host = std::make_shared<Host>(clientQueue);
+    queue_ = RealQueueOfMessagesFactory::create(clientReg, clientData);
+    queue_->attach(this);
+    HostPtr host = std::make_shared<Host>(queue_);
     hosts_.insert(std::pair<uint32_t, HostPtr>(numberHost, host));
     return host;
 }
@@ -45,7 +55,7 @@ bool EasStation::writeHardReset(int idMaster) {
 bool EasStation::writePermissionOfMasters(int idMaster, int isOpen) {
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
-//    hosts_[idHost]->getMasters()[realIdMaster]->write
+    //    hosts_[idHost]->getMasters()[realIdMaster]->write
     return true;
 }
 
@@ -66,11 +76,9 @@ bool EasStation::writeRegisterOfReadData(int idHost,
                                          int isOnSecond,
                                          int isOnThird,
                                          int isOnFourth) {
-    hosts_[idHost]->writeRegisterOfReadData(
-        std::array<bool, 4>{{static_cast<bool>(isOnFirst),
-                             static_cast<bool>(isOnSecond),
-                             static_cast<bool>(isOnThird),
-                             static_cast<bool>(isOnFourth)}});
+    hosts_[idHost]->writeRegisterOfReadData(std::array<bool, 4>{
+        {static_cast<bool>(isOnFirst), static_cast<bool>(isOnSecond),
+         static_cast<bool>(isOnThird), static_cast<bool>(isOnFourth)}});
     return true;
 }
 
@@ -79,11 +87,9 @@ bool EasStation::writePermissionOfData(int idHost,
                                        int isOnSecond,
                                        int isOnThird,
                                        int isOnFourth) {
-    hosts_[idHost]->writeResolutionOfLinks(
-        std::array<bool, 4>{{static_cast<bool>(isOnFirst),
-                             static_cast<bool>(isOnSecond),
-                             static_cast<bool>(isOnThird),
-                             static_cast<bool>(isOnFourth)}});
+    hosts_[idHost]->writeResolutionOfLinks(std::array<bool, 4>{
+        {static_cast<bool>(isOnFirst), static_cast<bool>(isOnSecond),
+         static_cast<bool>(isOnThird), static_cast<bool>(isOnFourth)}});
     return true;
 }
 
@@ -108,7 +114,7 @@ bool EasStation::writePermissionOfTimer(int idMaster) {
 bool EasStation::writeSetCoincidence(int idMaster, int coincidence) {
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
-    hosts_[idHost]->getMasters()[idMaster]->writeCoincidence(coincidence);
+    hosts_[idHost]->getMasters()[realIdMaster]->writeCoincidence(coincidence);
     return true;
 }
 
@@ -139,14 +145,11 @@ bool EasStation::writeActiveChannels(int idMaster,
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
     hosts_[idHost]->getMasters()[realIdMaster]->writeMaskOfActiveChannels(
-        std::array<bool, 8>{{static_cast<bool>(isOnFirst),
-                             static_cast<bool>(isOnSecond),
-                             static_cast<bool>(isOnThird),
-                             static_cast<bool>(isOnFourth),
-                             static_cast<bool>(isOnFifth),
-                             static_cast<bool>(isOnSixth),
-                             static_cast<bool>(isOnSeventh),
-                             static_cast<bool>(isOnEighth)}});
+        std::array<bool, 8>{
+            {static_cast<bool>(isOnFirst), static_cast<bool>(isOnSecond),
+             static_cast<bool>(isOnThird), static_cast<bool>(isOnFourth),
+             static_cast<bool>(isOnFifth), static_cast<bool>(isOnSixth),
+             static_cast<bool>(isOnSeventh), static_cast<bool>(isOnEighth)}});
     return true;
 }
 
@@ -194,11 +197,9 @@ bool EasStation::writeThreshold(int idPaa, int channel, int threshold) {
     uint32_t idMaster = (idPaa / 10) % 10;
     uint32_t realIdPaa = idPaa % 10;
     hosts_[idHost]
-      ->getMasters()[idMaster]
-            ->getAdcs()[realIdPaa]
-            ->writeThreshold(channel, threshold);
-    //TODO
-    hosts_[idHost]->runQueue();
+        ->getMasters()[idMaster]
+        ->getAdcs()[realIdPaa]
+        ->writeThreshold(channel, threshold);
     return true;
 }
 
@@ -261,7 +262,7 @@ bool EasStation::addAdcToMaster(int idPaa) {
 bool EasStation::setTaskTable(int idMaster) {
     uint32_t idHost = static_cast<uint32_t>(idMaster) / 10;
     uint32_t realIdMaster = idMaster % 10;
-    hosts_[idHost]->initializeTable(realIdMaster - 1);	//WARNING
+    hosts_[idHost]->initializeTable(realIdMaster - 1);  // WARNING
     return true;
 }
 
@@ -278,6 +279,16 @@ bool EasStation::resolutionDataZero(int idHost) {
 }
 
 bool EasStation::resolutionAndForbidOfData(int idHost, int resolution) {
-    hosts_[idHost]->writeResolutionAndForbidOfData(static_cast<bool>(resolution));
+    hosts_[idHost]->writeResolutionAndForbidOfData(
+        static_cast<bool>(resolution));
     return true;
+}
+
+bool EasStation::runQueue(int idHost) {
+    hosts_[idHost]->runQueue();
+    return true;
+}
+
+const std::vector<uint8_t>& EasStation::getData() const {
+    return data_;
 }

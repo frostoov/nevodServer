@@ -1,6 +1,6 @@
 #include "tcpdataconnection.hpp"
 
-#include <iostream> // TODO
+#include <iostream>  // TODO
 
 TcpDataConnection::TcpDataConnection(boost::asio::io_service& service)
     : socket_(service), isConnected_(false) {}
@@ -23,4 +23,21 @@ void TcpDataConnection::start() {
 
 bool TcpDataConnection::isConnected() const {
     return isConnected_;
+}
+
+bool TcpDataConnection::sendData(const std::vector<uint8_t>& data) {
+    boost::asio::async_write(
+        socket_, boost::asio::buffer(data),
+        boost::bind(&TcpDataConnection::handleWrite, shared_from_this(),
+                    boost::asio::placeholders::error,
+                    boost::asio::placeholders::bytes_transferred));
+    return true;
+}
+
+void TcpDataConnection::handleWrite(const boost::system::error_code& error,
+                                    size_t) {
+    if (!error) {
+        std::cout << "Data has been sent to client!!\t" << error.message()
+                  << std::endl;
+    }
 }

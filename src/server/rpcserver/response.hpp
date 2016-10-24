@@ -1,5 +1,5 @@
-#ifndef RESPONSE_H
-#define RESPONSE_H
+#ifndef RESPONSE_HPP
+#define RESPONSE_HPP
 
 #include <json.hpp>
 #include "jsonwriter.hpp"
@@ -29,4 +29,4 @@ private:
     Value id_;
 };
 
-#endif
+#endif//RESPONSE_HPP

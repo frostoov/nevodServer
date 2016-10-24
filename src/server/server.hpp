@@ -7,13 +7,15 @@
 #include "rpcserver/rpcserver.hpp"
 #include "../eas/easstation.hpp"
 
-class Server : public RpcServer {
+class Server : public RpcServer, public Observer {
 public:
     using EasStationPtr = std::unique_ptr<EasStation>;
     using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
 
     Server(uint16_t controlPort, uint16_t dataPort);
-	~Server();
+    ~Server();
+
+    void update(const Subject* subject);
 
     void start();
 

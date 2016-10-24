@@ -3,11 +3,21 @@
 Server::Server(uint16_t controlPort, uint16_t dataPort)
     : RpcServer(controlPort, dataPort) {
     easStation_ = std::make_unique<EasStation>(this->getIoService());
+    easStation_->attach(this);
 
     initializeDispatcherOfEasRpc();
 }
 
-Server::~Server() {}
+Server::~Server() {
+//    easStation_->detach(this);
+}
+
+void Server::update(const Subject* subject) {
+    if (subject == easStation_.get()) {
+        for (auto& client : clients_)
+            client.data->sendData(easStation_->getData());
+    }
+}
 
 void Server::start() {
     this->run();
@@ -95,7 +105,9 @@ void Server::initializeDispatcherOfEasRpc() {
                          *(easStation_.get()));
     dispatcher.addMethod("eas_resolutionDataZero",
                          &EasStation::resolutionDataZero, *(easStation_.get()));
-    dispatcher.addMethod("eas_resolutionAndForbidofData",
+    dispatcher.addMethod("eas_resolutionAndForbidOfData",
                          &EasStation::resolutionAndForbidOfData,
                          *(easStation_.get()));
+    dispatcher.addMethod("eas_runQueue",
+                         &EasStation::runQueue, *(easStation_.get()));
 }

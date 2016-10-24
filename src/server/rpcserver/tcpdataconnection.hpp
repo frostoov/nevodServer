@@ -18,7 +18,10 @@ public:
     void start();
     bool isConnected() const;
 
+    bool sendData(const std::vector<uint8_t>& data);
+
 protected:
+    void handleWrite(const boost::system::error_code& error, size_t);
 
 private:
     boost::asio::ip::tcp::socket socket_;

@@ -14,7 +14,6 @@ int main(int argc, char* argv[]) {
 //        service->run();
 //        host->connectToHost();
 
-
 //    StationConfig config;
 //    config.addHost("my_host");
 //    config.addJsonPairToHost(

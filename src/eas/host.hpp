@@ -49,10 +49,6 @@ public:
     void initializeTable(uint32_t numberMaster);
     void writeSleep(uint32_t milliseconds);
 
-    void write(int32_t number, bool isBan) {
-        clientQueue_->write(number, isBan);
-    }
-
     QueuePtr getQueue();
     Record getResult() const;
     HostRegisters getRegisters() const;

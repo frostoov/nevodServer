@@ -2,21 +2,26 @@
 #define EASSTATION_HPP
 
 #include <memory>
+#include <vector>
 #include <boost/asio.hpp>
 
+#include "../observer/observer.hpp"
 #include "host.hpp"
 #include "realclient.hpp"
 #include "realqueueofmessages.hpp"
 //#include "client.hpp"
 //#include "queueofmessages.hpp"
 
-class EasStation {
+class EasStation : public Subject, public Observer {
 public:
     using IoServicePtr = std::shared_ptr<boost::asio::io_service>;
     using HostPtr = std::shared_ptr<Host>;
+    using QueuePtr = std::shared_ptr<QueueOfMessages>;
 
     EasStation(const IoServicePtr& service);
     ~EasStation();
+
+    void update(const Subject* subject);
 
     HostPtr addHost(uint32_t numberHost,
                     const std::string& ip,
@@ -76,9 +81,14 @@ public:
     bool write200200(int idMaster);
     bool resolutionDataZero(int idHost);
     bool resolutionAndForbidOfData(int idHost, int resolution);
+    bool runQueue(int idHost);
+
+    const std::vector<uint8_t>& getData() const;
 
 private:
     IoServicePtr service_;
+    QueuePtr queue_;
+    std::vector<uint8_t> data_;
     std::map<uint32_t, HostPtr> hosts_;
 };
 
